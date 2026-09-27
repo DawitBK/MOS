@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Commercial proposal: Factory ERP</title>
+<meta name="description" content="Commercial proposal for the Factory ERP (MOS): team options A/B/C, delivery options, prices by package and module, maintenance, hosting at cost, billing.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+:root{
+  --ground:#f2f4f3; --surface:#ffffff; --surface-2:#f7f9f8;
+  --ink:#18212b; --ink-2:#44505c; --muted:#68737e; --rule:#d5dbdc; --rule-2:#e6eaea;
+  --accent:#2563b8; --accent-ink:#1d4f94; --accent-soft:#e7eef9;
+  --amber:#c9851c; --amber-soft:#f8eedd; --amber-ink:#7a4f0c;
+  --ok:#2f7a4f; --danger:#b3372f;
+  --font-display:"Barlow Semi Condensed","Arial Narrow",Arial,sans-serif;
+  --font-body:"Public Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#12171d; --surface:#1a2129; --surface-2:#161c23;
+    --ink:#e7ebef; --ink-2:#b8c2cc; --muted:#8e9aa6; --rule:#2e3844; --rule-2:#252e38;
+    --accent:#5b93e6; --accent-ink:#8db5f0; --accent-soft:#1d2c44;
+    --amber:#b8842c; --amber-soft:#2e2517; --amber-ink:#e2b46a;
+    --ok:#5fb383; --danger:#e37a70;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#12171d; --surface:#1a2129; --surface-2:#161c23;
+  --ink:#e7ebef; --ink-2:#b8c2cc; --muted:#8e9aa6; --rule:#2e3844; --rule-2:#252e38;
+  --accent:#5b93e6; --accent-ink:#8db5f0; --accent-soft:#1d2c44;
+  --amber:#b8842c; --amber-soft:#2e2517; --amber-ink:#e2b46a;
+  --ok:#5fb383; --danger:#e37a70;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.55;margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:20px}
+@media (max-width:520px){.wrap{padding-inline:16px}}
+h1,h2,h3,h4{font-family:var(--font-display);text-wrap:balance;margin:0;color:var(--ink);letter-spacing:.005em}
+h1{font-size:clamp(34px,5vw,48px);font-weight:700;line-height:1.05}
+h2{font-size:26px;font-weight:700;line-height:1.15;margin-top:6px}
+h3{font-size:19px;font-weight:600;line-height:1.25}
+h4{font-size:16px;font-weight:600}
+[id]{scroll-margin-top:64px}
+p{margin:0;max-width:78ch}
+a{color:var(--accent-ink)}
+code{font-family:var(--font-mono);font-size:.86em;background:var(--surface-2);border:1px solid var(--rule-2);border-radius:4px;padding:0 4px}
+.eyebrow{font-family:var(--font-mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.masthead{padding-block:34px 20px;display:grid;gap:14px}
+.masthead .lede{font-size:17px;color:var(--ink-2);max-width:80ch}
+.status-line{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.pill{display:inline-flex;align-items:center;font-family:var(--font-mono);font-size:12px;padding:3px 9px;border-radius:999px;border:1px solid var(--rule);background:var(--surface);color:var(--ink-2);white-space:nowrap}
+.pill.plan{border-color:var(--accent);color:var(--accent-ink);background:var(--accent-soft)}
+.pill.rev{border-color:var(--amber);color:var(--amber-ink);background:var(--amber-soft)}
+.spec{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));border:1px solid var(--rule);background:var(--surface);border-radius:6px}
+.spec div{padding:12px 14px;border-right:1px solid var(--rule-2)}
+.spec div:last-child{border-right:0}
+.spec b{display:block;font-family:var(--font-display);font-size:26px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.1}
+.spec span{font-size:12.5px;color:var(--muted)}
+.note{font-size:13.5px;color:var(--muted)}
+.btn{appearance:none;border:1px solid var(--rule);background:var(--surface);color:var(--ink);font:500 13px/1.2 var(--font-body);padding:7px 12px;border-radius:6px;cursor:pointer}
+.btn:hover{border-color:var(--accent);color:var(--accent-ink)}
+.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn.print{margin-left:auto}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap}
+.tabbar{position:sticky;top:0;z-index:5;background:var(--ground);border-bottom:1px solid var(--rule)}
+.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:thin}
+.tabs button{appearance:none;border:0;background:none;color:var(--ink-2);font-family:var(--font-display);font-size:16px;font-weight:600;padding:12px 14px 10px;border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tabs button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.panel{padding-block:26px 48px;display:grid;gap:30px}
+.panel[hidden]{display:none}
+section.block{display:grid;gap:14px;min-width:0}
+section.block > p,section.block > ul,section.block > ol{color:var(--ink-2)}
+ul.clean,ol.clean{margin:0;padding-left:20px;display:grid;gap:5px;max-width:86ch}
+ul.clean li,ol.clean li{color:var(--ink-2)}
+ul.clean ul.clean,ol.clean ul.clean{margin-top:5px}
+li b,p b{color:var(--ink)}
+.tbl{overflow-x:auto;border:1px solid var(--rule);border-radius:6px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{text-align:left;vertical-align:top;padding:8px 11px;border-bottom:1px solid var(--rule-2)}
+th{font-family:var(--font-display);font-weight:600;font-size:14px;color:var(--ink-2);background:var(--surface-2);letter-spacing:.01em;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.id{font-family:var(--font-mono);font-size:12px;white-space:nowrap;color:var(--accent-ink)}
+table.steps td:nth-child(4){min-width:300px}
+table.steps td:last-child{font-family:var(--font-mono);font-size:11px;color:var(--ink-2);min-width:170px;max-width:240px;overflow-wrap:anywhere}
+figure{margin:0;display:grid;gap:8px;min-width:0}
+.fig{overflow-x:auto;background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:14px}
+.fig svg{display:block;width:100%;height:auto;color:var(--ink)}
+.fig.hero svg{min-width:900px}
+figcaption{font-size:13.5px;color:var(--muted);max-width:92ch}
+svg text{font-family:var(--font-body)}
+svg .ttl{font-family:var(--font-display);font-size:15px;font-weight:600;fill:var(--ink)}
+svg .lbl{font-size:12px;fill:var(--ink-2)}
+svg .sm{font-size:10.5px;fill:var(--muted)}
+svg .st{fill:var(--surface);stroke:var(--ink-2);stroke-width:1.2}
+svg .st-auto{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.5}
+svg .st-person{fill:var(--amber-soft);stroke:var(--amber);stroke-width:1.4}
+svg .st-side{fill:var(--surface-2);stroke:var(--muted);stroke-width:1.1;stroke-dasharray:4 3}
+svg .edge{stroke:var(--ink-2);stroke-width:1.4;fill:none}
+svg .edge-async{stroke:var(--accent);stroke-width:1.5;fill:none;stroke-dasharray:6 4}
+svg .mk{fill:var(--ink-2)}
+svg .mk-auto{fill:var(--accent)}
+svg .hb rect{fill:var(--surface);stroke:var(--accent);stroke-width:1.2}
+svg .hb text{font-family:var(--font-mono);font-size:10px;fill:var(--accent-ink);text-anchor:middle;dominant-baseline:central}
+details{border:1px solid var(--rule);border-radius:6px;background:var(--surface)}
+details > summary{cursor:pointer;padding:11px 14px;font-family:var(--font-display);font-weight:600;font-size:16px}
+details > summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+details .inner{padding:4px 16px 18px;display:grid;gap:14px;min-width:0}
+details.proc{margin-top:10px}
+details.proc > summary{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;list-style-position:outside}
+details.proc[open] > summary{border-bottom:1px solid var(--rule-2)}
+.pid{font-family:var(--font-mono);font-size:12.5px;font-weight:500;color:var(--accent-ink);background:var(--accent-soft);border-radius:4px;padding:1px 7px}
+.pname{flex:1 1 320px}
+.meta{font-family:var(--font-mono);font-size:11.5px;font-weight:400;color:var(--muted)}
+.life-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,460px),1fr));gap:18px}
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:14px 16px;display:grid;gap:10px;align-content:start;min-width:0}
+.card.wide{grid-column:1/-1}
+.card .mmd{border:0;padding:0}
+.card p{font-size:14px;color:var(--ink-2)}
+.mmd-fig{margin:0}
+.mmd{overflow-x:auto;background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:12px;min-height:44px}
+.mmd:empty::before{content:"Drawing diagram\2026";color:var(--muted);font-size:13px}
+.mmd svg{display:block;margin:0 auto;height:auto}
+.mmd.failed{color:var(--danger);font-size:13px}
+.mmd-src{display:none;margin:0;overflow-x:auto;font-family:var(--font-mono);font-size:11.5px;line-height:1.45;background:var(--surface-2);border:1px solid var(--rule);border-radius:6px;padding:10px 12px;color:var(--ink-2)}
+.mmd-src.show{display:block}
+body.offline .mmd{display:none}
+body.offline .mmd-src{display:block}
+pre.code{margin:0;overflow-x:auto;font-family:var(--font-mono);font-size:12px;background:var(--surface-2);border:1px solid var(--rule);border-radius:6px;padding:10px 12px}
+blockquote.callout{margin:0;border-left:3px solid var(--accent);background:var(--accent-soft);padding:12px 16px;border-radius:0 6px 6px 0;display:grid;gap:8px}
+details.about .inner,details.graph .inner{padding-top:12px}
+.foot{padding-block:10px 40px}
+@media print{
+  :root,:root[data-theme="dark"],:root:not([data-theme="light"]){
+    --ground:#ffffff; --surface:#ffffff; --surface-2:#f6f7f7; --ink:#111; --ink-2:#333; --muted:#555; --rule:#ccc; --rule-2:#e2e2e2;
+    --accent:#2563b8; --accent-ink:#1d4f94; --accent-soft:#eef3fb; --amber:#c9851c; --amber-soft:#faf2e4; --amber-ink:#7a4f0c;
+    color-scheme:light;
+  }
+  body{font-size:11.5pt}
+  .tabbar,.toolbar,.btn,.offline-note{display:none !important}
+  .panel,.panel[hidden]{display:grid !important;padding-block:10px}
+  .wrap{max-width:none}
+  .fig.hero svg{min-width:0}
+  .mmd,figure,tr,.card{break-inside:avoid}
+  .mmd:empty{display:none}
+  .mmd:empty + .mmd-src{display:block}
+  details.proc{break-before:page}
+  details > summary{list-style:none}
+}
+
+</style>
+</head>
+<body>
+<header class="wrap masthead">
+  <div class="eyebrow">Draft for the owner&#x27;s review · not sent · local file, not published</div>
+  <h1>Commercial proposal: Factory ERP</h1>
+  <p class="lede">Team options, delivery options and prices for the six-module Factory ERP (MOS), at US$5 per hour with the birr equivalent. Prices exclude VAT and withholding.</p>
+  <div class="status-line"><span class="pill plan">Planning only · no code</span><span class="pill rev">Draft 2026-09-27</span>
+  <button type="button" class="btn print" id="printBtn">Print or save as PDF</button></div>
+  <div class="spec"><div><b>US$5</b><span>per team hour</span></div><div><b>6 + 2</b><span>months: six modules built, then live</span></div><div><b>$23,200</b><span>Team A</span></div><div><b>$18,000</b><span>Team B</span></div><div><b>$11,760</b><span>Team C</span></div></div>
+  <p class="note offline-note">Charts are drawn by Mermaid from the internet (cdn.jsdelivr.net). Offline, their source text is shown instead.</p>
+</header>
+<nav class="tabbar" aria-label="Sections"><div class="wrap tabs" role="tablist"><button role="tab" type="button" id="tab-overview" aria-controls="panel-overview" aria-selected="false">Summary</button><button role="tab" type="button" id="tab-options" aria-controls="panel-options" aria-selected="false">Options and prices</button><button role="tab" type="button" id="tab-support" aria-controls="panel-support" aria-selected="false">Support, rates, hosting</button><button role="tab" type="button" id="tab-terms" aria-controls="panel-terms" aria-selected="false">Billing and terms</button></div></nav>
+<main>
+<div class="panel wrap" role="tabpanel" id="panel-overview" aria-labelledby="tab-overview" hidden><section class="block"><details class="about"><summary>About this document</summary><div class="inner"><div class="tbl"><table class=""><thead><tr><th></th><th></th></tr></thead><tbody><tr><td>Document</td><td>Commercial proposal: team options, delivery plan, prices, payment terms</td></tr><tr><td>Version</td><td><b>0.2, draft for the owner's review — not yet sent to the client</b> (0.2: the owner's Phase 6 decisions: six modules in one release in 26 weeks; ownership; no free warranty)</td></tr><tr><td>Date</td><td>2026-09-28</td></tr><tr><td>Prepared for</td><td>[Client name] (the flour mill whose procure-to-pay draft this proposal answers)</td></tr><tr><td>Prepared by</td><td>[Vendor name]</td></tr><tr><td>Validity</td><td>30 days from the date of issue</td></tr><tr><td>Currency</td><td>Prices in US dollars with the Ethiopian birr equivalent at <b>ETB 162.00 per US$</b> (§8). <b>All prices exclude VAT and withholding tax</b></td></tr><tr><td>Basis</td><td>The planning package in this repository: FRD (231 requirements, 205 in the first release), process model, database design, implementation plan v0.4</td></tr></tbody></table></div>
+<p>Items marked <b>[owner to confirm]</b> are proposals the owner decides before this document goes to the client.</p></div></details></section><section class="block"><h2 id="1-summary">1. Summary</h2>
+<ul class="clean"><li><b>What you get:</b> one integrated system for the plant, in six modules:<ul class="clean"><li>procurement with supplier payment;</li><li>inventory, with silos and stores;</li><li>lab and quality;</li><li>gate and weighbridge;</li><li>production (milling and packing);</li><li>sales with receivables.</li></ul></li></ul>
+<p>It runs as your own installation on your own server. It exports journals to your accounting package.</p>
+<ul class="clean"><li><b>When:</b> all six modules are <b>built in 26 weeks and live nine weeks later</b> (week 35, about eight months after the start). This holds whichever team you choose.</li><li><b>How we charge:</b> team hours × <b>US$5 per hour</b> (ETB 810). Development includes testing and setting up the development and CI environments. Quality assurance, go-live services and maintenance are priced separately (§5, §7).</li><li><b>Your build is yours.</b> You receive the source code of your installation (§13).</li></ul>
+<div class="tbl"><table class=""><thead><tr><th>Team (§3)</th><th>Build</th><th>Go-live</th><th>Total to go-live (packages 1–3)</th></tr></thead><tbody><tr><td><b>A: 2 developers + AI + QA engineer</b></td><td>W1–W26</td><td>W27–W35</td><td><b>$23,200</b> · ETB 3,758,400</td></tr><tr><td><b>B: 2 developers + AI</b></td><td>W1–W26</td><td>W27–W35</td><td><b>$18,000</b> · ETB 2,916,000</td></tr><tr><td><b>C: 1 developer + heavy AI</b></td><td>W1–W26</td><td>W27–W35</td><td><b>$11,760</b> · ETB 1,905,120</td></tr></tbody></table></div>
+<p>Maintenance follows from US$150 a month (§7). Infrastructure is at cost (§9).</p></section><section class="block"><h2 id="2-what-we-will-deliver">2. What we will deliver</h2>
+<p><b>The six modules</b>, all on one platform with one set of users, approvals, numbering, audit and documents:</p>
+<div class="tbl"><table class=""><thead><tr><th>Module</th><th>Main functions</th></tr></thead><tbody><tr><td>Procurement and supplier payment</td><td>Supplier registration with protected bank details; requisitions with live stock; purchase orders with approval and amendments; goods receipt with weights, bags and rejected quantities; supplier returns; invoices, three-way match, debit notes, self-billing; payment requests drafted from the receipt; approval; payment with cheque register and withholding certificates</td></tr><tr><td>Inventory</td><td>Stock by store, silo, lot and status; issues, transfers, adjustments; counts and silo dips; fumigation holds; period close; stock balance and valuation</td></tr><tr><td>Lab and quality</td><td>Specifications, sampling, results entry, grading, quality score, decisions, weight and price deductions</td></tr><tr><td>Gate and weighbridge</td><td>Expected arrivals, gate entry, weigh tickets with blind verification, exit clearance, gate passes, yard board, paper fallback</td></tr><tr><td>Production</td><td>Recipes with flour and bran, milling runs, packing into bags, issue and output, finished-goods release, cost of production, extraction rate</td></tr><tr><td>Sales and receivables</td><td>Customers and credit limits, price lists, orders, delivery through the gate, invoices, cash sales, receipts, returns and credit notes</td></tr></tbody></table></div>
+<p><b>Depth.</b> Every function above has three levels of depth:</p>
+<div class="tbl"><table class=""><thead><tr><th>Level</th><th>Meaning</th></tr></thead><tbody><tr><td><b>Core</b></td><td>The flow works end to end with its key controls: approvals, segregation of duties, numbering without gaps, audit trail, posted documents that cannot be edited</td></tr><tr><td><b>Standard</b></td><td>The year-one controls and conveniences, e.g. two-factor sign-in for payment roles, delegation, PO amendments, self-billing, blind counts, paper fallback at the gate</td></tr><tr><td><b>Full</b></td><td>The remaining features of the first release, e.g. single sign-on with an external identity provider, global search, supplier notifications</td></tr></tbody></table></div>
+<p>The release includes all six modules at core depth (§4). Standard and full features come in the same release if the team runs ahead of plan, or in the next release at the same rate.</p>
+<p><b>Also included:</b></p>
+<ul class="clean"><li>installation on your infrastructure;</li><li>data migration from your spreadsheets;</li><li>role-based training;</li><li>three weeks of hypercare after go-live;</li><li>documentation (user guides per role, administration guide, runbook).</li></ul></section><section class="block"><h2 id="3-team-options">3. Team options</h2>
+<div class="tbl"><table class=""><thead><tr><th>Team</th><th>People (hours per week)</th><th>Suits</th></tr></thead><tbody><tr><td><b>A: 2 developers + AI + QA</b></td><td>Lead developer (56 h), second developer (48 h), QA engineer (40 h)</td><td>The most schedule margin, and a dedicated tester for a payments-grade system</td></tr><tr><td><b>B: 2 developers + AI</b></td><td>Lead developer (56 h), second developer (48 h)</td><td>A lower price. The developers also carry the testing</td></tr><tr><td><b>C: 1 developer + heavy AI</b></td><td>Lead developer (56 h)</td><td>The lowest price. One person builds everything, so illness or leave stops the project, and the go-live needs your key users to carry more of the testing and training</td></tr><tr><td><i>Reserve capacity</i></td><td><i>A third developer (48 h), added if the week-4 or week-9 checkpoint shows the team behind</i></td><td><i>Keeps the date; priced as extra hours only if needed</i></td></tr></tbody></table></div>
+<p>All developers use AI coding assistants throughout; the estimate already assumes it (Appendix A).</p></section></div><div class="panel wrap" role="tabpanel" id="panel-options" aria-labelledby="tab-options" hidden><section class="block"><h2 id="4-delivery-plan-and-prices">4. Delivery plan and prices</h2>
+<p>One release: <b>all six modules at core depth, built in W1–W26 and taken live in W27–W35.</b> Going live covers testing with your users, installation, data migration, training, cutover and three weeks of hypercare.</p>
+<div class="tbl"><table class=""><thead><tr><th>Path</th><th>Team</th><th>Scope</th><th>Build</th><th>Go-live</th><th>Hours</th><th>US$</th><th>ETB</th></tr></thead><tbody><tr><td><b>A</b></td><td>2 developers + AI + QA</td><td>All six modules at core depth</td><td>W1–W26</td><td>W27–W35</td><td>4,640</td><td><b>$23,200</b></td><td>3,758,400</td></tr><tr><td><b>B</b></td><td>2 developers + AI</td><td>All six modules at core depth</td><td>W1–W26</td><td>W27–W35</td><td>3,600</td><td><b>$18,000</b></td><td>2,916,000</td></tr><tr><td><b>C</b></td><td>1 developer with heavy AI</td><td>All six modules at core depth</td><td>W1–W26</td><td>W27–W35</td><td>2,352</td><td><b>$11,760</b></td><td>1,905,120</td></tr></tbody></table></div>
+<ul class="clean"><li><b>Core depth</b> is every module's flow with its key controls (§2). The standard and full features are delivered in the same release if the team runs ahead of plan. Otherwise they are the first items of the next release, priced when you order them.</li><li><b>Progress checkpoints.</b> At weeks 4 and 9 we measure actual speed against the plan and report it to you. If the team is behind, we add capacity so the date and the six modules hold. Any extra hours are agreed with you before they are billed <b>[owner to confirm who bears them]</b>.</li></ul></section><section class="block"><h2 id="5-price-by-package">5. Price by package</h2>
+<div class="tbl"><table class=""><thead><tr><th>Package</th><th>What it covers</th><th>Path A</th><th>Path B</th><th>Path C</th></tr></thead><tbody><tr><td><b>1. Development</b></td><td>Build, developer testing, CI and the development environments</td><td>2,704 h<br><b>$13,520</b><br>ETB 2,190,240</td><td>2,704 h<br><b>$13,520</b><br>ETB 2,190,240</td><td>1,456 h<br><b>$7,280</b><br>ETB 1,179,360</td></tr><tr><td><b>2. QA, testing and UAT</b></td><td>QA engineer during the build (path A); system integration test and UAT with their fixes</td><td>1,409 h<br><b>$7,045</b><br>ETB 1,141,290</td><td>369 h<br><b>$1,845</b><br>ETB 298,890</td><td>369 h<br><b>$1,845</b><br>ETB 298,890</td></tr><tr><td><b>3. Production deployment, hosting set-up and go-live</b></td><td>Environment set-up, data migration, training, cutover, 3 weeks of hypercare</td><td>527 h<br><b>$2,635</b><br>ETB 426,870</td><td>527 h<br><b>$2,635</b><br>ETB 426,870</td><td>527 h<br><b>$2,635</b><br>ETB 426,870</td></tr><tr><td><b>Total, build to go-live</b></td><td>Packages 1–3</td><td>4,640 h<br><b>$23,200</b><br><b>ETB 3,758,400</b></td><td>3,600 h<br><b>$18,000</b><br><b>ETB 2,916,000</b></td><td>2,352 h<br><b>$11,760</b><br><b>ETB 1,905,120</b></td></tr><tr><td>4. Maintenance and support</td><td>Monthly retainer after hypercare (§7)</td><td>from $150 / month</td><td>from $150 / month</td><td>from $150 / month</td></tr><tr><td>Hosting and infrastructure</td><td>Servers, backup storage, domain, TLS, email relay, devices</td><td>at cost, after the infrastructure answers</td><td>←</td><td>←</td></tr></tbody></table></div></section><section class="block"><h2 id="6-price-by-module">6. Price by module</h2>
+<p>Development and QA hours during the build, shared out by each module's share of the estimated work. The platform foundation (sign-in, roles, approvals, numbering, audit, documents, master data, the stock ledger) is built once and serves every module. It is priced as its own line.</p>
+<div class="tbl"><table class=""><thead><tr><th>Module</th><th>Path A: estimated h → billed h → US$</th><th>Path B: estimated h → billed h → US$</th><th>Path C: estimated h → billed h → US$</th></tr></thead><tbody><tr><td>Foundation</td><td>844 → 1,328 → <b>$6,639</b></td><td>844 → 959 → <b>$4,794</b></td><td>844 → 516 → <b>$2,582</b></td></tr><tr><td>Procurement</td><td>256 → 403 → <b>$2,014</b></td><td>256 → 291 → <b>$1,454</b></td><td>256 → 157 → <b>$783</b></td></tr><tr><td>Payables</td><td>256 → 403 → <b>$2,014</b></td><td>256 → 291 → <b>$1,454</b></td><td>256 → 157 → <b>$783</b></td></tr><tr><td>Inventory</td><td>158 → 249 → <b>$1,243</b></td><td>158 → 180 → <b>$898</b></td><td>158 → 97 → <b>$483</b></td></tr><tr><td>Lab/QC</td><td>176 → 277 → <b>$1,384</b></td><td>176 → 200 → <b>$1,000</b></td><td>176 → 108 → <b>$538</b></td></tr><tr><td>Gate</td><td>222 → 349 → <b>$1,746</b></td><td>222 → 252 → <b>$1,261</b></td><td>222 → 136 → <b>$679</b></td></tr><tr><td>Production</td><td>170 → 267 → <b>$1,337</b></td><td>170 → 193 → <b>$966</b></td><td>170 → 104 → <b>$520</b></td></tr><tr><td>Sales</td><td>190 → 299 → <b>$1,494</b></td><td>190 → 216 → <b>$1,079</b></td><td>190 → 116 → <b>$581</b></td></tr><tr><td>Hardening</td><td>108 → 170 → <b>$849</b></td><td>108 → 123 → <b>$614</b></td><td>108 → 66 → <b>$330</b></td></tr><tr><td><b>Development window</b></td><td>2,380 → 3,744 → <b>$18,720</b></td><td>2,380 → 2,704 → <b>$13,520</b></td><td>2,380 → 1,456 → <b>$7,280</b></td></tr></tbody></table></div>
+<p><b>Procurement on its own</b> (Module 1: platform + procurement + payables; or with stock and inspection added, which matches your procure-to-pay draft), if you prefer to start with one module:</p>
+<div class="tbl"><table class=""><thead><tr><th>Package</th><th>Build h (incl. hardening)</th><th>Path A: weeks · US$ · ETB</th><th>Path B: weeks · US$ · ETB</th><th>Path C: weeks · US$ · ETB</th></tr></thead><tbody><tr><td>Module 1, core: platform + procurement + payables</td><td>1,420</td><td>build W1–W17, live ≈ W23<br><b>$15,760</b><br>ETB 2,553,120</td><td>build W1–W17, live ≈ W23<br><b>$12,360</b><br>ETB 2,002,320</td><td>build W1–W16, live ≈ W22<br><b>$8,000</b><br>ETB 1,296,000</td></tr><tr><td>Module 1, core + standard</td><td>1,663</td><td>build W1–W18, live ≈ W24<br><b>$16,765</b><br>ETB 2,715,930</td><td>build W1–W18, live ≈ W24<br><b>$13,165</b><br>ETB 2,132,730</td><td>build W1–W19, live ≈ W25<br><b>$9,125</b><br>ETB 1,478,250</td></tr><tr><td>Client procure-to-pay bundle: Module 1 core + stock (inventory core) + inspection (QC core)</td><td>1,770</td><td>build W1–W20, live ≈ W26<br><b>$18,315</b><br>ETB 2,967,030</td><td>build W1–W20, live ≈ W26<br><b>$14,315</b><br>ETB 2,319,030</td><td>build W1–W20, live ≈ W26<br><b>$9,515</b><br>ETB 1,541,430</td></tr></tbody></table></div></section></div><div class="panel wrap" role="tabpanel" id="panel-support" aria-labelledby="tab-support" hidden><section class="block"><h2 id="7-maintenance-and-support">7. Maintenance and support</h2>
+<p>The retainer starts after hypercare. It is billed monthly, for a minimum of 12 months <b>[owner to confirm]</b>. Unused hours carry over for one month. <b>Defect fixes after hypercare are covered by the retainer</b>; there is no separate warranty period.</p>
+<div class="tbl"><table class=""><thead><tr><th>Tier</th><th>Hours / month</th><th>Covers</th><th>Response</th><th>US$ / month</th><th>ETB / month</th><th>US$ / year</th></tr></thead><tbody><tr><td><b>Basic</b></td><td>30</td><td>Defect fixes, security and dependency patches, backup checks</td><td>Next business day for all severities; business hours</td><td>$150</td><td>24,300</td><td>$1,800</td></tr><tr><td><b>Standard</b></td><td>60</td><td>Basic + minor enhancements, monthly health check, version upgrades, one report change a month</td><td>4 business hours for Critical and High; next business day otherwise</td><td>$300</td><td>48,600</td><td>$3,600</td></tr><tr><td><b>Premium</b></td><td>100</td><td>Standard + 7-day on-call for Critical (weighbridge, gate or payments down), quarterly restore drill, small change requests</td><td>2 hours for Critical, 7 days a week; 4 business hours for High</td><td>$500</td><td>81,000</td><td>$6,000</td></tr></tbody></table></div>
+<ul class="clean"><li><b>Beyond the retainer:</b> work above the retainer hours is billed at the hourly rate, with your approval first.</li></ul></section><section class="block"><h2 id="8-rate-card-exchange-rate-and-extras">8. Rate card, exchange rate and extras</h2>
+<div class="tbl"><table class=""><thead><tr><th>Role</th><th>Typical week</th><th>US$ / hour</th><th>ETB / hour</th><th>US$ / week</th><th>ETB / week</th></tr></thead><tbody><tr><td>Lead developer</td><td>7 days × 8 h = 56 h</td><td>$5.00</td><td>810</td><td>$280</td><td>45,360</td></tr><tr><td>Second developer</td><td>6 days × 8 h = 48 h</td><td>$5.00</td><td>810</td><td>$240</td><td>38,880</td></tr><tr><td>Third developer</td><td>6 days × 8 h = 48 h</td><td>$5.00</td><td>810</td><td>$240</td><td>38,880</td></tr><tr><td>QA engineer</td><td>5 days × 8 h = 40 h</td><td>$5.00</td><td>810</td><td>$200</td><td>32,400</td></tr></tbody></table></div>
+<ul class="clean"><li><b>Exchange rate.</b> The planning rate is <b>ETB 162.00 per US$</b>. Mid-market was 161.20 (Wise) and 162.17 (XE) on 2026-09-27. Commercial Bank of Ethiopia's transactional rates were 160.23 buying and 163.44 selling on 2026-09-17 (Appendix B).<ul class="clean"><li>Invoices are issued in ETB at the planning rate.</li><li>If the National Bank of Ethiopia rate on the invoice date differs from it by more than 5%, that invoice uses the day's rate <b>[owner to confirm]</b>.</li></ul></li></ul>
+<div class="tbl"><table class=""><thead><tr><th>Total, build to go-live</th><th>US$</th><th>at ETB 145.80 (−10%)</th><th>at ETB 162.00 (planning)</th><th>at ETB 178.20 (+10%)</th></tr></thead><tbody><tr><td>Path A</td><td>$23,200</td><td>3,382,560</td><td>3,758,400</td><td>4,134,240</td></tr><tr><td>Path B</td><td>$18,000</td><td>2,624,400</td><td>2,916,000</td><td>3,207,600</td></tr><tr><td>Path C</td><td>$11,760</td><td>1,714,608</td><td>1,905,120</td><td>2,095,632</td></tr></tbody></table></div>
+<ul class="clean"><li><b>Change requests:</b> new or changed requirements are estimated in hours, approved by you in writing, and billed at the hourly rate. Scope is only added to the release if work of equal size leaves it, or by agreement.</li><li><b>Extra non-development hours:</b> workshops, training sessions or meetings beyond those planned are billed at the hourly rate. Planned: 3 requirement workshops, the monthly demos, the training in §2.</li><li><b>Travel and expenses:</b> visits within the city where the team works are included. Travel beyond it is billed at cost (transport, accommodation, per diem) with your approval first; travel time is billed at the hourly rate <b>[owner to confirm]</b>.</li></ul></section><section class="block"><h2 id="9-hosting-and-infrastructure">9. Hosting and infrastructure</h2>
+<p>The system runs on infrastructure you choose. Nothing is assumed until you answer the stakeholder questionnaire:</p>
+<ul class="clean"><li><b>on-premises</b> on your own server (Windows Server or Linux);</li><li><b>a virtual server</b> at a local provider or in a cloud;</li><li><b>a managed cloud setup.</b></li></ul>
+<p><b>Infrastructure is priced at cost</b> once you have answered. You buy it or rent it directly, or we buy it with your approval and re-invoice at cost. Our set-up hours are already in package 3.</p>
+<p><b>Indicative sizing for one plant</b>, to confirm with your answers:</p>
+<div class="tbl"><table class=""><thead><tr><th>Item</th><th>Indicative size</th></tr></thead><tbody><tr><td>Application and database server (or two servers)</td><td>8 virtual CPUs, 32 GB memory, 500 GB SSD</td></tr><tr><td>Staging server, for testing updates</td><td>4 virtual CPUs, 16 GB memory, 200 GB SSD</td></tr><tr><td>Backup storage, off the server</td><td>1–2 TB, with one copy off site</td></tr><tr><td>Power</td><td>A UPS for the server and the gate PCs</td></tr><tr><td>Gate and weighbridge</td><td>One PC or tablet per gate post; a 4G router as a network fallback; label printer and barcode scanner (optional)</td></tr><tr><td>Domain name and TLS certificate; email relay</td><td>Optional; needed for email notifications and remote access</td></tr></tbody></table></div></section></div><div class="panel wrap" role="tabpanel" id="panel-terms" aria-labelledby="tab-terms" hidden><section class="block"><h2 id="10-billing-and-payment-schedule">10. Billing and payment schedule</h2>
+<p>Three billing models:</p>
+<ol class="clean"><li><b>Hybrid (recommended).</b> Development and QA are invoiced monthly for the hours worked, capped at the plan. Go-live services are a fixed fee (60% at UAT sign-off, 40% at hypercare exit). Maintenance is monthly. You pay only for hours worked, and the cap protects you from overruns.</li><li><b>Fixed price by milestone.</b> The plan's price plus 10%, which covers the risk we then carry, paid at the milestones below.</li><li><b>Time and materials.</b> Hours worked, invoiced monthly, with no cap.</li></ol>
+<p><b>Team A:</b></p>
+<div class="tbl"><table class=""><thead><tr><th>When</th><th>Hybrid (recommended)</th><th>Fixed price per milestone</th></tr></thead><tbody><tr><td>Signature (mobilisation)</td><td>Monthly invoice for the planned team hours, ≈ $3,120</td><td>10% = $2,552</td></tr><tr><td>End-of-month-1 demo</td><td>Monthly, as above</td><td>10% = $2,552</td></tr><tr><td>End-of-month-2 demo</td><td>Monthly, as above</td><td>10% = $2,552</td></tr><tr><td>End-of-month-3 demo</td><td>Monthly, as above</td><td>10% = $2,552</td></tr><tr><td>End-of-month-4 demo</td><td>Monthly, as above</td><td>10% = $2,552</td></tr><tr><td>End-of-month-5 demo</td><td>Monthly, as above</td><td>10% = $2,552</td></tr><tr><td>Feature freeze (W26)</td><td>Monthly, as above</td><td>10% = $2,552</td></tr><tr><td>UAT sign-off</td><td>Go-live services: 60% of $4,480 = $2,688</td><td>15% = $3,828</td></tr><tr><td>Hypercare exit</td><td>Go-live services: 40% = $1,792</td><td>15% = $3,828</td></tr><tr><td><b>Total</b></td><td><b>$23,200</b> (hours worked, capped at the plan)</td><td><b>$25,520</b> (plan + 10% for the fixed-price risk)</td></tr></tbody></table></div>
+<p><b>Team B:</b></p>
+<div class="tbl"><table class=""><thead><tr><th>When</th><th>Hybrid (recommended)</th><th>Fixed price per milestone</th></tr></thead><tbody><tr><td>Signature (mobilisation)</td><td>Monthly invoice for the planned team hours, ≈ $2,253</td><td>10% = $1,980</td></tr><tr><td>End-of-month-1 demo</td><td>Monthly, as above</td><td>10% = $1,980</td></tr><tr><td>End-of-month-2 demo</td><td>Monthly, as above</td><td>10% = $1,980</td></tr><tr><td>End-of-month-3 demo</td><td>Monthly, as above</td><td>10% = $1,980</td></tr><tr><td>End-of-month-4 demo</td><td>Monthly, as above</td><td>10% = $1,980</td></tr><tr><td>End-of-month-5 demo</td><td>Monthly, as above</td><td>10% = $1,980</td></tr><tr><td>Feature freeze (W26)</td><td>Monthly, as above</td><td>10% = $1,980</td></tr><tr><td>UAT sign-off</td><td>Go-live services: 60% of $4,480 = $2,688</td><td>15% = $2,970</td></tr><tr><td>Hypercare exit</td><td>Go-live services: 40% = $1,792</td><td>15% = $2,970</td></tr><tr><td><b>Total</b></td><td><b>$18,000</b> (hours worked, capped at the plan)</td><td><b>$19,800</b> (plan + 10% for the fixed-price risk)</td></tr></tbody></table></div>
+<p><b>Team C:</b></p>
+<div class="tbl"><table class=""><thead><tr><th>When</th><th>Hybrid (recommended)</th><th>Fixed price per milestone</th></tr></thead><tbody><tr><td>Signature (mobilisation)</td><td>Monthly invoice for the planned team hours, ≈ $1,213</td><td>10% = $1,294</td></tr><tr><td>End-of-month-1 demo</td><td>Monthly, as above</td><td>10% = $1,294</td></tr><tr><td>End-of-month-2 demo</td><td>Monthly, as above</td><td>10% = $1,294</td></tr><tr><td>End-of-month-3 demo</td><td>Monthly, as above</td><td>10% = $1,294</td></tr><tr><td>End-of-month-4 demo</td><td>Monthly, as above</td><td>10% = $1,294</td></tr><tr><td>End-of-month-5 demo</td><td>Monthly, as above</td><td>10% = $1,294</td></tr><tr><td>Feature freeze (W26)</td><td>Monthly, as above</td><td>10% = $1,294</td></tr><tr><td>UAT sign-off</td><td>Go-live services: 60% of $4,480 = $2,688</td><td>15% = $1,940</td></tr><tr><td>Hypercare exit</td><td>Go-live services: 40% = $1,792</td><td>15% = $1,940</td></tr><tr><td><b>Total</b></td><td><b>$11,760</b> (hours worked, capped at the plan)</td><td><b>$12,936</b> (plan + 10% for the fixed-price risk)</td></tr></tbody></table></div>
+<p><b>For every model:</b></p>
+<ul class="clean"><li>Payment is due 15 days after invoice <b>[owner to confirm]</b>.</li><li>Month-end demos are the acceptance points for development.</li><li>UAT sign-off and hypercare exit are the acceptance points for go-live services.</li></ul></section><section class="block"><h2 id="11-assumptions">11. Assumptions</h2>
+<ol class="clean"><li><b>Client decisions and inputs.</b><ul class="clean"><li>You name a project sponsor and one key user per module, available about 4 hours a week during the build and full-time during UAT.</li><li>Answers to the questionnaire arrive by the weeks listed in it. Late answers move the affected modules, not the price per hour.</li><li>Master data (items, suppliers, customers, storage units, opening balances) is supplied in our templates. Cleaning your data is your responsibility; we help with checks.</li></ul></li><li><b>Scope.</b> Requirements are as in the FRD version 0.3.2 and the process model. Changes go through §8.</li><li><b>Standards.</b> Screens follow your procure-to-pay draft's layout, with the corrections we agreed. English with the Gregorian calendar in the first release.</li><li><b>Rates.</b> Tax rates, withholding rules and approval bands are configuration you confirm. No country rule is hard-coded.</li><li><b>Infrastructure.</b> Infrastructure and third-party services are bought at cost and are not in these prices (§9).</li><li><b>Weighbridge.</b> Weights are entered by hand, with photo and blind-verification controls. A direct weighbridge connection is a later option.</li></ol></section><section class="block"><h2 id="12-exclusions">12. Exclusions</h2>
+<p>These are not in the price unless ordered separately:</p>
+<ul class="clean"><li>a general ledger, chart of accounts and financial statements (journals are exported to your accounting package);</li><li>payroll and HR;</li><li>direct connections to the weighbridge, label printers, barriers or number-plate cameras;</li><li>bank payment files, fiscal devices and e-invoicing. If the law requires a fiscal device for sales invoices, it is added by change request;</li><li>a supplier or customer portal; RFQ comparison; contracts;</li><li>MRP, production scheduling, labour and overhead costing;</li><li>Amharic and the Ethiopian calendar;</li><li>hardware, software licences, hosting and internet.</li></ul></section><section class="block"><h2 id="13-terms-to-agree">13. Terms to agree</h2>
+<div class="tbl"><table class=""><thead><tr><th>Topic</th><th>Proposal</th></tr></thead><tbody><tr><td>Ownership</td><td><b>You own your build:</b> you receive its complete source code, with a perpetual, irrevocable right to use, change and maintain it for your business, yourselves or through anyone you hire. [Vendor] keeps the right to use the same software (MOS) and sell it to other companies. Your data and your company-specific configuration are yours alone, always exportable, and never shared</td></tr><tr><td>Source code</td><td>Delivered to you at go-live and with each maintenance release</td></tr><tr><td>Confidentiality</td><td>Mutual; your business data is never used outside your installation</td></tr><tr><td>Acceptance</td><td>Month-end demos for development; the UAT script for go-live; hypercare exit criteria for handover</td></tr><tr><td>Termination</td><td>Either side with 30 days' notice; hours worked are paid; delivered work and your data are handed over</td></tr></tbody></table></div></section><section class="block"><h2 id="14-next-steps">14. Next steps</h2>
+<ol class="clean"><li>Choose the team (A, B or C).</li><li>Name the sponsor and the key users; choose the start week (W1).</li><li>Answer the stakeholder questionnaire. The items needed before W1 come first: product scope ("flour"), currency of purchase orders, the meaning of "operation unit", and users and roles.</li><li>Sign the agreement. W1 starts with the platform, and the first progress checkpoint is at week 4.</li></ol></section><section class="block"><h2 id="appendix-a-basis-of-estimate">Appendix A. Basis of estimate</h2>
+<ul class="clean"><li><b>Bottom-up.</b> Every one of the 205 first-release requirements was mapped to one of 187 features, and each feature estimated in developer hours with AI assistance (implementation plan v0.4, Appendix A).<ul class="clean"><li>Core depth: 2,380 hours.</li><li>Core + standard: 2,986 hours.</li><li>Full first release: 3,102 hours.</li></ul></li><li><b>Capacity.</b> About 80% of each person's hours go to building; the rest goes to meetings, reviews, demos and your questions. One week of the 26 is kept as reserve.</li><li><b>Plan.</b> The six modules at core depth are scheduled into each developer's weeks, respecting which module depends on which, so they finish by week 25. The week-4 and week-9 checkpoints compare actual speed with that plan.</li><li><b>Price.</b> Team members × weekly hours × 26 weeks × US$5 for development and QA during the build, plus the go-live hours. It is not a fixed price unless you choose the fixed-price model (§10).</li></ul></section><section class="block"><h2 id="appendix-b-exchange-rate-sources-checked-2026-09-27">Appendix B. Exchange-rate sources (checked 2026-09-27)</h2>
+<div class="tbl"><table class=""><thead><tr><th>Source</th><th>Rate (ETB per US$)</th><th>Date</th></tr></thead><tbody><tr><td>Wise, mid-market</td><td>161.20</td><td>2026-09-27</td></tr><tr><td>XE, mid-market</td><td>162.17</td><td>2026-09-27, 19:09 UTC</td></tr><tr><td>Commercial Bank of Ethiopia, transactional buying / selling</td><td>160.23 / 163.44</td><td>2026-09-17</td></tr><tr><td><b>Planning rate used here</b></td><td><b>162.00</b></td><td>rounded from the two mid-market rates</td></tr></tbody></table></div>
+<p>Sources:</p>
+<ul class="clean"><li>https://wise.com/gb/currency-converter/usd-to-etb-rate/history</li><li>https://www.xe.com/en-us/currencyconverter/convert/?Amount=1&amp;From=USD&amp;To=ETB</li><li>https://ethio.forex/bank/CBET</li></ul></section></div>
+</main>
+<footer class="wrap foot"><p class="note">Source: <code>MOS/docs/MOS-COMMERCIAL-PROPOSAL.md</code>. Kept locally in the MOS repository; not published.</p></footer>
+<script type="module">
+const MERMAID_URL = 'https://cdn.jsdelivr.net/npm/mermaid@12/dist/mermaid.esm.min.mjs';
+const tabs = [...document.querySelectorAll('[role="tab"]')];
+const panels = [...document.querySelectorAll('[role="tabpanel"]')];
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch { /* storage unavailable */ } },
+};
+
+function show(key, focusTab) {
+  let found = false;
+  for (const t of tabs) {
+    const on = t.id === `tab-${key}`;
+    t.setAttribute('aria-selected', String(on));
+    t.tabIndex = on ? 0 : -1;
+    if (on) { found = true; if (focusTab) t.focus(); }
+  }
+  if (!found) return show('overview', focusTab);
+  for (const p of panels) p.hidden = p.id !== `panel-${key}`;
+  store.set('mos-pm-tab', key);
+  renderVisible();
+}
+tabs.forEach((t, i) => {
+  t.addEventListener('click', () => show(t.id.slice(4)));
+  t.addEventListener('keydown', (e) => {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    const next = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+    show(next.id.slice(4), true);
+  });
+});
+
+// ---- Mermaid, loaded from the CDN and drawn lazily (hidden diagrams cannot be measured)
+let mermaid = null;
+const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function initMermaid() {
+  const dark = matchMedia('(prefers-color-scheme: dark)').matches;
+  mermaid.initialize({
+    startOnLoad: false,
+    securityLevel: 'strict',
+    htmlLabels: false,
+    theme: 'base',
+    fontFamily: css('--font-body'),
+    themeVariables: {
+      darkMode: dark,
+      background: css('--surface'),
+      fontFamily: css('--font-body'),
+      fontSize: '13px',
+      primaryColor: css('--accent-soft'),
+      primaryBorderColor: css('--accent'),
+      primaryTextColor: css('--ink'),
+      secondaryColor: css('--amber-soft'),
+      tertiaryColor: css('--surface-2'),
+      lineColor: css('--ink-2'),
+      textColor: css('--ink'),
+      mainBkg: css('--accent-soft'),
+      clusterBkg: css('--surface-2'),
+      clusterBorder: css('--rule'),
+      edgeLabelBackground: css('--surface'),
+      actorBkg: css('--accent-soft'),
+      actorBorder: css('--accent'),
+      actorTextColor: css('--ink'),
+      actorLineColor: css('--rule'),
+      signalColor: css('--ink-2'),
+      signalTextColor: css('--ink'),
+      labelBoxBkgColor: css('--surface-2'),
+      labelBoxBorderColor: css('--rule'),
+      labelTextColor: css('--ink'),
+      loopTextColor: css('--ink-2'),
+      noteBkgColor: css('--amber-soft'),
+      noteBorderColor: css('--amber'),
+      noteTextColor: css('--ink'),
+      activationBkgColor: css('--surface-2'),
+      stateLabelColor: css('--ink'),
+      transitionColor: css('--ink-2'),
+      transitionLabelColor: css('--ink-2'),
+    },
+    flowchart: { htmlLabels: false, curve: 'basis', useMaxWidth: true },
+    sequence: { useMaxWidth: true, wrap: true, width: 170, messageFontSize: 13, actorFontSize: 13, noteFontSize: 12 },
+    state: { useMaxWidth: true },
+  });
+}
+let queue = Promise.resolve();
+function renderVisible() {
+  if (!mermaid) return queue;
+  queue = queue.then(async () => {
+    for (const el of document.querySelectorAll('.mmd:not([data-done])')) {
+      if (el.offsetParent === null) continue;
+      try {
+        const { svg } = await mermaid.render(`${el.id}-svg`, el.dataset.src);
+        el.innerHTML = svg;
+        el.dataset.done = '1';
+      } catch (err) {
+        el.dataset.done = 'error';
+        el.classList.add('failed');
+        el.textContent = 'This diagram could not be drawn; its source is shown below.';
+        el.nextElementSibling?.classList.add('show');
+      }
+    }
+  });
+  return queue;
+}
+import(MERMAID_URL)
+  .then(async (m) => {
+    // measure labels with the real web font, or they are clipped once it loads
+    await Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 3000))]);
+    mermaid = m.default; initMermaid(); renderVisible();
+  })
+  .catch(() => { document.body.classList.add('offline'); });
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+  if (!mermaid) return;
+  initMermaid();
+  document.querySelectorAll('.mmd[data-done="1"]').forEach((el) => { delete el.dataset.done; el.innerHTML = ''; });
+  renderVisible();
+});
+document.addEventListener('toggle', (e) => { if (e.target.open) renderVisible(); }, true);
+
+// ---- open / close all processes
+document.querySelectorAll('.toolbar .btn').forEach((b) => b.addEventListener('click', () => {
+  const open = b.dataset.act === 'expand';
+  b.closest('.panel').querySelectorAll('details.proc').forEach((d) => { d.open = open; });
+  renderVisible();
+}));
+
+// ---- in-page links switch to the right tab and open the right section
+function goTo(id) {
+  const target = document.getElementById(id);
+  if (!target) return false;
+  const panel = target.closest('[role="tabpanel"]');
+  if (panel) show(panel.id.slice(6));
+  if (target.tagName === 'DETAILS') target.open = true;
+  let d = target.parentElement?.closest('details');
+  while (d) { d.open = true; d = d.parentElement?.closest('details'); }
+  requestAnimationFrame(() => target.scrollIntoView({ block: 'start' }));
+  renderVisible();
+  return true;
+}
+document.addEventListener('click', (e) => {
+  const a = e.target.closest('a[href^="#"]');
+  if (!a) return;
+  const id = decodeURIComponent(a.getAttribute('href').slice(1));
+  if (goTo(id)) { e.preventDefault(); history.replaceState(null, '', `#${id}`); }
+});
+
+// ---- print: show everything, draw every diagram, then print
+const printBtn = document.getElementById('printBtn');
+let opened = [];
+function expandForPrint() {
+  panels.forEach((p) => { p.hidden = false; });
+  opened = [...document.querySelectorAll('details:not([open])')];
+  opened.forEach((d) => { d.open = true; });
+}
+function restoreAfterPrint() {
+  opened.forEach((d) => { d.open = false; });
+  opened = [];
+  show(store.get('mos-pm-tab') || 'overview');
+}
+printBtn.addEventListener('click', async () => {
+  expandForPrint();
+  await renderVisible();
+  setTimeout(() => window.print(), 250);
+});
+window.addEventListener('beforeprint', () => { if (!opened.length) expandForPrint(); });
+window.addEventListener('afterprint', restoreAfterPrint);
+
+// ---- start
+const initial = decodeURIComponent(location.hash.slice(1));
+if (!(initial && goTo(initial))) show(store.get('mos-pm-tab') || 'overview');
+
+</script>
+</body>
+</html>
