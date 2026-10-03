@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Owner meeting briefing</title>
+<style>:root{
+  --bg:#f6f5f1; --card:#ffffff; --soft:#f0efe9;
+  --ink:#1f2328; --ink2:#4a525b; --muted:#6b737c; --rule:#dcd9cf; --rule2:#e9e7df;
+  --accent:#1f6f6b; --accent-soft:#e2f0ee; --accent-ink:#17534f;
+  --q:#a35d00; --q-soft:#fbefdc;
+  --font:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:Consolas,"SFMono-Regular",ui-monospace,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#15181b; --card:#1d2125; --soft:#22272c;
+    --ink:#e8eaec; --ink2:#bfc5cb; --muted:#8f979f; --rule:#343a41; --rule2:#2a3036;
+    --accent:#5fb8b1; --accent-soft:#1c3331; --accent-ink:#8fd3cd;
+    --q:#e2a554; --q-soft:#33281a;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#15181b; --card:#1d2125; --soft:#22272c;
+  --ink:#e8eaec; --ink2:#bfc5cb; --muted:#8f979f; --rule:#343a41; --rule2:#2a3036;
+  --accent:#5fb8b1; --accent-soft:#1c3331; --accent-ink:#8fd3cd;
+  --q:#e2a554; --q-soft:#33281a;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:17px;line-height:1.6}
+.wrap{max-width:1100px;margin:0 auto;padding-inline:24px}
+@media (max-width:600px){.wrap{padding-inline:16px} body{font-size:16px}}
+.top{background:var(--card);border-bottom:1px solid var(--rule);padding:28px 0 20px}
+.eyebrow{margin:0 0 6px;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:600}
+h1{margin:0;font-size:clamp(28px,4.2vw,40px);line-height:1.15;font-weight:700;text-wrap:balance}
+h2{font-size:27px;line-height:1.2;margin:0 0 14px;font-weight:700;text-wrap:balance}
+h3{font-size:20px;margin:30px 0 10px;font-weight:650;color:var(--accent-ink);text-wrap:balance}
+h4{font-size:17px;margin:20px 0 8px}
+[id]{scroll-margin-top:70px}
+p{margin:10px 0;max-width:75ch}
+a{color:var(--accent-ink)}
+strong{font-weight:650}
+code{font-family:var(--mono);font-size:.88em;background:var(--soft);border:1px solid var(--rule2);border-radius:4px;padding:0 4px}
+.tools{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
+.tools button{font:inherit;font-size:14px;padding:6px 14px;border-radius:999px;border:1px solid var(--rule);background:var(--soft);color:var(--ink);cursor:pointer}
+.tools button:hover{border-color:var(--accent)}
+.toc{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(6px);border-bottom:1px solid var(--rule)}
+.toc .wrap{display:flex;gap:4px;overflow-x:auto;padding-block:8px;scrollbar-width:thin}
+.toc a{flex:none;font-size:14px;text-decoration:none;color:var(--ink2);padding:5px 12px;border-radius:999px;white-space:nowrap}
+.toc a:hover{background:var(--accent-soft);color:var(--accent-ink)}
+.sec{background:var(--card);border:1px solid var(--rule);border-radius:14px;padding:26px 28px;margin:22px 0}
+@media (max-width:600px){.sec{padding:18px 16px;border-radius:10px}}
+ul,ol{margin:8px 0;padding-left:24px}
+li{margin:4px 0}
+li>ul,li>ol{margin:4px 0}
+blockquote{margin:16px 0;padding:14px 18px;background:var(--accent-soft);border-left:4px solid var(--accent);border-radius:8px;color:var(--ink)}
+.tbl{overflow-x:auto;margin:14px 0;border:1px solid var(--rule);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:15.5px}
+th,td{text-align:left;vertical-align:top;padding:10px 12px;border-bottom:1px solid var(--rule2)}
+th{background:var(--soft);font-weight:650;font-size:14px;color:var(--ink2)}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even) td{background:color-mix(in srgb,var(--soft) 45%,transparent)}
+td.key{font-weight:650;white-space:nowrap}
+td.ans{min-width:180px}
+.q{display:inline-block;font-weight:700;font-size:.85em;color:var(--q);background:var(--q-soft);border-radius:6px;padding:0 6px;white-space:nowrap}
+.flow{list-style:none;padding:0;margin:16px 0;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.flow li{margin:0;background:var(--accent-soft);color:var(--accent-ink);border:1px solid color-mix(in srgb,var(--accent) 35%,transparent);border-radius:999px;padding:6px 14px;font-weight:600;font-size:15px}
+.flow li:not(:last-child)::after{content:"→";margin-left:12px;color:var(--muted);font-weight:400}
+.shots{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin:8px 0 14px}
+.shot{display:block;text-decoration:none;color:var(--muted);font-size:13px;border:1px solid var(--rule);border-radius:10px;overflow:hidden;background:var(--soft)}
+.shot img{display:block;width:100%;height:170px;object-fit:cover;object-position:top;background:#fff}
+.shot span{display:block;padding:5px 10px}
+.shot:hover{border-color:var(--accent)}
+.foot{color:var(--muted);font-size:13px;padding-block:24px 40px}
+@media print{
+  body{background:#fff;font-size:12pt}
+  .toc,.tools,.foot{display:none}
+  .top{border:0;padding:0 0 10px}
+  .sec{border:0;padding:0;margin:0 0 18px;break-inside:auto}
+  .sec+.sec{break-before:page}
+  .shots{grid-template-columns:repeat(3,1fr)}
+  .shot img{height:130px}
+  .tbl{overflow:visible;border:0}
+  th,td{border:1px solid #bbb}
+  td.ans{min-width:6cm;height:1.6cm}
+  tr{break-inside:avoid}
+  a{color:inherit;text-decoration:none}
+}
+</style>
+</head>
+<body>
+<style>@media print{.mos-nav{display:none}}</style><div class="mos-nav" style="font:14px/1.4 'Segoe UI',system-ui,sans-serif;padding:7px 16px;background:#1f6f6b;color:#fff"><a href="../../../index.html" style="color:#fff;font-weight:600;text-decoration:none">&larr; MOS start page</a><span style="opacity:.8"> &nbsp;&middot;&nbsp; 8. Meetings</span></div>
+<header class="top"><div class="wrap">
+<p class="eyebrow">For the owner only</p>
+<h1>Owner briefing for the 3 October meeting (for you only, not for the client)</h1>
+<div class="tools"><button type="button" onclick="window.print()">Print / save as PDF</button>
+<button type="button" id="theme">Dark / light</button></div>
+</div></header>
+<nav class="toc"><div class="wrap"><a href="#1-your-goal-for-the-meeting-in-three-lines">1. Your goal for the meeting, in three lines</a><a href="#2-open-with-this">2. Open with this</a><a href="#3-positions-to-hold-and-why-if-they-push-back">3. Positions to hold, and why (if they push back)</a><a href="#4-where-you-can-give-ground-at-no-cost">4. Where you can give ground at no cost</a><a href="#5-if-they-ask-about-the-timeline">5. If they ask about the timeline</a><a href="#6-if-they-ask-about-price">6. If they ask about price</a><a href="#7-things-to-note-during-the-meeting">7. Things to note during the meeting</a><a href="#8-where-each-question-lives-in-our-register">8. Where each question lives in our register</a><a href="#9-after-the-meeting">9. After the meeting</a></div></nav>
+<main class="wrap">
+<p><strong>Meeting:</strong> Saturday 3 October 2026, "1 o'clock at night" local time, which is <strong>7 PM</strong>. That is how the chat on 2 October settled it: you proposed "1 pm local" and the client asked "1 night?"; you said yes.</p>
+<p><strong>What the client said they will discuss:</strong> "the two documents mentioned above". Those are the two sent on 1 October as "final": the <strong>procure-to-pay UI</strong> (P2P process v2) and the <strong>data dictionary</strong>. The architecture proposal came separately on 2 October, so it is in the pack's appendix in case it comes up.</p>
+<p><strong>What to share on screen:</strong> <code>DISCUSSION-PACK.html</code>. It is written for the client: plain language, no internal decision IDs, no prices.</p>
+<section class="sec" id="1-your-goal-for-the-meeting-in-three-lines">
+<h2 id="1-your-goal-for-the-meeting-in-three-lines">1. Your goal for the meeting, in three lines</h2>
+<ol><li><strong>Agree:</strong> "we capture every field and every step; the table design is ours" (<span class="q">Q-18</span>).</li><li><strong>Get answers, or an owner and a date, for the four questions that size the work</strong> (<span class="q">Q-01</span> to <span class="q">Q-04</span>). They decide how much fits in the six-month plan.</li><li><strong>Leave with the next steps agreed:</strong> their answers within a week; a third revision of page 1; a realistic example for acceptance testing.</li></ol>
+</section>
+<section class="sec" id="2-open-with-this">
+<h2 id="2-open-with-this">2. Open with this</h2>
+<blockquote>"Thank you for these documents. They are detailed and they confirm that your process and ours are the same. Almost every one of your screens matches what we have planned, and we're adding the three that are new. We'll take every field in your data dictionary. Today we'd like to go through the points to agree, and four questions only you can answer, because they decide the size of the work."</blockquote>
+<p>Keep the tone <strong>"we're adopting your work"</strong>, not "we found 25 defects". A second, page-by-page check on 3 October corrected our own review in a few places (§3.6, §4.5 and §5.4 of the review); the pack already uses the corrected facts. The full internal audit is <a href="../../7-reviews/MOS-CLIENT-DOCS-V2-REVIEW.html">MOS-CLIENT-DOCS-V2-REVIEW.md</a>; don't show it to the client as it is.</p>
+</section>
+<section class="sec" id="3-positions-to-hold-and-why-if-they-push-back">
+<h2 id="3-positions-to-hold-and-why-if-they-push-back">3. Positions to hold, and why (if they push back)</h2>
+<div class="tbl"><table>
+<thead><tr><th>Topic</th><th>Hold this</th><th>One-line reason to give</th></tr></thead>
+<tbody>
+<tr><td>Table design</td><td>Ours, with every client field added</td><td>Without line links the system can't stop paying the same delivery twice; an editable stock history corrupts balances</td></tr>
+<tr><td>Status dropdowns</td><td>No: status changes only by actions (submit, approve, post)</td><td>A dropdown lets anyone skip the approval</td></tr>
+<tr><td>Supplier bank details</td><td>Only from the approved supplier record; a change needs a second person</td><td>One of the most common payment-fraud routes</td></tr>
+<tr><td>Supplier-raised payment requests (page 22)</td><td>Not in this release; a priced change later</td><td>It contradicts their own page 1, and opens the system to outsiders</td></tr>
+<tr><td>Rejected delivery received in full (page 9)</td><td>Never: rejected stock is returned or held</td><td>Otherwise rejected grain becomes payable stock</td></tr>
+<tr><td>One costing method per company</td><td>Yes, not per store or silo</td><td>The same wheat can't have two costs</td></tr>
+<tr><td>Posted count = approved count</td><td>Yes</td><td>Otherwise the count can be quietly changed at posting</td></tr>
+<tr><td>Different people for recording, inspecting and receiving a delivery</td><td>Yes, with logged exceptions for a small team (<span class="q">Q-23</span>)</td><td>The examples show one person in all three roles; nobody would check their work</td></tr>
+<tr><td>TypeScript</td><td>Keep it</td><td>Their examples are JavaScript, but they call TypeScript "worth considering". It catches mistakes before users see them, and JavaScript developers pick it up quickly</td></tr>
+</tbody></table></div>
+</section>
+<section class="sec" id="4-where-you-can-give-ground-at-no-cost">
+<h2 id="4-where-you-can-give-ground-at-no-cost">4. Where you can give ground at no cost</h2>
+<ul><li><strong>Their module names</strong> in our offer (procurement, inventory, QC, payables, production, sales, receivables, user management), with the gate shown separately.</li><li><strong>Their folder names</strong> inside each module, so their developers feel at home.</li><li><strong>React Router, and a Vite build</strong> for the frontend, which their architecture proposes. <strong>This is still your open decision O-27</strong>: I recommend Vite. If you haven't decided, say "we're evaluating it and lean towards your choice".</li><li><strong>No Redis</strong>: pg-boss inside PostgreSQL. Your open decision O-28; I recommend pg-boss. Same line if undecided.</li><li><strong>OpenAPI/Swagger documentation</strong> from the start (about 8 hours).</li><li><strong>"Approve every invoice"</strong> as a setting (<span class="q">Q-04</span>).</li><li><strong>Which release each addition lands in.</strong> The pack says some additions come in the follow-up release. The six-month re-plan (done, 3 October) keeps blind counting, the Excel count import, "checked by" and invoice approval at standard depth (built if time allows), and makes finished-flour release and the stock check core.</li></ul>
+<p><strong>One default to know about:</strong> <span class="q">Q-20</span>'s default assumes that finished-flour release and the stock check before sales-order approval are at go-live depth. That is my recommendation, about +16 hours: without the release, finished flour stays on hold and can never be sold. If you disagree, change the default before the meeting.</p>
+</section>
+<section class="sec" id="5-if-they-ask-about-the-timeline">
+<h2 id="5-if-they-ask-about-the-timeline">5. If they ask about the timeline</h2>
+<p>Your instruction (3 October) is that <strong>everything fits in under six months</strong>: build, testing, hosting, UAT, training and go-live. <strong>The re-plan is done</strong> (<a href="../../6-decisions/adr/ADR-0025-everything-in-six-months.md">ADR-0025</a>, <a href="../../4-plan/MOS-IMPLEMENTATION-PLAN.html">implementation plan</a> 0.5). What to say:</p>
+<blockquote>"Everything, including testing on your servers, your team's acceptance testing, training and going live, is planned inside six months, with go-live in week 24. Each module goes to your key users for testing as soon as it's built, rather than all at the end. Your answers on weighing and grading today decide how comfortable that is."</blockquote>
+<div class="tbl"><table>
+<thead><tr><th>Weeks</th><th>What</th></tr></thead>
+<tbody>
+<tr><td>W1–W20</td><td>Build, in two-week sprints; each module tested by their key users as it lands (from about W8)</td></tr>
+<tr><td>By W4 / W16</td><td>Test server on their infrastructure / production server ready</td></tr>
+<tr><td>W21–W22</td><td>Full system test and final acceptance test</td></tr>
+<tr><td>W23</td><td>Training and the data-migration rehearsal</td></tr>
+<tr><td><strong>W24</strong></td><td><strong>Go-live</strong></td></tr>
+<tr><td>W25–W26</td><td>Hypercare (close support right after go-live), then maintenance</td></tr>
+</tbody></table></div>
+<p><strong>What the re-plan found (for you, not for the client):</strong></p>
+<ul><li>The speed needed to build everything in 20 weeks: <strong>path A+ (3 developers + QA) ×1.33</strong>, the best case of the estimate; <strong>path A (2 developers + QA) ×1.89</strong>; path B ×2.22; path C does not fit. Recommendation: lead with A+ (open decision O-34).</li><li><strong>"No gate module" and "pass/fail inspection" remove about 230 core hours:</strong> A+ drops to ×1.19 and A to ×1.59. That is the difference between a comfortable and a tight six months, so <span class="q">Q-01</span> and <span class="q">Q-02</span> matter most tonight.</li><li>Two things the client must give <strong>before W1</strong>: the infrastructure answers (the test server is needed by W4) and the names of their key users.</li></ul>
+</section>
+<section class="sec" id="6-if-they-ask-about-price">
+<h2 id="6-if-they-ask-about-price">6. If they ask about price</h2>
+<p><strong>Your instruction (3 October): the price stays within ETB 1,000,000.</strong> The proposal draft now carries <strong>one fixed price of ETB 986,615</strong> (about US$6,090) for every given requirement and every go-live service; maintenance, new features, hosting and third-party services are outside it. The breakdown by phase, sprint, module and feature is in the <a href="../../5-for-the-client/MOS-PRICING-AND-TIMELINE.html">pricing and timeline</a>. If asked, you can say: "about ETB 990,000, fixed, everything to go-live included, paid as each part is accepted."</p>
+<p><strong>For you only:</strong> at the US$5 rate card the six-month team costs ETB 3.59 million (A+), 2.82 million (A) or 2.17 million (B). The fixed price covers about 27% of A+'s cost, about ETB 222 per team hour instead of ETB 810. That is your call (register A-43), but go in knowing it.</p>
+</section>
+<section class="sec" id="7-things-to-note-during-the-meeting">
+<h2 id="7-things-to-note-during-the-meeting">7. Things to note during the meeting</h2>
+<ul><li>The answer to each Q number. The pack's tables have a column for it in the printable view.</li><li>Who answers what, and by when.</li><li><strong>Who the key users are</strong> per module (needed for acceptance testing).</li><li><strong>Whether they have a weighbridge</strong>, its make and model, and whether it connects to a PC.</li><li><strong>Their IT set-up</strong>, if it comes up: servers, Windows or Linux, internet at the gate. The infrastructure questionnaire (I-01 to I-17) covers it.</li></ul>
+</section>
+<section class="sec" id="8-where-each-question-lives-in-our-register">
+<h2 id="8-where-each-question-lives-in-our-register">8. Where each question lives in our register</h2>
+<p>The pack numbers questions <span class="q">Q-01</span>…<span class="q">Q-23</span> for the client. This is where each one goes in the <a href="../../6-decisions/MOS-DECISION-REGISTER.html">decision register</a> and the <a href="../../7-reviews/MOS-CLIENT-DOCS-V2-REVIEW.html">review</a> §8. C-01…C-49 and I-18 are all in the register (0.2, updated 3 October with the review's questions). <strong>C-48, C-49 and I-18 are new from the 3 October re-check.</strong></p>
+<div class="tbl"><table>
+<thead><tr><th>Pack</th><th>Register</th><th>Pack</th><th>Register</th><th>Pack</th><th>Register</th></tr></thead>
+<tbody>
+<tr><td><span class="q">Q-01</span></td><td>C-38 (+ C-29)</td><td><span class="q">Q-09</span></td><td>C-04</td><td><span class="q">Q-17</span></td><td>C-16, C-17</td></tr>
+<tr><td><span class="q">Q-02</span></td><td>C-25…C-27</td><td><span class="q">Q-10</span></td><td>C-41</td><td><span class="q">Q-18</span></td><td>C-37 (O-33)</td></tr>
+<tr><td><span class="q">Q-03</span></td><td>C-39</td><td><span class="q">Q-11</span></td><td>C-43</td><td><span class="q">Q-19</span></td><td>C-24</td></tr>
+<tr><td><span class="q">Q-04</span></td><td>C-42</td><td><span class="q">Q-12</span></td><td>C-44</td><td><span class="q">Q-20</span></td><td><strong>C-48</strong></td></tr>
+<tr><td><span class="q">Q-05</span></td><td>C-40</td><td><span class="q">Q-13</span></td><td>C-28</td><td><span class="q">Q-21</span></td><td><strong>I-18</strong></td></tr>
+<tr><td><span class="q">Q-06</span></td><td>C-37</td><td><span class="q">Q-14</span></td><td>C-45</td><td><span class="q">Q-22</span></td><td>C-24 (updated)</td></tr>
+<tr><td><span class="q">Q-07</span></td><td>C-36</td><td><span class="q">Q-15</span></td><td>C-46</td><td><span class="q">Q-23</span></td><td><strong>C-49</strong></td></tr>
+<tr><td><span class="q">Q-08</span></td><td>C-03</td><td><span class="q">Q-16</span></td><td>C-47</td><td></td><td></td></tr>
+</tbody></table></div>
+</section>
+<section class="sec" id="9-after-the-meeting">
+<h2 id="9-after-the-meeting">9. After the meeting</h2>
+<p>Send me your notes, or just the answers, and I will:</p>
+<ol><li>fold them into the requirements, the database design and the register;</li><li>update the questionnaire;</li><li>recompute the six-month plan with the answers (the model is set up for it: <span class="q">Q-01</span>/<span class="q">Q-02</span> alone move A+ from ×1.33 to ×1.19).</li></ol>
+</section>
+</main>
+<footer class="wrap foot">MOS planning · local document, not published</footer>
+<script>
+(function(){var b=document.getElementById('theme');b.onclick=function(){var r=document.documentElement;var d=r.getAttribute('data-theme')==='dark'||(!r.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);r.setAttribute('data-theme',d?'light':'dark');};})();
+</script>
+</body>
+</html>

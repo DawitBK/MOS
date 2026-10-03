@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MOS reading guide</title>
+<meta name="description" content="MOS reading guide: the order to read everything in.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+:root{
+  --ground:#f2f4f3; --surface:#ffffff; --surface-2:#f7f9f8;
+  --ink:#18212b; --ink-2:#44505c; --muted:#68737e; --rule:#d5dbdc; --rule-2:#e6eaea;
+  --accent:#2563b8; --accent-ink:#1d4f94; --accent-soft:#e7eef9;
+  --amber:#c9851c; --amber-soft:#f8eedd; --amber-ink:#7a4f0c;
+  --ok:#2f7a4f; --danger:#b3372f;
+  --font-display:"Barlow Semi Condensed","Arial Narrow",Arial,sans-serif;
+  --font-body:"Public Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#12171d; --surface:#1a2129; --surface-2:#161c23;
+    --ink:#e7ebef; --ink-2:#b8c2cc; --muted:#8e9aa6; --rule:#2e3844; --rule-2:#252e38;
+    --accent:#5b93e6; --accent-ink:#8db5f0; --accent-soft:#1d2c44;
+    --amber:#b8842c; --amber-soft:#2e2517; --amber-ink:#e2b46a;
+    --ok:#5fb383; --danger:#e37a70;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#12171d; --surface:#1a2129; --surface-2:#161c23;
+  --ink:#e7ebef; --ink-2:#b8c2cc; --muted:#8e9aa6; --rule:#2e3844; --rule-2:#252e38;
+  --accent:#5b93e6; --accent-ink:#8db5f0; --accent-soft:#1d2c44;
+  --amber:#b8842c; --amber-soft:#2e2517; --amber-ink:#e2b46a;
+  --ok:#5fb383; --danger:#e37a70;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.55;margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:20px}
+@media (max-width:520px){.wrap{padding-inline:16px}}
+h1,h2,h3,h4{font-family:var(--font-display);text-wrap:balance;margin:0;color:var(--ink);letter-spacing:.005em}
+h1{font-size:clamp(34px,5vw,48px);font-weight:700;line-height:1.05}
+h2{font-size:26px;font-weight:700;line-height:1.15;margin-top:6px}
+h3{font-size:19px;font-weight:600;line-height:1.25}
+h4{font-size:16px;font-weight:600}
+[id]{scroll-margin-top:64px}
+p{margin:0;max-width:78ch}
+a{color:var(--accent-ink)}
+code{font-family:var(--font-mono);font-size:.86em;background:var(--surface-2);border:1px solid var(--rule-2);border-radius:4px;padding:0 4px}
+.eyebrow{font-family:var(--font-mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.masthead{padding-block:34px 20px;display:grid;gap:14px}
+.masthead .lede{font-size:17px;color:var(--ink-2);max-width:80ch}
+.status-line{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.pill{display:inline-flex;align-items:center;font-family:var(--font-mono);font-size:12px;padding:3px 9px;border-radius:999px;border:1px solid var(--rule);background:var(--surface);color:var(--ink-2);white-space:nowrap}
+.pill.plan{border-color:var(--accent);color:var(--accent-ink);background:var(--accent-soft)}
+.pill.rev{border-color:var(--amber);color:var(--amber-ink);background:var(--amber-soft)}
+.spec{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));border:1px solid var(--rule);background:var(--surface);border-radius:6px}
+.spec div{padding:12px 14px;border-right:1px solid var(--rule-2)}
+.spec div:last-child{border-right:0}
+.spec b{display:block;font-family:var(--font-display);font-size:26px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.1}
+.spec span{font-size:12.5px;color:var(--muted)}
+.note{font-size:13.5px;color:var(--muted)}
+.btn{appearance:none;border:1px solid var(--rule);background:var(--surface);color:var(--ink);font:500 13px/1.2 var(--font-body);padding:7px 12px;border-radius:6px;cursor:pointer}
+.btn:hover{border-color:var(--accent);color:var(--accent-ink)}
+.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn.print{margin-left:auto}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap}
+.tabbar{position:sticky;top:0;z-index:5;background:var(--ground);border-bottom:1px solid var(--rule)}
+.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:thin}
+.tabs button{appearance:none;border:0;background:none;color:var(--ink-2);font-family:var(--font-display);font-size:16px;font-weight:600;padding:12px 14px 10px;border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tabs button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.panel{padding-block:26px 48px;display:grid;gap:30px}
+.panel[hidden]{display:none}
+section.block{display:grid;gap:14px;min-width:0}
+section.block > p,section.block > ul,section.block > ol{color:var(--ink-2)}
+ul.clean,ol.clean{margin:0;padding-left:20px;display:grid;gap:5px;max-width:86ch}
+ul.clean li,ol.clean li{color:var(--ink-2)}
+ul.clean ul.clean,ol.clean ul.clean{margin-top:5px}
+li b,p b{color:var(--ink)}
+.tbl{overflow-x:auto;border:1px solid var(--rule);border-radius:6px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{text-align:left;vertical-align:top;padding:8px 11px;border-bottom:1px solid var(--rule-2)}
+th{font-family:var(--font-display);font-weight:600;font-size:14px;color:var(--ink-2);background:var(--surface-2);letter-spacing:.01em;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.id{font-family:var(--font-mono);font-size:12px;white-space:nowrap;color:var(--accent-ink)}
+table.steps td:nth-child(4){min-width:300px}
+table.steps td:last-child{font-family:var(--font-mono);font-size:11px;color:var(--ink-2);min-width:170px;max-width:240px;overflow-wrap:anywhere}
+figure{margin:0;display:grid;gap:8px;min-width:0}
+.fig{overflow-x:auto;background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:14px}
+.fig svg{display:block;width:100%;height:auto;color:var(--ink)}
+.fig.hero svg{min-width:900px}
+figcaption{font-size:13.5px;color:var(--muted);max-width:92ch}
+svg text{font-family:var(--font-body)}
+svg .ttl{font-family:var(--font-display);font-size:15px;font-weight:600;fill:var(--ink)}
+svg .lbl{font-size:12px;fill:var(--ink-2)}
+svg .sm{font-size:10.5px;fill:var(--muted)}
+svg .st{fill:var(--surface);stroke:var(--ink-2);stroke-width:1.2}
+svg .st-auto{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.5}
+svg .st-person{fill:var(--amber-soft);stroke:var(--amber);stroke-width:1.4}
+svg .st-side{fill:var(--surface-2);stroke:var(--muted);stroke-width:1.1;stroke-dasharray:4 3}
+svg .edge{stroke:var(--ink-2);stroke-width:1.4;fill:none}
+svg .edge-async{stroke:var(--accent);stroke-width:1.5;fill:none;stroke-dasharray:6 4}
+svg .mk{fill:var(--ink-2)}
+svg .mk-auto{fill:var(--accent)}
+svg .hb rect{fill:var(--surface);stroke:var(--accent);stroke-width:1.2}
+svg .hb text{font-family:var(--font-mono);font-size:10px;fill:var(--accent-ink);text-anchor:middle;dominant-baseline:central}
+details{border:1px solid var(--rule);border-radius:6px;background:var(--surface)}
+details > summary{cursor:pointer;padding:11px 14px;font-family:var(--font-display);font-weight:600;font-size:16px}
+details > summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+details .inner{padding:4px 16px 18px;display:grid;gap:14px;min-width:0}
+details.proc{margin-top:10px}
+details.proc > summary{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;list-style-position:outside}
+details.proc[open] > summary{border-bottom:1px solid var(--rule-2)}
+.pid{font-family:var(--font-mono);font-size:12.5px;font-weight:500;color:var(--accent-ink);background:var(--accent-soft);border-radius:4px;padding:1px 7px}
+.pname{flex:1 1 320px}
+.meta{font-family:var(--font-mono);font-size:11.5px;font-weight:400;color:var(--muted)}
+.life-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,460px),1fr));gap:18px}
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:14px 16px;display:grid;gap:10px;align-content:start;min-width:0}
+.card.wide{grid-column:1/-1}
+.card .mmd{border:0;padding:0}
+.card p{font-size:14px;color:var(--ink-2)}
+.mmd-fig{margin:0}
+.mmd{overflow-x:auto;background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:12px;min-height:44px}
+.mmd:empty::before{content:"Drawing diagram\2026";color:var(--muted);font-size:13px}
+.mmd svg{display:block;margin:0 auto;height:auto}
+.mmd.failed{color:var(--danger);font-size:13px}
+.mmd-src{display:none;margin:0;overflow-x:auto;font-family:var(--font-mono);font-size:11.5px;line-height:1.45;background:var(--surface-2);border:1px solid var(--rule);border-radius:6px;padding:10px 12px;color:var(--ink-2)}
+.mmd-src.show{display:block}
+body.offline .mmd{display:none}
+body.offline .mmd-src{display:block}
+pre.code{margin:0;overflow-x:auto;font-family:var(--font-mono);font-size:12px;background:var(--surface-2);border:1px solid var(--rule);border-radius:6px;padding:10px 12px}
+blockquote.callout{margin:0;border-left:3px solid var(--accent);background:var(--accent-soft);padding:12px 16px;border-radius:0 6px 6px 0;display:grid;gap:8px}
+details.about .inner,details.graph .inner{padding-top:12px}
+.foot{padding-block:10px 40px}
+@media print{
+  :root,:root[data-theme="dark"],:root:not([data-theme="light"]){
+    --ground:#ffffff; --surface:#ffffff; --surface-2:#f6f7f7; --ink:#111; --ink-2:#333; --muted:#555; --rule:#ccc; --rule-2:#e2e2e2;
+    --accent:#2563b8; --accent-ink:#1d4f94; --accent-soft:#eef3fb; --amber:#c9851c; --amber-soft:#faf2e4; --amber-ink:#7a4f0c;
+    color-scheme:light;
+  }
+  body{font-size:11.5pt}
+  .tabbar,.toolbar,.btn,.offline-note{display:none !important}
+  .panel,.panel[hidden]{display:grid !important;padding-block:10px}
+  .wrap{max-width:none}
+  .fig.hero svg{min-width:0}
+  .mmd,figure,tr,.card{break-inside:avoid}
+  .mmd:empty{display:none}
+  .mmd:empty + .mmd-src{display:block}
+  details.proc{break-before:page}
+  details > summary{list-style:none}
+}
+
+/* nested tables and code must not widen the page on a phone */
+.panel,.panel>.block,.block li,.block ol,.block ul{min-width:0;max-width:100%}
+.block li .tbl{max-width:100%;overflow-x:auto;display:block}
+.block pre{max-width:100%;overflow-x:auto}
+.block :not(pre)>code{overflow-wrap:anywhere}
+.block p,.block li{overflow-wrap:break-word}
+
+</style>
+</head>
+<body>
+<style>@media print{.mos-nav{display:none}}</style><div class="mos-nav" style="font:14px/1.4 'Segoe UI',system-ui,sans-serif;padding:7px 16px;background:#1f6f6b;color:#fff"><a href="index.html" style="color:#fff;font-weight:600;text-decoration:none">&larr; MOS start page</a><span style="opacity:.8"> &nbsp;&middot;&nbsp; Reading guide</span></div>
+<header class="wrap masthead">
+  <div class="eyebrow">MOS · start here · local file, not published</div>
+  <h1>MOS reading guide</h1>
+  <p class="lede">The order to read the MOS folder in, file by file: what to look at in each, how long it takes, and how to know you are ready to present and decide.</p>
+  <div class="status-line"><span class="pill plan">Planning only · no code</span><span class="pill rev">Guide · 3 Oct 2026</span>
+  <button type="button" class="btn print" id="printBtn">Print or save as PDF</button></div>
+  <div class="spec"><div><b>20</b><span>stops</span></div><div><b>~1 h</b><span>fast route (★)</span></div><div><b>~7 h</b><span>full route</span></div><div><b>10</b><span>numbers to know</span></div></div>
+  
+</header>
+<nav class="tabbar" aria-label="Sections"><div class="wrap tabs" role="tablist"><button role="tab" type="button" id="tab-route" aria-controls="panel-route" aria-selected="false">The route</button><button role="tab" type="button" id="tab-client" aria-controls="panel-client" aria-selected="false">B. The client</button><button role="tab" type="button" id="tab-system" aria-controls="panel-system" aria-selected="false">C–D. System and design</button><button role="tab" type="button" id="tab-money" aria-controls="panel-money" aria-selected="false">E. Time and money</button><button role="tab" type="button" id="tab-decide" aria-controls="panel-decide" aria-selected="false">F. Decisions</button><button role="tab" type="button" id="tab-ready" aria-controls="panel-ready" aria-selected="false">G. Ready to present</button></div></nav>
+<main>
+<div class="panel wrap" role="tabpanel" id="panel-route" aria-labelledby="tab-route" hidden><section class="block"><details class="about"><summary>About this document</summary><div class="inner"><div class="tbl"><table class=""><thead><tr><th></th><th></th></tr></thead><tbody><tr><td>What this is</td><td>The order to read the MOS folder in, file by file, with what to look at in each and how long it takes</td></tr><tr><td>For</td><td>The owner, before presenting, discussing or deciding</td></tr><tr><td>Two routes</td><td><b>Fast route</b> (about 1 hour, stops marked ★) · <b>Full route</b> (about 7 hours, every stop)</td></tr><tr><td>How to open the files</td><td>Open each <b>page</b> (<code>.html</code>) in a browser; it has tabs and prints cleanly. The <code>.md</code> next to it is the same text, best read in VS Code (Ctrl+Shift+V)</td></tr><tr><td>Date</td><td>2026-10-03</td></tr></tbody></table></div></div></details></section><section class="block"><h2 id="the-route-at-a-glance">The route at a glance</h2>
+<div class="tbl"><table class=""><thead><tr><th>Part</th><th>What you will know at the end</th><th>Stops</th><th>Time</th></tr></thead><tbody><tr><td><b>A. Orientation</b></td><td>What MOS is, where everything is, where things stand</td><td>1–4</td><td>25 min</td></tr><tr><td><b>B. The client</b></td><td>What the client sent, what we found, what we asked them</td><td>5–8</td><td>75 min</td></tr><tr><td><b>C. What the system does</b></td><td>Every requirement, every process step, every table (at a glance)</td><td>9–11</td><td>90 min</td></tr><tr><td><b>D. How it is built</b></td><td>The architecture and the big decisions behind it</td><td>12–13</td><td>40 min</td></tr><tr><td><b>E. Time and money</b></td><td>The six-month plan, the team, the sprints, the fixed price</td><td>14–18</td><td>100 min</td></tr><tr><td><b>F. Decisions and questions</b></td><td>What is decided, what you still decide, what the client must answer</td><td>19–20</td><td>40 min</td></tr><tr><td><b>G. Ready to present</b></td><td>The numbers to know, the questions you will get, and the page that answers each</td><td>the checklist below</td><td>15 min</td></tr></tbody></table></div></section><section class="block"><h2 id="a-orientation-25-min">A. Orientation (25 min)</h2>
+<div class="tbl"><table class="steps"><thead><tr><th>#</th><th>Open</th><th>Folder</th><th>Look at</th><th>Time</th><th>You're done when you can say…</th></tr></thead><tbody><tr><td><b>1</b> ★</td><td><a href="index.html">index.html</a></td><td><code>MOS/</code></td><td>The status strip at the top, then scroll the cards once. Don't open anything yet</td><td>3 min</td><td>"There are nine numbered folders, from overview to inputs."</td></tr><tr><td><b>2</b> ★</td><td><a href="README.md">README.md</a></td><td><code>MOS/</code></td><td>The module table, the status note, the "I want to…" table</td><td>5 min</td><td>"MOS is six modules for a flour mill, planning only, go-live W24."</td></tr><tr><td><b>3</b></td><td><a href="PROGRESS.md">PROGRESS.md</a></td><td><code>MOS/</code></td><td>Only the <b>Overall status</b> paragraph and the newest session-log entries at the bottom</td><td>5 min</td><td>"Planning is complete; implementation waits for my go-ahead."</td></tr><tr><td><b>4</b> ★</td><td><a href="docs/1-overview/MOS-MASTER-PLAN.html">Master plan</a></td><td><code>docs/1-overview/</code></td><td>Tabs <b>In one minute</b> and <b>Plan and teams</b>. Skim <b>Decisions and design</b></td><td>12 min</td><td>"Everything in 26 weeks; recommended team A+ (3 developers + QA); fixed price ETB 986,615."</td></tr></tbody></table></div></section></div><div class="panel wrap" role="tabpanel" id="panel-client" aria-labelledby="tab-client" hidden><section class="block"><h2 id="b-the-client-what-they-sent-what-we-found-what-we-asked-75-min">B. The client: what they sent, what we found, what we asked (75 min)</h2>
+<div class="tbl"><table class="steps"><thead><tr><th>#</th><th>Open</th><th>Folder</th><th>Look at</th><th>Time</th><th>You're done when you can say…</th></tr></thead><tbody><tr><td><b>5</b></td><td><a href="docs/9-inputs/from-client/README.md">The client's documents</a></td><td><code>docs/9-inputs/from-client/</code></td><td>The README's table of four documents. Then open <b>P2P-process-v2.pdf</b> and page through the 28 screens quickly</td><td>15 min</td><td>"Their P2P v2 has 28 screens; they also sent a data dictionary and an architecture proposal."</td></tr><tr><td><b>6</b></td><td><a href="docs/7-reviews/MOS-CLIENT-DOCS-V2-REVIEW.html">Client documents v2 review</a></td><td><code>docs/7-reviews/</code></td><td>Tab <b>Summary</b> (§1–2), then <b>Integration plan</b> (§7.3 effort, §7.5 your decisions). Skim the other tabs for the headings only</td><td>20 min</td><td>"We adopt every field and three new screens; it adds 59 core hours; seven of my decisions came out of it."</td></tr><tr><td><b>7</b> ★</td><td><a href="docs/8-meetings/2026-10-03-client-documents/DISCUSSION-PACK.html">Discussion pack, 3 Oct</a></td><td><code>docs/8-meetings/2026-10-03-client-documents/</code></td><td>The agenda, §4 (the four questions that size the work, Q-01–Q-04) and §6 next steps. This is what the client sees</td><td>20 min</td><td>"The four questions are: gate and weighing, grading, who raises payment requests, invoice approval."</td></tr><tr><td><b>8</b> ★</td><td><a href="docs/8-meetings/2026-10-03-client-documents/OWNER-BRIEFING.html">Owner briefing, 3 Oct</a></td><td>same folder</td><td>§3 positions to hold, §4 where to give ground, §5 timeline, §6 price. <b>For you only</b></td><td>20 min</td><td>"I know what to hold firm on, what to concede, and what not to promise."</td></tr></tbody></table></div></section></div><div class="panel wrap" role="tabpanel" id="panel-system" aria-labelledby="tab-system" hidden><section class="block"><h2 id="c-what-the-system-does-90-min">C. What the system does (90 min)</h2>
+<div class="tbl"><table class="steps"><thead><tr><th>#</th><th>Open</th><th>Folder</th><th>Look at</th><th>Time</th><th>You're done when you can say…</th></tr></thead><tbody><tr><td><b>9</b></td><td><a href="docs/2-requirements/MOS-FRD.html">Requirements (FRD)</a></td><td><code>docs/2-requirements/</code></td><td>Tab <b>Scope and roles</b> (§1–2). Then in <b>Inventory, procurement, QC, gate</b> read §9, the inbound process end to end. Then <b>Reports, NFRs, controls, scenarios</b>: §15 controls and §16 the acceptance scenarios</td><td>40 min</td><td>"231 requirements, 205 in v1; the headline is the inbound loop; 19 scenarios prove it works."</td></tr><tr><td><b>10</b></td><td><a href="docs/2-requirements/MOS-PROCESS-MODEL.html">Process model</a></td><td><code>docs/2-requirements/</code></td><td>Tab <b>Overview</b>: the value chain and the whole-ERP flow with its 33 hand-offs. Then in <b>Processes</b> open the inbound-delivery swimlane</td><td>30 min</td><td>"I can walk someone through truck → weigh → lab → GRN → payment, and say who does each step."</td></tr><tr><td><b>11</b></td><td><a href="docs/3-design/MOS-DATABASE-DESIGN.html">Database design</a></td><td><code>docs/3-design/</code></td><td>Tab <b>Overview</b> only: the schema map and the conventions. The rest is reference for developers</td><td>20 min</td><td>"230 tables in 9 groups; posted records can never be edited, only reversed."</td></tr></tbody></table></div></section><section class="block"><h2 id="d-how-it-is-built-40-min">D. How it is built (40 min)</h2>
+<div class="tbl"><table class="steps"><thead><tr><th>#</th><th>Open</th><th>Folder</th><th>Look at</th><th>Time</th><th>You're done when you can say…</th></tr></thead><tbody><tr><td><b>12</b></td><td><a href="docs/3-design/MOS-TDD.html">Technical design (TDD)</a></td><td><code>docs/3-design/</code></td><td>Tab <b>Architecture and stack</b> (§1–2, §4). Skim <b>Identity, transactions, posting</b></td><td>25 min</td><td>"A modular monolith on Node 24, NestJS and PostgreSQL 18, one installation per company, on the client's own server."</td></tr><tr><td><b>13</b></td><td><a href="docs/6-decisions/adr/README.md">Architecture decisions (ADRs)</a></td><td><code>docs/6-decisions/adr/</code></td><td>The index table. Then open <b>ADR-0025</b> (everything in six months) and <b>ADR-0021</b> (the stack)</td><td>15 min</td><td>"Every big technical choice has a dated record with its reason; 0025 is the six-month calendar."</td></tr></tbody></table></div></section></div><div class="panel wrap" role="tabpanel" id="panel-money" aria-labelledby="tab-money" hidden><section class="block"><h2 id="e-time-and-money-100-min">E. Time and money (100 min)</h2>
+<div class="tbl"><table class="steps"><thead><tr><th>#</th><th>Open</th><th>Folder</th><th>Look at</th><th>Time</th><th>You're done when you can say…</th></tr></thead><tbody><tr><td><b>14</b> ★</td><td><a href="docs/4-plan/MOS-IMPLEMENTATION-PLAN.html">Implementation plan</a></td><td><code>docs/4-plan/</code></td><td>Tab <b>Summary</b> (the glossary, the calendar, the team table), then <b>Capacity and speed</b> (§5: why A+ needs ×1.33 and A ×1.89), then <b>Go-live and inputs</b> (§8, §9) and <b>Governance and risks</b> (§13)</td><td>35 min</td><td>"A+ needs the best case of the estimate; A only works without the gate; C doesn't fit. The client's infrastructure answers are needed before W1."</td></tr><tr><td><b>15</b></td><td><a href="docs/4-plan/MOS-SPRINT-PLAN.html">Sprint plan</a></td><td><code>docs/4-plan/</code></td><td>Tab <b>Overview</b>: §2 the sprint calendar and §3.3 the five milestone reviews. Then one sprint in <b>Sprints</b> (S8, the procure-to-pay review) to see the level of detail</td><td>20 min</td><td>"Thirteen sprints; M4 in W16 shows the client's procure-to-pay end to end."</td></tr><tr><td><b>16</b></td><td><a href="docs/4-plan/MOS-PROCUREMENT-MODULE-PLAN.html">Module 1 plan (procurement)</a></td><td><code>docs/4-plan/</code></td><td>Tab <b>Overview</b> (the timeline table), then <b>Acceptance and UAT</b> (the 22 UAT cases)</td><td>15 min</td><td>"54 stories; the client's key users test procure-to-pay with these 22 cases."</td></tr><tr><td><b>17</b> ★</td><td><a href="docs/5-for-the-client/MOS-PRICING-AND-TIMELINE.html">Pricing and timeline</a></td><td><code>docs/5-for-the-client/</code></td><td>§1 summary, §2 by phase, §3 by module, §8 payment schedule. §4–§5 (by sprint and by feature) are for when someone asks "what does X cost?"</td><td>20 min</td><td>"ETB 986,615, fixed, within ETB 1,000,000; 10% at signature, then paid per accepted review."</td></tr><tr><td><b>18</b></td><td><a href="docs/5-for-the-client/MOS-COMMERCIAL-PROPOSAL.html">Commercial proposal</a></td><td><code>docs/5-for-the-client/</code></td><td>Read it as the client would, start to finish. Note every <b>[owner to confirm]</b></td><td>10 min</td><td>"I know which terms I still have to confirm before it is sent."</td></tr></tbody></table></div></section></div><div class="panel wrap" role="tabpanel" id="panel-decide" aria-labelledby="tab-decide" hidden><section class="block"><h2 id="f-decisions-and-questions-40-min">F. Decisions and questions (40 min)</h2>
+<div class="tbl"><table class="steps"><thead><tr><th>#</th><th>Open</th><th>Folder</th><th>Look at</th><th>Time</th><th>You're done when you can say…</th></tr></thead><tbody><tr><td><b>19</b> ★</td><td><a href="docs/6-decisions/MOS-DECISION-REGISTER.html">Decision register</a></td><td><code>docs/6-decisions/</code></td><td>Tab <b>B. Owner</b> first: your open decisions (O-34 team, O-27/O-28 stack, O-26 extra capacity). Then <b>A. Decided</b>, rows A-42 (six months) and A-43 (fixed price, with the internal cost note)</td><td>25 min</td><td>"My three most urgent decisions are O-34, O-27 and O-28."</td></tr><tr><td><b>20</b></td><td><a href="docs/5-for-the-client/MOS-STAKEHOLDER-QUESTIONNAIRE.html">Stakeholder questionnaire</a></td><td><code>docs/5-for-the-client/</code></td><td>Section 10 (infrastructure) and section 12 (questions from their October documents). Everything marked "Before W1"</td><td>15 min</td><td>"Before we start, the client owes: the four sizing answers, the infrastructure for the test server, and the key users."</td></tr></tbody></table></div>
+<p><b>Optional, history only</b> (read when someone cites them): the <a href="docs/7-reviews/MOS-CLIENT-P2P-DRAFT-REVIEW.html">first-draft review</a>, the <a href="docs/7-reviews/MOS-BRAINSTORM-OUTPUT-REVIEW.html">ChatGPT brainstorm review</a>, the <a href="docs/7-reviews/MOS-PACKAGE-AUDIT-v0.3.html">v0.3 package audit</a>, the <a href="docs/9-inputs/owner-brainstorm/README.md">owner brainstorm</a>, and ADR-0001…0016.</p></section></div><div class="panel wrap" role="tabpanel" id="panel-ready" aria-labelledby="tab-ready" hidden><section class="block"><h2 id="g-ready-to-present">G. Ready to present</h2>
+<h3 id="the-numbers-to-know-by-heart">The numbers to know by heart</h3>
+<div class="tbl"><table class=""><thead><tr><th>Number</th><th>What it is</th><th>Where it comes from</th></tr></thead><tbody><tr><td><b>6</b> modules</td><td>Procurement (with supplier payment), inventory, lab and quality, gate and weighbridge, production, sales (with receivables)</td><td>Master plan</td></tr><tr><td><b>26 weeks</b>, go-live <b>W24</b></td><td>Everything included: build W1–W20, system test and UAT W21–W22, training W23, go-live W24, hypercare W25–W26</td><td>ADR-0025</td></tr><tr><td><b>W4 / W16</b></td><td>Test server on the client's infrastructure / production server ready</td><td>Implementation plan §8</td></tr><tr><td><b>231 / 205</b></td><td>Requirements in total / in v1</td><td>FRD</td></tr><tr><td><b>2,439 h</b> core · <b>3,177 h</b> total</td><td>Estimated work; the client's documents added 59 core hours</td><td>Implementation plan §3</td></tr><tr><td><b>×1.33 / ×1.89</b></td><td>Speed needed: path A+ (3 developers + QA) / path A (2 + QA). Without the gate module: ×1.19 / ×1.59</td><td>Implementation plan §5</td></tr><tr><td><b>ETB 986,615</b></td><td>The fixed price (within ETB 1,000,000), every given requirement and every go-live service</td><td>Pricing and timeline</td></tr><tr><td><b>10%</b></td><td>At signature; then each review pays for what it accepted</td><td>Pricing and timeline §8</td></tr><tr><td><b>W4 / W8</b></td><td>The two speed checkpoints; capacity is added before W9 if behind</td><td>Implementation plan §11</td></tr><tr><td><b>Q-01–Q-04</b></td><td>The four client answers that size the work</td><td>Discussion pack §4</td></tr></tbody></table></div>
+<h3 id="the-questions-you-will-get-and-the-page-that-answers-each">The questions you will get, and the page that answers each</h3>
+<div class="tbl"><table class=""><thead><tr><th>If someone asks…</th><th>Open</th><th>Where</th></tr></thead><tbody><tr><td>"Can you really do all of it in six months?"</td><td>Implementation plan</td><td>§5 (speed per team, the honest verdicts) and §11 (checkpoints)</td></tr><tr><td>"When do we see something working?"</td><td>Sprint plan</td><td>§3.3, the five reviews (M1 in W4 on the test server)</td></tr><tr><td>"When do our people test?"</td><td>Implementation plan</td><td>§8.1: rolling UAT from about W8, final UAT W21–W22</td></tr><tr><td>"What exactly does it cost, and what isn't included?"</td><td>Pricing and timeline</td><td>§1 and §9</td></tr><tr><td>"What does module X or feature Y cost?"</td><td>Pricing and timeline</td><td>§3 (modules), §5 (features)</td></tr><tr><td>"When do we pay?"</td><td>Pricing and timeline</td><td>§8</td></tr><tr><td>"What do you need from us, and by when?"</td><td>Implementation plan / questionnaire</td><td>§9 / the "Needed by" column</td></tr><tr><td>"Why not our table design (the data dictionary)?"</td><td>Owner briefing / v2 review</td><td>§3 (positions to hold) / §4</td></tr><tr><td>"Why TypeScript, NestJS, PostgreSQL?"</td><td>TDD / ADR-0021</td><td>§2</td></tr><tr><td>"Where does it run? Do we need the cloud?"</td><td>Master plan</td><td>§4 (on-premises first; infrastructure at cost)</td></tr><tr><td>"What if we don't need the gate module?"</td><td>Implementation plan</td><td>§5.3 (about 190 hours less; speed needed drops)</td></tr><tr><td>"Who owns the code?"</td><td>Commercial proposal</td><td>§13 (the client owns its build)</td></tr></tbody></table></div>
+<h3 id="before-you-walk-in">Before you walk in</h3>
+<ul class="clean"><li>[ ] Read the fast route (★) at least.</li><li>[ ] Decide or prepare a line on <b>O-34</b> (which team), <b>O-27/O-28</b> (Vite, pg-boss) and <b>O-26</b> (who pays for added capacity).</li><li>[ ] Confirm or adjust the <b>[owner to confirm]</b> items in the proposal.</li><li>[ ] Have the <a href="docs/8-meetings/2026-10-03-client-documents/DISCUSSION-PACK.html">discussion pack</a> open to share and the <a href="docs/8-meetings/2026-10-03-client-documents/OWNER-BRIEFING.html">owner briefing</a> open for yourself.</li><li>[ ] Know the internal cost note under A-43 in the register: the fixed price covers about 27% of path A+'s team cost at the rate card.</li></ul></section></div>
+</main>
+<footer class="wrap foot"><p class="note">Source: <code>MOS/READING-GUIDE.md</code> (the master copy). Kept locally in the MOS repository; not published.</p></footer>
+<script type="module">
+const MERMAID_URL = 'https://cdn.jsdelivr.net/npm/mermaid@12/dist/mermaid.esm.min.mjs';
+const tabs = [...document.querySelectorAll('[role="tab"]')];
+const panels = [...document.querySelectorAll('[role="tabpanel"]')];
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch { /* storage unavailable */ } },
+};
+const TABKEY = 'mos-pm-tab:' + location.pathname;
+function pickTab() { const k = store.get(TABKEY); if (k && document.getElementById('tab-' + k)) return k; const first = document.querySelector('[role="tab"]'); return first ? first.id.slice(4) : 'overview'; }
+
+
+function show(key, focusTab) {
+  let found = false;
+  for (const t of tabs) {
+    const on = t.id === `tab-${key}`;
+    t.setAttribute('aria-selected', String(on));
+    t.tabIndex = on ? 0 : -1;
+    if (on) { found = true; if (focusTab) t.focus(); }
+  }
+  if (!found) return show('overview', focusTab);
+  for (const p of panels) p.hidden = p.id !== `panel-${key}`;
+  store.set(TABKEY, key);
+  renderVisible();
+}
+tabs.forEach((t, i) => {
+  t.addEventListener('click', () => show(t.id.slice(4)));
+  t.addEventListener('keydown', (e) => {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    const next = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+    show(next.id.slice(4), true);
+  });
+});
+
+// ---- Mermaid, loaded from the CDN and drawn lazily (hidden diagrams cannot be measured)
+let mermaid = null;
+const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function initMermaid() {
+  const dark = matchMedia('(prefers-color-scheme: dark)').matches;
+  mermaid.initialize({
+    startOnLoad: false,
+    securityLevel: 'strict',
+    htmlLabels: false,
+    theme: 'base',
+    fontFamily: css('--font-body'),
+    themeVariables: {
+      darkMode: dark,
+      background: css('--surface'),
+      fontFamily: css('--font-body'),
+      fontSize: '13px',
+      primaryColor: css('--accent-soft'),
+      primaryBorderColor: css('--accent'),
+      primaryTextColor: css('--ink'),
+      secondaryColor: css('--amber-soft'),
+      tertiaryColor: css('--surface-2'),
+      lineColor: css('--ink-2'),
+      textColor: css('--ink'),
+      mainBkg: css('--accent-soft'),
+      clusterBkg: css('--surface-2'),
+      clusterBorder: css('--rule'),
+      edgeLabelBackground: css('--surface'),
+      actorBkg: css('--accent-soft'),
+      actorBorder: css('--accent'),
+      actorTextColor: css('--ink'),
+      actorLineColor: css('--rule'),
+      signalColor: css('--ink-2'),
+      signalTextColor: css('--ink'),
+      labelBoxBkgColor: css('--surface-2'),
+      labelBoxBorderColor: css('--rule'),
+      labelTextColor: css('--ink'),
+      loopTextColor: css('--ink-2'),
+      noteBkgColor: css('--amber-soft'),
+      noteBorderColor: css('--amber'),
+      noteTextColor: css('--ink'),
+      activationBkgColor: css('--surface-2'),
+      stateLabelColor: css('--ink'),
+      transitionColor: css('--ink-2'),
+      transitionLabelColor: css('--ink-2'),
+    },
+    flowchart: { htmlLabels: false, curve: 'basis', useMaxWidth: true },
+    sequence: { useMaxWidth: true, wrap: true, width: 170, messageFontSize: 13, actorFontSize: 13, noteFontSize: 12 },
+    state: { useMaxWidth: true },
+  });
+}
+let queue = Promise.resolve();
+function renderVisible() {
+  if (!mermaid) return queue;
+  queue = queue.then(async () => {
+    for (const el of document.querySelectorAll('.mmd:not([data-done])')) {
+      if (el.offsetParent === null) continue;
+      try {
+        const { svg } = await mermaid.render(`${el.id}-svg`, el.dataset.src);
+        el.innerHTML = svg;
+        el.dataset.done = '1';
+      } catch (err) {
+        el.dataset.done = 'error';
+        el.classList.add('failed');
+        el.textContent = 'This diagram could not be drawn; its source is shown below.';
+        el.nextElementSibling?.classList.add('show');
+      }
+    }
+  });
+  return queue;
+}
+import(MERMAID_URL)
+  .then(async (m) => {
+    // measure labels with the real web font, or they are clipped once it loads
+    await Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 3000))]);
+    mermaid = m.default; initMermaid(); renderVisible();
+  })
+  .catch(() => { document.body.classList.add('offline'); });
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+  if (!mermaid) return;
+  initMermaid();
+  document.querySelectorAll('.mmd[data-done="1"]').forEach((el) => { delete el.dataset.done; el.innerHTML = ''; });
+  renderVisible();
+});
+document.addEventListener('toggle', (e) => { if (e.target.open) renderVisible(); }, true);
+
+// ---- open / close all processes
+document.querySelectorAll('.toolbar .btn').forEach((b) => b.addEventListener('click', () => {
+  const open = b.dataset.act === 'expand';
+  b.closest('.panel').querySelectorAll('details.proc').forEach((d) => { d.open = open; });
+  renderVisible();
+}));
+
+// ---- in-page links switch to the right tab and open the right section
+function goTo(id) {
+  const target = document.getElementById(id);
+  if (!target) return false;
+  const panel = target.closest('[role="tabpanel"]');
+  if (panel) show(panel.id.slice(6));
+  if (target.tagName === 'DETAILS') target.open = true;
+  let d = target.parentElement?.closest('details');
+  while (d) { d.open = true; d = d.parentElement?.closest('details'); }
+  requestAnimationFrame(() => target.scrollIntoView({ block: 'start' }));
+  renderVisible();
+  return true;
+}
+document.addEventListener('click', (e) => {
+  const a = e.target.closest('a[href^="#"]');
+  if (!a) return;
+  const id = decodeURIComponent(a.getAttribute('href').slice(1));
+  if (goTo(id)) { e.preventDefault(); history.replaceState(null, '', `#${id}`); }
+});
+
+// ---- print: show everything, draw every diagram, then print
+const printBtn = document.getElementById('printBtn');
+let opened = [];
+function expandForPrint() {
+  panels.forEach((p) => { p.hidden = false; });
+  opened = [...document.querySelectorAll('details:not([open])')];
+  opened.forEach((d) => { d.open = true; });
+}
+function restoreAfterPrint() {
+  opened.forEach((d) => { d.open = false; });
+  opened = [];
+  show(pickTab());
+}
+printBtn.addEventListener('click', async () => {
+  expandForPrint();
+  await renderVisible();
+  setTimeout(() => window.print(), 250);
+});
+window.addEventListener('beforeprint', () => { if (!opened.length) expandForPrint(); });
+window.addEventListener('afterprint', restoreAfterPrint);
+
+// ---- start
+const initial = decodeURIComponent(location.hash.slice(1));
+if (!(initial && goTo(initial))) show(pickTab());
+
+</script>
+</body>
+</html>

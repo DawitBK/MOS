@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Decision register</title>
+<meta name="description" content="MOS decision register.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+:root{
+  --ground:#f2f4f3; --surface:#ffffff; --surface-2:#f7f9f8;
+  --ink:#18212b; --ink-2:#44505c; --muted:#68737e; --rule:#d5dbdc; --rule-2:#e6eaea;
+  --accent:#2563b8; --accent-ink:#1d4f94; --accent-soft:#e7eef9;
+  --amber:#c9851c; --amber-soft:#f8eedd; --amber-ink:#7a4f0c;
+  --ok:#2f7a4f; --danger:#b3372f;
+  --font-display:"Barlow Semi Condensed","Arial Narrow",Arial,sans-serif;
+  --font-body:"Public Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#12171d; --surface:#1a2129; --surface-2:#161c23;
+    --ink:#e7ebef; --ink-2:#b8c2cc; --muted:#8e9aa6; --rule:#2e3844; --rule-2:#252e38;
+    --accent:#5b93e6; --accent-ink:#8db5f0; --accent-soft:#1d2c44;
+    --amber:#b8842c; --amber-soft:#2e2517; --amber-ink:#e2b46a;
+    --ok:#5fb383; --danger:#e37a70;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#12171d; --surface:#1a2129; --surface-2:#161c23;
+  --ink:#e7ebef; --ink-2:#b8c2cc; --muted:#8e9aa6; --rule:#2e3844; --rule-2:#252e38;
+  --accent:#5b93e6; --accent-ink:#8db5f0; --accent-soft:#1d2c44;
+  --amber:#b8842c; --amber-soft:#2e2517; --amber-ink:#e2b46a;
+  --ok:#5fb383; --danger:#e37a70;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.55;margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:20px}
+@media (max-width:520px){.wrap{padding-inline:16px}}
+h1,h2,h3,h4{font-family:var(--font-display);text-wrap:balance;margin:0;color:var(--ink);letter-spacing:.005em}
+h1{font-size:clamp(34px,5vw,48px);font-weight:700;line-height:1.05}
+h2{font-size:26px;font-weight:700;line-height:1.15;margin-top:6px}
+h3{font-size:19px;font-weight:600;line-height:1.25}
+h4{font-size:16px;font-weight:600}
+[id]{scroll-margin-top:64px}
+p{margin:0;max-width:78ch}
+a{color:var(--accent-ink)}
+code{font-family:var(--font-mono);font-size:.86em;background:var(--surface-2);border:1px solid var(--rule-2);border-radius:4px;padding:0 4px}
+.eyebrow{font-family:var(--font-mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.masthead{padding-block:34px 20px;display:grid;gap:14px}
+.masthead .lede{font-size:17px;color:var(--ink-2);max-width:80ch}
+.status-line{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.pill{display:inline-flex;align-items:center;font-family:var(--font-mono);font-size:12px;padding:3px 9px;border-radius:999px;border:1px solid var(--rule);background:var(--surface);color:var(--ink-2);white-space:nowrap}
+.pill.plan{border-color:var(--accent);color:var(--accent-ink);background:var(--accent-soft)}
+.pill.rev{border-color:var(--amber);color:var(--amber-ink);background:var(--amber-soft)}
+.spec{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));border:1px solid var(--rule);background:var(--surface);border-radius:6px}
+.spec div{padding:12px 14px;border-right:1px solid var(--rule-2)}
+.spec div:last-child{border-right:0}
+.spec b{display:block;font-family:var(--font-display);font-size:26px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.1}
+.spec span{font-size:12.5px;color:var(--muted)}
+.note{font-size:13.5px;color:var(--muted)}
+.btn{appearance:none;border:1px solid var(--rule);background:var(--surface);color:var(--ink);font:500 13px/1.2 var(--font-body);padding:7px 12px;border-radius:6px;cursor:pointer}
+.btn:hover{border-color:var(--accent);color:var(--accent-ink)}
+.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn.print{margin-left:auto}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap}
+.tabbar{position:sticky;top:0;z-index:5;background:var(--ground);border-bottom:1px solid var(--rule)}
+.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:thin}
+.tabs button{appearance:none;border:0;background:none;color:var(--ink-2);font-family:var(--font-display);font-size:16px;font-weight:600;padding:12px 14px 10px;border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tabs button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.panel{padding-block:26px 48px;display:grid;gap:30px}
+.panel[hidden]{display:none}
+section.block{display:grid;gap:14px;min-width:0}
+section.block > p,section.block > ul,section.block > ol{color:var(--ink-2)}
+ul.clean,ol.clean{margin:0;padding-left:20px;display:grid;gap:5px;max-width:86ch}
+ul.clean li,ol.clean li{color:var(--ink-2)}
+ul.clean ul.clean,ol.clean ul.clean{margin-top:5px}
+li b,p b{color:var(--ink)}
+.tbl{overflow-x:auto;border:1px solid var(--rule);border-radius:6px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{text-align:left;vertical-align:top;padding:8px 11px;border-bottom:1px solid var(--rule-2)}
+th{font-family:var(--font-display);font-weight:600;font-size:14px;color:var(--ink-2);background:var(--surface-2);letter-spacing:.01em;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.id{font-family:var(--font-mono);font-size:12px;white-space:nowrap;color:var(--accent-ink)}
+table.steps td:nth-child(4){min-width:300px}
+table.steps td:last-child{font-family:var(--font-mono);font-size:11px;color:var(--ink-2);min-width:170px;max-width:240px;overflow-wrap:anywhere}
+figure{margin:0;display:grid;gap:8px;min-width:0}
+.fig{overflow-x:auto;background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:14px}
+.fig svg{display:block;width:100%;height:auto;color:var(--ink)}
+.fig.hero svg{min-width:900px}
+figcaption{font-size:13.5px;color:var(--muted);max-width:92ch}
+svg text{font-family:var(--font-body)}
+svg .ttl{font-family:var(--font-display);font-size:15px;font-weight:600;fill:var(--ink)}
+svg .lbl{font-size:12px;fill:var(--ink-2)}
+svg .sm{font-size:10.5px;fill:var(--muted)}
+svg .st{fill:var(--surface);stroke:var(--ink-2);stroke-width:1.2}
+svg .st-auto{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.5}
+svg .st-person{fill:var(--amber-soft);stroke:var(--amber);stroke-width:1.4}
+svg .st-side{fill:var(--surface-2);stroke:var(--muted);stroke-width:1.1;stroke-dasharray:4 3}
+svg .edge{stroke:var(--ink-2);stroke-width:1.4;fill:none}
+svg .edge-async{stroke:var(--accent);stroke-width:1.5;fill:none;stroke-dasharray:6 4}
+svg .mk{fill:var(--ink-2)}
+svg .mk-auto{fill:var(--accent)}
+svg .hb rect{fill:var(--surface);stroke:var(--accent);stroke-width:1.2}
+svg .hb text{font-family:var(--font-mono);font-size:10px;fill:var(--accent-ink);text-anchor:middle;dominant-baseline:central}
+details{border:1px solid var(--rule);border-radius:6px;background:var(--surface)}
+details > summary{cursor:pointer;padding:11px 14px;font-family:var(--font-display);font-weight:600;font-size:16px}
+details > summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+details .inner{padding:4px 16px 18px;display:grid;gap:14px;min-width:0}
+details.proc{margin-top:10px}
+details.proc > summary{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;list-style-position:outside}
+details.proc[open] > summary{border-bottom:1px solid var(--rule-2)}
+.pid{font-family:var(--font-mono);font-size:12.5px;font-weight:500;color:var(--accent-ink);background:var(--accent-soft);border-radius:4px;padding:1px 7px}
+.pname{flex:1 1 320px}
+.meta{font-family:var(--font-mono);font-size:11.5px;font-weight:400;color:var(--muted)}
+.life-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,460px),1fr));gap:18px}
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:14px 16px;display:grid;gap:10px;align-content:start;min-width:0}
+.card.wide{grid-column:1/-1}
+.card .mmd{border:0;padding:0}
+.card p{font-size:14px;color:var(--ink-2)}
+.mmd-fig{margin:0}
+.mmd{overflow-x:auto;background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:12px;min-height:44px}
+.mmd:empty::before{content:"Drawing diagram\2026";color:var(--muted);font-size:13px}
+.mmd svg{display:block;margin:0 auto;height:auto}
+.mmd.failed{color:var(--danger);font-size:13px}
+.mmd-src{display:none;margin:0;overflow-x:auto;font-family:var(--font-mono);font-size:11.5px;line-height:1.45;background:var(--surface-2);border:1px solid var(--rule);border-radius:6px;padding:10px 12px;color:var(--ink-2)}
+.mmd-src.show{display:block}
+body.offline .mmd{display:none}
+body.offline .mmd-src{display:block}
+pre.code{margin:0;overflow-x:auto;font-family:var(--font-mono);font-size:12px;background:var(--surface-2);border:1px solid var(--rule);border-radius:6px;padding:10px 12px}
+blockquote.callout{margin:0;border-left:3px solid var(--accent);background:var(--accent-soft);padding:12px 16px;border-radius:0 6px 6px 0;display:grid;gap:8px}
+details.about .inner,details.graph .inner{padding-top:12px}
+.foot{padding-block:10px 40px}
+@media print{
+  :root,:root[data-theme="dark"],:root:not([data-theme="light"]){
+    --ground:#ffffff; --surface:#ffffff; --surface-2:#f6f7f7; --ink:#111; --ink-2:#333; --muted:#555; --rule:#ccc; --rule-2:#e2e2e2;
+    --accent:#2563b8; --accent-ink:#1d4f94; --accent-soft:#eef3fb; --amber:#c9851c; --amber-soft:#faf2e4; --amber-ink:#7a4f0c;
+    color-scheme:light;
+  }
+  body{font-size:11.5pt}
+  .tabbar,.toolbar,.btn,.offline-note{display:none !important}
+  .panel,.panel[hidden]{display:grid !important;padding-block:10px}
+  .wrap{max-width:none}
+  .fig.hero svg{min-width:0}
+  .mmd,figure,tr,.card{break-inside:avoid}
+  .mmd:empty{display:none}
+  .mmd:empty + .mmd-src{display:block}
+  details.proc{break-before:page}
+  details > summary{list-style:none}
+}
+
+/* nested tables and code must not widen the page on a phone */
+.panel,.panel>.block,.block li,.block ol,.block ul{min-width:0;max-width:100%}
+.block li .tbl{max-width:100%;overflow-x:auto;display:block}
+.block pre{max-width:100%;overflow-x:auto}
+.block :not(pre)>code{overflow-wrap:anywhere}
+.block p,.block li{overflow-wrap:break-word}
+
+</style>
+</head>
+<body>
+<style>@media print{.mos-nav{display:none}}</style><div class="mos-nav" style="font:14px/1.4 'Segoe UI',system-ui,sans-serif;padding:7px 16px;background:#1f6f6b;color:#fff"><a href="../../index.html" style="color:#fff;font-weight:600;text-decoration:none">&larr; MOS start page</a><span style="opacity:.8"> &nbsp;&middot;&nbsp; 6. Decisions</span></div>
+<header class="wrap masthead">
+  <div class="eyebrow">MOS · planning package · local file, not published</div>
+  <h1>Decision register</h1>
+  <p class="lede">Every decision and open question in one place: what is decided, what the owner decides, what the client decides, and the infrastructure questions.</p>
+  <div class="status-line"><span class="pill plan">Planning only · no code</span><span class="pill rev">Draft 0.2 · 3 Oct 2026</span>
+  <button type="button" class="btn print" id="printBtn">Print or save as PDF</button></div>
+  <div class="spec"><div><b>42</b><span>decided</span></div><div><b>19</b><span>open for the owner</span></div><div><b>49</b><span>client business questions</span></div><div><b>18</b><span>infrastructure questions</span></div></div>
+  
+</header>
+<nav class="tabbar" aria-label="Sections"><div class="wrap tabs" role="tablist"><button role="tab" type="button" id="tab-how" aria-controls="panel-how" aria-selected="false">How to read</button><button role="tab" type="button" id="tab-a" aria-controls="panel-a" aria-selected="false">A. Decided</button><button role="tab" type="button" id="tab-b" aria-controls="panel-b" aria-selected="false">B. Owner</button><button role="tab" type="button" id="tab-c" aria-controls="panel-c" aria-selected="false">C. Client business</button><button role="tab" type="button" id="tab-d" aria-controls="panel-d" aria-selected="false">D. Infrastructure</button><button role="tab" type="button" id="tab-trace" aria-controls="panel-trace" aria-selected="false">Trace and log</button></div></nav>
+<main>
+<div class="panel wrap" role="tabpanel" id="panel-how" aria-labelledby="tab-how" hidden><section class="block"><details class="about"><summary>About this document</summary><div class="inner"><div class="tbl"><table class=""><thead><tr><th></th><th></th></tr></thead><tbody><tr><td>Document</td><td>Decision register: what is decided, what the owner decides, what the client decides, and the infrastructure questions</td></tr><tr><td>Version</td><td><b>0.2</b>, draft for review (0.1: planning Phase 5, 2026-09-28; <b>0.2: 2026-10-03, the six-month calendar and the client-documents review</b>)</td></tr><tr><td>Date</td><td>2026-10-03 (first version 2026-09-28)</td></tr><tr><td>Audience</td><td>Product owner; the client's sponsor and module owners (parts C and D)</td></tr><tr><td>Status</td><td><b>Planning only; no implementation has started</b></td></tr><tr><td>Companion docs</td><td><a href="../5-for-the-client/MOS-STAKEHOLDER-QUESTIONNAIRE.html">Stakeholder questionnaire</a> (parts C and D as a form for the client) · <a href="../4-plan/MOS-IMPLEMENTATION-PLAN.html">Implementation plan</a> · <a href="../5-for-the-client/MOS-COMMERCIAL-PROPOSAL.html">Commercial proposal</a> · <a href="adr/">docs/6-decisions/adr/</a></td></tr></tbody></table></div></div></details></section><section class="block"><h2 id="how-to-read-this-register">How to read this register</h2>
+<ul class="clean"><li><b>One row per decision or question.</b> Every open question raised in planning Phases 1–4 appears here exactly once. Part E shows where each earlier question went; duplicates were merged, and a merged row lists all its sources.</li><li><b>Needed by</b> is a week of the six-month plan (<a href="../4-plan/MOS-IMPLEMENTATION-PLAN.html">implementation plan</a> 0.5 §9), the earlier of paths A+ and A. W1 is the go-ahead week; go-live is W24 (<a href="adr/ADR-0025-everything-in-six-months.md">ADR-0025</a>).</li><li><b>Default if unanswered:</b> what the team builds if the answer is late. The work continues on the default, and changing it later goes through the change rule.</li><li><b>Status</b> is Decided or Open. When an open item is answered, it moves to part A with the date and the answer. The questionnaire's answers come back into parts C and D.</li></ul>
+<div class="tbl"><table class=""><thead><tr><th>Part</th><th>Rows</th><th>Who decides</th></tr></thead><tbody><tr><td>A. Decided</td><td>43</td><td>Done (ADRs, owner inputs, planning phases)</td></tr><tr><td>B. Open, owner</td><td>18 (16 were decided in the Phase 6 session and 1 on 2026-10-03, all moved to part A)</td><td>Product owner</td></tr><tr><td>C. Open, client business</td><td>49</td><td>The client's sponsor and module owners</td></tr><tr><td>D. Open, client infrastructure</td><td>18</td><td>The client's IT</td></tr></tbody></table></div></section></div><div class="panel wrap" role="tabpanel" id="panel-a" aria-labelledby="tab-a" hidden><section class="block"><h2 id="a-decided">A. Decided</h2>
+<div class="tbl"><table class=""><thead><tr><th>ID</th><th>Decision</th><th>Why</th><th>Source</th><th>Reversible</th><th>Confidence</th></tr></thead><tbody><tr><td class="id">A-01</td><td>Modular monolith: one PostgreSQL schema per module, in dependency tiers; lower tiers call higher ones only through ports</td><td>One deployable for a 1–3 person team; module boundaries still enforced by lint and grants</td><td>ADR-0003; database design §2.1</td><td>Costly</td><td>High</td></tr><tr><td class="id">A-02</td><td>One installation per company, no tenancy in v1; UUIDv7 keys and a company column keep the SaaS path open</td><td>Removes RLS and tenant machinery from a 6-month build; instance-per-customer needs no schema change</td><td>ADR-0017</td><td>Costly</td><td>High</td></tr><tr><td class="id">A-03</td><td>v1 / v1.1 / Later tags replace MVP / P2 / P3; every module is contractual, depth is what moves</td><td>The client expects all six modules; depth is the honest lever</td><td>ADR-0018</td><td>Yes</td><td>High</td></tr><tr><td class="id">A-04</td><td>Infrastructure is not assumed; the application stays portable (Linux or Windows Server, containers optional, 12-factor config)</td><td>The client infrastructure is unknown; guessing adds services the client may not run</td><td>ADR-0019</td><td>Yes</td><td>High</td></tr><tr><td class="id">A-05</td><td>Local username/password accounts by default, TOTP for sensitive roles; OpenID Connect sign-in optional</td><td>The client draft shows local sign-in; SSO is not guaranteed at the plant</td><td>ADR-0015, ADR-0005</td><td>Yes</td><td>High</td></tr><tr><td class="id">A-06</td><td>Posted documents are immutable; corrections only by reversal documents</td><td>Audit trail and ledger integrity</td><td>ADR-0007; FR-PLT-021, 022</td><td>No</td><td>High</td></tr><tr><td class="id">A-07</td><td>Signed single-sided stock ledger with transactional balances; moving-average cost at company level</td><td>Correct stock and value under concurrency; FIFO derivable later</td><td>ADR-0008; FR-INV-010</td><td>Costly</td><td>High</td></tr><tr><td class="id">A-08</td><td>Transactional outbox for every side effect; the queue sits behind a port</td><td>No half-done work after a crash; infrastructure-neutral</td><td>ADR-0006</td><td>Yes (backend)</td><td>High</td></tr><tr><td class="id">A-09</td><td>"The system prepares, a named role confirms": GRN and PV are drafted automatically and confirmed by STK and APC; automatic mode is a setting</td><td>Matches the client accountability model and still removes re-keying</td><td>ADR-0016; FR-INB-002, 003, 010</td><td>Yes</td><td>High</td></tr><tr><td class="id">A-10</td><td>Data-driven approval matrix (document type × amount band × site × category + flags) with sequential stages; SoD rules enforced at assignment and posting</td><td>Controls as configuration; lean engine for v1</td><td>ADR-0010 as amended by ADR-0018</td><td>Yes</td><td>High</td></tr><tr><td class="id">A-11</td><td>Gap-free numbering at the irreversible point, in the same transaction; PVs numbered at submission with the prefix PV-</td><td>Legal and audit numbering; PV- avoids the clash with PR- in the client draft</td><td>ADR-0011; FR-PLT-040, 041</td><td>Costly</td><td>High</td></tr><tr><td class="id">A-12</td><td>Own attachment store on local disk by default; S3-compatible storage and virus scanning optional</td><td>No assumed object store or scanner</td><td>ADR-0013, ADR-0019</td><td>Yes</td><td>High</td></tr><tr><td class="id">A-13</td><td>Standalone product; the gate is built inside MOS; GMS is not used</td><td>Company-neutral product; GMS serves another purpose</td><td>ADR-0014</td><td>Yes</td><td>High</td></tr><tr><td class="id">A-14</td><td>Weighbridge weights entered by hand with photo, blind verification and forced re-tare; direct capture is Later</td><td>No hardware integration inside 6 months; controls make manual entry safe</td><td>ADR-0018; FR-GATE-009, 010</td><td>Yes</td><td>Medium</td></tr><tr><td class="id">A-15</td><td>The weighbridge station stays available when the Gate module is off (flow C)</td><td>The client own flow has no gate module but has weighbridges</td><td>FR-PLT-006 (FRD 0.3.2)</td><td>Yes</td><td>High</td></tr><tr><td class="id">A-16</td><td>Journals exported to the accounting package as CSV; no general ledger</td><td>Scope; the client keeps its accounting package</td><td>FRD §1.2; FR-AP-010</td><td>Yes</td><td>High</td></tr><tr><td class="id">A-17</td><td>Grain/flour-milling industry pack only in v1</td><td>The client is a flour mill (pending Q0)</td><td>ADR-0018; FR-MD-011</td><td>Yes</td><td>High</td></tr><tr><td class="id">A-18</td><td>Supplier bank details never edited in place: independent approver, recorded call-back, cooling-off period; payment method fixed at approval</td><td>The main payment-fraud risk in procure-to-pay</td><td>FR-PRC-004, FR-AP-007</td><td>No</td><td>High</td></tr><tr><td class="id">A-19</td><td>Keys UUIDv7; money, quantity, price and factor as numeric domains; statuses as text with CHECK, changed only by named actions</td><td>Portable, sortable keys; exact arithmetic; action-driven status</td><td>Database design §2; FR-PLT-031</td><td>Costly</td><td>High</td></tr><tr><td class="id">A-20</td><td>One <code>fin.open_item</code> for every partner document; company paying accounts and tax codes in master data</td><td>One settlement model for AP and AR; removes two tier violations</td><td>Database design D-01…D-19</td><td>Costly</td><td>High</td></tr><tr><td class="id">A-21</td><td>Usage decisions and approval decisions are insert-only</td><td>Decision history can never be rewritten</td><td>Database design §18; FR-PLT-054</td><td>No</td><td>High</td></tr><tr><td class="id">A-22</td><td>English and the Gregorian calendar in v1; locale hooks from day one</td><td>Scope; Amharic and the Ethiopian calendar are a Later pack</td><td>FR-PLT-052</td><td>Yes</td><td>High</td></tr><tr><td class="id">A-23</td><td>Estimate bottom-up by feature, tagged core / standard / full, AI-assisted hours with a ±25% range; scope per path chosen by schedule</td><td>Replaces the top-down month weights, which under-estimated by about a third</td><td>Implementation plan v0.4 §3–§5</td><td>Yes</td><td>Medium</td></tr><tr><td class="id">A-24</td><td>Price basis: US$5 per team hour, quoted in ETB; lead developer 56 h a week; development includes testing and development/CI infrastructure</td><td>Owner input (2026-09-27)</td><td>PROGRESS.md; commercial proposal §1</td><td>Yes</td><td>High</td></tr><tr><td class="id">A-25</td><td>Planning documents stay local in the MOS repository (never published to claude.ai); work runs phase by phase with an owner review</td><td>Owner instruction</td><td>MOS/CLAUDE.md</td><td>Yes</td><td>High</td></tr><tr><td class="id">A-26</td><td>All three team paths are laid out for the client, each delivering the same release; the client chooses (was O-01). <b>Under review for the six-month calendar: O-34</b></td><td>Which team path is recommended to the client?</td><td>Phase 6 round 1; ADR-0020</td><td>Yes</td><td>High</td></tr><tr><td class="id">A-27</td><td><b>Calendar superseded by A-42 (2026-10-03); scope unchanged.</b> One release: all six modules at core depth, built W1–W26, live W27–W35, on every path; each path planned at the velocity it needs (A ×1.32, B ×1.52, C ×2.50); checkpoints at W4 and W9 (was O-02)</td><td>Which delivery option is recommended?</td><td>Phase 6 round 1; ADR-0020</td><td>Yes</td><td>High</td></tr><tr><td class="id">A-28</td><td>Second developer works 48 h a week (6 days) (was O-05)</td><td>Second developer's week: 40, 48 or 56 hours</td><td>Phase 6 round 1</td><td>Yes</td><td>High</td></tr><tr><td class="id">A-29</td><td>No free warranty period: defects after hypercare are handled under the maintenance retainer (was O-07)</td><td>Warranty after go-live</td><td>Phase 6 round 1</td><td>Yes</td><td>High</td></tr><tr><td class="id">A-30</td><td>The client owns its build (full source, perpetual irrevocable right to use and change it); the vendor keeps the right to sell MOS to other companies; client data and configuration are the client's alone (was O-11)</td><td>Ownership and licence model; source-code escrow</td><td>Phase 6 round 1</td><td>Yes</td><td>High</td></tr><tr><td class="id">A-31</td><td>The stale v0.2 page on claude.ai was deleted (was O-14)</td><td>Delete the stale v0.2 page still published on claude.ai?</td><td>Phase 6 round 3; deleted 2026-09-28</td><td>Yes</td><td>High</td></tr><tr><td class="id">A-32</td><td>Node.js 24 LTS (was O-15)</td><td>Node.js major version</td><td>Phase 6 round 2; ADR-0021</td><td>Yes</td><td>High</td></tr><tr><td class="id">A-33</td><td>NestJS 12 on Express, with Vitest (was O-16)</td><td>NestJS 11 (CommonJS, Jest) or 12 (ESM, Vitest, built-in schema validation)</td><td>Phase 6 round 2; ADR-0021</td><td>Yes</td><td>High</td></tr><tr><td class="id">A-34</td><td>PostgreSQL 18 (was O-17)</td><td>PostgreSQL major version</td><td>Phase 6 round 2; ADR-0021</td><td>Yes</td><td>High</td></tr><tr><td class="id">A-35</td><td>BullMQ 6 + Redis 7.2 / Valkey behind the JobQueue port (was O-18)</td><td>Queue backend behind the JobQueue port: Redis/Valkey + BullMQ, BullMQ on PostgreSQL, or pg-boss</td><td>Phase 6 round 2; ADR-0021</td><td>Yes</td><td>High</td></tr><tr><td class="id">A-36</td><td>core.audit_event is not partitioned in v1; partitioning becomes a planned migration if it nears 50 M rows (was O-19)</td><td>Partition <code>core.audit_event</code> by month from day one</td><td>Phase 6 round 2; ADR-0021</td><td>Yes</td><td>High</td></tr><tr><td class="id">A-37</td><td>Next.js 16 house stack (was O-20)</td><td>Frontend: house Next.js 16 stack or a Vite single-page app</td><td>Phase 6 round 2; ADR-0021</td><td>Yes</td><td>High</td></tr><tr><td class="id">A-38</td><td>Both packagings documented and tested; the client chooses native services (PM2 optional) or Docker Compose; on-premises hosting proposed first (was O-21)</td><td>Default production packaging to propose: native Node services (house style, PM2 optional) or Docker Compose</td><td>Phase 6 round 3; ADR-0022</td><td>Yes</td><td>High</td></tr><tr><td class="id">A-39</td><td>dev + staging + production; private GitHub repository with GitHub Actions (was O-22)</td><td>Environments, CI/CD and repository hosting</td><td>Phase 6 round 3; ADR-0022</td><td>Yes</td><td>High</td></tr><tr><td class="id">A-40</td><td>Nightly full backup + WAL archiving, weekly restore test on staging; Pino logs, health, metrics, alerts (was O-23)</td><td>Backup, restore and observability baseline to propose</td><td>Phase 6 round 3; ADR-0022</td><td>Yes</td><td>High</td></tr><tr><td class="id">A-41</td><td>FRD month tags re-aligned to the path A schedule (FRD 0.3.3) (was O-25); <b>re-aligned to the six-month schedule in FRD 0.3.5</b></td><td>Re-align the FRD month tags to the chosen path and option</td><td>Phase 6; FRD 0.3.3</td><td>Yes</td><td>High</td></tr><tr><td class="id">A-42</td><td><b>Everything inside 26 weeks:</b> build W1–W20 with rolling UAT, test server by W4, production server by W16, system test and final UAT W21–W22, training W23, <b>go-live W24</b>, hypercare W25–W26; scope unchanged (six modules at core); checkpoints at W4 and W8; speeds needed A+ ×1.33, A ×1.89, B ×2.22; path C does not fit</td><td>Owner instruction: "everything including deployment, testing, hosting, UAT fits in under 6 months"</td><td>Owner, 2026-10-03; ADR-0025</td><td>Yes</td><td>High</td></tr><tr><td class="id">A-43</td><td><b>Price: one fixed price of ETB 986,615</b> (about US$6,090), within ETB 1,000,000, for every given requirement (core, standard and full) and every go-live service; allocated by estimated work at ETB 245 per hour; paid as work is accepted. Outside it: maintenance, new features, hosting and third-party services (was O-35)</td><td>Owner instruction (2026-10-03). <b>Owner note, internal:</b> at the US$5 rate card the six-month team costs ETB 3.59 M (path A+), 2.82 M (A) or 2.17 M (B); the fixed price covers 27%, 35% or 46% of that, about ETB 222 per team hour on A+ instead of ETB 810</td><td>Owner, 2026-10-03; <a href="../5-for-the-client/MOS-PRICING-AND-TIMELINE.html">pricing and timeline</a></td><td>Yes</td><td>High</td></tr></tbody></table></div></section></div><div class="panel wrap" role="tabpanel" id="panel-b" aria-labelledby="tab-b" hidden><section class="block"><h2 id="b-open-decisions-for-the-owner">B. Open decisions for the owner</h2>
+<p>The Phase 6 session (2026-09-28) decided 16 owner items; they are now rows A-26 onward in part A, each noting its old number. O-27…O-33 come from the <a href="../7-reviews/MOS-CLIENT-DOCS-V2-REVIEW.html">client-documents review</a> §7.5; O-34 from the six-month re-plan (O-35, the pricing basis, was decided as A-43). These remain open:</p>
+<div class="tbl"><table class=""><thead><tr><th>ID</th><th>Decision</th><th>Recommendation</th><th>Needed by</th><th>Cost of a late decision</th></tr></thead><tbody><tr><td class="id">O-03</td><td>Go-ahead date (W1)</td><td>After contract signature and the "before W1" client answers</td><td>Contract</td><td>Every needed-by week shifts</td></tr><tr><td class="id">O-04</td><td>Product name for the client ("Factory ERP", MOS or other); also a client question (C-02)</td><td>Use the client name for its installation; keep MOS as the product codename</td><td>Before W1</td><td>Branding in templates is a find/replace; low</td></tr><tr><td class="id">O-06</td><td>Is QA billed at the same US$5 rate?</td><td>Yes, one rate for every team hour keeps the offer simple</td><td>Before the proposal</td><td>Prices depend on it</td></tr><tr><td class="id">O-08</td><td>Maintenance: minimum term and unused hours</td><td>12-month minimum; unused hours carry over one month</td><td>Before the proposal</td><td>Legal terms</td></tr><tr><td class="id">O-09</td><td>Exchange-rate clause</td><td>Invoice at ETB 162.00 per US$; switch to the NBE rate of the day if it differs by more than 5%</td><td>Before the proposal</td><td>FX risk (R24)</td></tr><tr><td class="id">O-10</td><td>Travel and expenses</td><td>Visits in the team city included; beyond it at cost with approval, travel time at the hourly rate</td><td>Before the proposal</td><td>Legal terms</td></tr><tr><td class="id">O-12</td><td>Billing model, fixed-price premium and payment terms</td><td>Hybrid (monthly hours capped at plan; go-live as a fixed fee); 10% premium if fixed price; 15 days</td><td>Before the proposal</td><td>Legal terms</td></tr><tr><td class="id">O-13</td><td>Import supplier bank accounts as PENDING and verify them in W23 (instead of bypassing the call-back rule)</td><td>Yes; pay by cheque until an account is verified</td><td>Before W17 (migration)</td><td>Go-live payments by transfer delayed</td></tr><tr><td class="id">O-24</td><td>Offline gate and label printing</td><td>Paper mode with back-entry (no offline app); PDF labels, no direct printer driver in v1</td><td>Before WP-10</td><td>Gate scope</td></tr><tr><td class="id">O-26</td><td>Who pays for capacity added after a W4/W8 checkpoint shows the team behind (a third developer or extra hours)?</td><td>Decide before the proposal; either the vendor absorbs it (fixed commitment) or it is billed with the client's approval</td><td>Before the proposal is sent</td><td>The proposal carries an [owner to confirm] marker</td></tr><tr><td class="id">O-27</td><td>Frontend: a Vite single-page app, or keep Next.js 16 (A-37)?</td><td><b>Vite SPA</b> (review U-1); the estimate assumes it (−4 h)</td><td>Before S1</td><td>S1 tasks <code>f04a</code>, <code>f04m</code></td></tr><tr><td class="id">O-28</td><td>Job queue: pg-boss on PostgreSQL, or keep BullMQ + Redis/Valkey (A-35)?</td><td><b>pg-boss</b> (review U-2); the estimate assumes it (−6 h); no Redis to install on Windows</td><td>Before S1</td><td>S1 tasks <code>f00d</code>, <code>f01j</code></td></tr><tr><td class="id">O-29</td><td>The supplier delivery as the gate visit in both modes, or a separate procurement table?</td><td><b>One arrival record (the visit) in both modes</b></td><td>Before S3</td><td>Feature <code>f08s</code></td></tr><tr><td class="id">O-30</td><td>Supplier-portal elements (raised by suppliers) in v1?</td><td><b>No</b>; a separately priced change (INT-14)</td><td>Before the proposal</td><td>Scope</td></tr><tr><td class="id">O-31</td><td>Present the offer in the client's eight module names, with the gate shown separately?</td><td><b>Yes</b>, with a mapping table</td><td>Before the proposal</td><td>Presentation</td></tr><tr><td class="id">O-32</td><td>Send the client the feedback note and the new questions?</td><td><b>Yes</b>, after the owner's review</td><td>After the 3 October meeting</td><td>Client answers</td></tr><tr><td class="id">O-33</td><td>Position on the data dictionary: "every field captured, our table design"</td><td><b>Yes</b></td><td>Before the proposal</td><td>Design</td></tr><tr><td class="id">O-34</td><td><b>Which team to plan with</b> for the six-month calendar (ADR-0025)? The client price is fixed (A-43), so this decides cost and risk, not price</td><td><b>A+</b> (×1.33); A only with the gate and grading answers (×1.59) and the second developer at 56 h (×1.49); not B (×2.22) or C (does not fit)</td><td>Before W1</td><td>Hiring the third developer</td></tr></tbody></table></div></section></div><div class="panel wrap" role="tabpanel" id="panel-c" aria-labelledby="tab-c" hidden><section class="block"><h2 id="c-client-business-decisions">C. Client business decisions</h2>
+<h3 id="c1-general">C.1 General</h3>
+<div class="tbl"><table class=""><thead><tr><th>ID</th><th>Question</th><th>Why it matters</th><th>Default if unanswered</th><th>Needed by</th><th>Answered by</th><th>Sources</th></tr></thead><tbody><tr><td class="id">C-01</td><td>Does "Floor Manufacturing" mean <b>flour</b> (the draft inspects wheat for "Addis Flour Factory")?</td><td>Decides the industry pack and every example</td><td>Flour milling</td><td>Before W1</td><td>Sponsor</td><td>Q0, BQ-28, A-02</td></tr><tr><td class="id">C-02</td><td>What is the product called at your company: "Factory ERP" (as on the sign-in mock-up) or another name?</td><td>Branding on screens and documents</td><td>"Factory ERP"</td><td>Before W1</td><td>Sponsor</td><td>Q1</td></tr><tr><td class="id">C-03</td><td>The <b>operation unit</b> chosen at sign-in: a plant (site), a legal company, or a department?</td><td>Sets the organisation model and access scopes</td><td>A site (plant)</td><td>Before W1</td><td>Sponsor</td><td>Q9</td></tr><tr><td class="id">C-04</td><td><b>Currency:</b> PRs and POs show USD, invoices and payments ETB. Are some purchases in foreign currency? How are they converted and paid?</td><td>Document currency, exchange-rate storage and FX variance postings</td><td>One currency per document; USD POs keep their rate; payment in ETB with FX variance</td><td>Before W1</td><td>Finance</td><td>Q11, P-14, DB-USD</td></tr><tr><td class="id">C-05</td><td>Who are the users, with roles, departments and sites? Who is the project sponsor, and who is the key user per module?</td><td>Accounts, scopes, approvers, UAT</td><td>— (needed)</td><td>Before W1 (sponsor, key users) / W3 (users and roles)</td><td>Sponsor / HR</td><td>DATA-USERS</td></tr><tr><td class="id">C-06</td><td>How long must documents and audit records legally be kept?</td><td>Retention and archiving</td><td>10 years online</td><td>Before W17</td><td>Finance / legal</td><td>PM-7, BQ-42, DB-RET</td></tr></tbody></table></div>
+<h3 id="c2-approvals">C.2 Approvals</h3>
+<div class="tbl"><table class=""><thead><tr><th>ID</th><th>Question</th><th>Why it matters</th><th>Default if unanswered</th><th>Needed by</th><th>Answered by</th><th>Sources</th></tr></thead><tbody><tr><td class="id">C-07</td><td>Approval bands for PRs, POs, PVs, adjustments and bank-detail changes: who is "Management", and which amounts go to whom?</td><td>Seeds the approval matrix</td><td>Two stages above a threshold, one below; PVs always approved</td><td>Before W4</td><td>Management</td><td>Q5, BQ-33</td></tr></tbody></table></div>
+<h3 id="c3-procurement">C.3 Procurement</h3>
+<div class="tbl"><table class=""><thead><tr><th>ID</th><th>Question</th><th>Why it matters</th><th>Default if unanswered</th><th>Needed by</th><th>Answered by</th><th>Sources</th></tr></thead><tbody><tr><td class="id">C-08</td><td>Is a PO without a PR ever allowed (never, or for named categories)?</td><td>PO validation</td><td>Never</td><td>Before W6</td><td>Procurement</td><td>Q6</td></tr><tr><td class="id">C-09</td><td>Should suppliers self-register through a link ("Supplier Portal" on the draft)? Are there individual suppliers (farmers, traders) without a TIN?</td><td>Self-registration is v1.1; individuals need self-billing and the no-TIN rate</td><td>Procurement registers suppliers; individuals allowed</td><td>Before W6</td><td>Procurement</td><td>Q12, F-32</td></tr><tr><td class="id">C-10</td><td>Which documents must a supplier provide per supplier group (licence, TIN, VAT, bank letter), and which expire?</td><td>Onboarding checklist</td><td>Trade licence, TIN, VAT certificate, bank letter</td><td>Before W6</td><td>Procurement</td><td>DATA-KYC</td></tr><tr><td class="id">C-11</td><td>How many quotations are needed per amount band, and when is sole source allowed?</td><td>Sourcing policy on the PO</td><td>Three above a band, justification otherwise</td><td>Before W6</td><td>Procurement</td><td>DATA-SOURCING</td></tr><tr><td class="id">C-12</td><td>Quantity and price tolerances between PR, PO, GRN and invoice</td><td>Over-receipt, over-ordering and matching rules</td><td>PR→PO 0%; receipt +2%; invoice price ±1%</td><td>Before W6</td><td>Procurement / finance</td><td>PM-4, BQ-32</td></tr><tr><td class="id">C-13</td><td>Confirm: partial deliveries and several GRNs against one PO are allowed</td><td>Designed that way</td><td>Yes</td><td>Before W6</td><td>Procurement</td><td>BQ-31</td></tr></tbody></table></div>
+<h3 id="c4-payables">C.4 Payables</h3>
+<div class="tbl"><table class=""><thead><tr><th>ID</th><th>Question</th><th>Why it matters</th><th>Default if unanswered</th><th>Needed by</th><th>Answered by</th><th>Sources</th></tr></thead><tbody><tr><td class="id">C-14</td><td>Are invoices received before or after the goods, and at gross or accepted weight?</td><td>The matching basis</td><td>After the GRN, at payable weight</td><td>Before W8</td><td>Finance</td><td>Q8</td></tr><tr><td class="id">C-15</td><td>Should the person who pays be different from the person who raised the payment request? (The draft shows the same finance officer)</td><td>An SoD rule</td><td>The same person may raise and record, never approve</td><td>Before W8</td><td>Finance</td><td>Q7</td></tr><tr><td class="id">C-16</td><td>Payment methods and paying accounts (banks, cash boxes, mobile money); can the method change after approval?</td><td>Paying accounts and re-approval rule</td><td>Transfer and cheque; a change needs re-approval</td><td>Before W8</td><td>Finance</td><td>Q13</td></tr><tr><td class="id">C-17</td><td>Is the company a withholding agent? Current VAT and withholding rates and thresholds, including the no-TIN rate</td><td>Tax codes are seed data</td><td>Rates entered by finance before go-live</td><td>Before W8</td><td>Finance</td><td>Q14, BQ-41, F-05</td></tr><tr><td class="id">C-18</td><td>The WHT certificate layout and numbering rules</td><td>Certificate template</td><td>A generic certificate with a gap-free number</td><td>Before W8</td><td>Finance</td><td>PM-2, DB-WHT</td></tr><tr><td class="id">C-19</td><td>Confirm: three-way match is a hard control before payment (services by confirmation; farmers by self-billing)</td><td>Designed that way</td><td>Yes</td><td>Before W8</td><td>Finance</td><td>BQ-34</td></tr><tr><td class="id">C-20</td><td>Which accounting package receives the journals, and in which import format?</td><td>CSV export layout and account map</td><td>A generic journal CSV</td><td>Before W8</td><td>Finance</td><td>PM-6, BQ-40</td></tr></tbody></table></div>
+<h3 id="c5-inventory">C.5 Inventory</h3>
+<div class="tbl"><table class=""><thead><tr><th>ID</th><th>Question</th><th>Why it matters</th><th>Default if unanswered</th><th>Needed by</th><th>Answered by</th><th>Sources</th></tr></thead><tbody><tr><td class="id">C-21</td><td>Rejected quantity on a GRN: unloaded and held, or left on the truck? Then return, replacement or disposal?</td><td>Disposition rules and stock status</td><td>Both allowed, chosen per line</td><td>Before W7</td><td>Stores / QC</td><td>Q4, BQ-35</td></tr><tr><td class="id">C-22</td><td>Empty bags: returned, kept as packaging stock, or credited? The tare per bag type</td><td>Payable net weight</td><td>Returned; 0.15 kg per bag</td><td>Before W7</td><td>Stores</td><td>Q15</td></tr><tr><td class="id">C-23</td><td>Stores, silos and their capacities (and silo geometry for dips); who approves transfers between stores?</td><td>Storage set-up and transfer approval</td><td>Warehouse supervisor approves</td><td>Before W3 (list) / W7 (approvers)</td><td>Stores</td><td>Q10, BQ-36, DATA-STORAGE</td></tr></tbody></table></div>
+<h3 id="c6-lab-and-qc">C.6 Lab and QC</h3>
+<div class="tbl"><table class=""><thead><tr><th>ID</th><th>Question</th><th>Why it matters</th><th>Default if unanswered</th><th>Needed by</th><th>Answered by</th><th>Sources</th></tr></thead><tbody><tr><td class="id">C-24</td><td>The item list with lot tracking, inspection requirement and inspection point; the test ranges per raw material</td><td>QC policies and specs</td><td>The grain pack defaults</td><td>Before W10</td><td>QC</td><td>PM-5, BQ-29, BQ-30</td></tr><tr><td class="id">C-25</td><td>Grading: worst parameter or score bands? The actual grade table and score weights behind "92.4 / 100"</td><td>Grade and score model</td><td>Worst-parameter grading; equal weights</td><td>Before W1 (pass/fail or grades: Q-02) / W10 (the grade table)</td><td>QC</td><td>Q2, F-37</td></tr><tr><td class="id">C-26</td><td>Price effect of quality: a differential per grade, deductions per parameter, or both?</td><td>Payable quantity and price</td><td>Moisture and impurity deductions</td><td>Before W1 (Q-02) / W10 (the rules)</td><td>QC / procurement</td><td>Q3</td></tr><tr><td class="id">C-27</td><td>Can one truck be partly accepted? Who decides: the inspector or the QC manager?</td><td>Usage-decision rights</td><td>Yes; the QC manager</td><td>Before W10</td><td>QC</td><td>Q16</td></tr><tr><td class="id">C-28</td><td>Confirm the end-to-end procure-to-pay example (one supplier, PO, truck and payment) we will use for acceptance</td><td>Acceptance scenario AS-13</td><td>The corrected example in the FRD</td><td>Before W4</td><td>Procurement / QC</td><td>F-28</td></tr></tbody></table></div>
+<h3 id="c7-gate">C.7 Gate</h3>
+<div class="tbl"><table class=""><thead><tr><th>ID</th><th>Question</th><th>Why it matters</th><th>Default if unanswered</th><th>Needed by</th><th>Answered by</th><th>Sources</th></tr></thead><tbody><tr><td class="id">C-29</td><td>Gate workshop: documents checked in and out; weighbridge make, capacity and division; tolerances; who may override</td><td>Gate module design</td><td>The grain pack defaults</td><td>Before W1 (gate module or not: Q-01) / W10 (workshop)</td><td>Security / stores</td><td>Q17-GATE, BQ-39</td></tr></tbody></table></div>
+<h3 id="c8-production">C.8 Production</h3>
+<div class="tbl"><table class=""><thead><tr><th>ID</th><th>Question</th><th>Why it matters</th><th>Default if unanswered</th><th>Needed by</th><th>Answered by</th><th>Sources</th></tr></thead><tbody><tr><td class="id">C-30</td><td>Production workshop: products, milling stages, extraction rates, by-products, packing sizes, fortification; reservation, issue, return and scrap</td><td>Production module design</td><td>The flour pack defaults</td><td>Before W10</td><td>Production</td><td>Q17-MFG, BQ-37</td></tr></tbody></table></div>
+<h3 id="c9-sales">C.9 Sales</h3>
+<div class="tbl"><table class=""><thead><tr><th>ID</th><th>Question</th><th>Why it matters</th><th>Default if unanswered</th><th>Needed by</th><th>Answered by</th><th>Sources</th></tr></thead><tbody><tr><td class="id">C-31</td><td>Sales workshop: customers, price lists, credit rules, delivery documents, sales approvals</td><td>Sales module design</td><td>The designed defaults</td><td>Before W12</td><td>Sales</td><td>Q18, BQ-38</td></tr><tr><td class="id">C-32</td><td>Is a fiscal device or e-invoice legally required for sales invoices?</td><td>Could add a v1 integration</td><td>Fiscal reference recorded by hand</td><td>Before W12</td><td>Finance / legal</td><td>Q18-FISCAL, F-07</td></tr><tr><td class="id">C-33</td><td>Who posts customer invoices at the mill: sales staff, a billing clerk or finance?</td><td>Roles and SoD</td><td>A billing clerk in finance</td><td>Before W12</td><td>Finance</td><td>PM-3</td></tr><tr><td class="id">C-34</td><td>Are customers ever refunded in cash or by transfer, or are credit balances always offset?</td><td>A refund document would be added</td><td>Always offset</td><td>Before W12</td><td>Finance</td><td>PM-1, DB-REFUND</td></tr></tbody></table></div>
+<h3 id="c10-go-live">C.10 Go-live</h3>
+<div class="tbl"><table class=""><thead><tr><th>ID</th><th>Question</th><th>Why it matters</th><th>Default if unanswered</th><th>Needed by</th><th>Answered by</th><th>Sources</th></tr></thead><tbody><tr><td class="id">C-35</td><td>Migration data extracts, UAT dates, training schedule and the go-live date</td><td>Go-live plan</td><td>—</td><td>Before W17 (migration extracts) / W21 (UAT key users, training dates, go-live date)</td><td>Sponsor</td><td>DATA-GOLIVE</td></tr></tbody></table></div>
+<h3 id="c11-from-the-clients-v2-documents-added-2026-10-03">C.11 From the client's v2 documents (added 2026-10-03)</h3>
+<p>The questions of the <a href="../7-reviews/MOS-CLIENT-DOCS-V2-REVIEW.html">client-documents review</a> §8. The 3 October discussion pack asks them as Q-01…Q-23; the pack-to-register map is in the <a href="../8-meetings/2026-10-03-client-documents/OWNER-BRIEFING.html">owner briefing</a> §8. New evidence on C-03, C-04, C-16, C-17 and C-24…C-27 is in the review §8.</p>
+<div class="tbl"><table class=""><thead><tr><th>ID</th><th>Question</th><th>Why it matters</th><th>Default if unanswered</th><th>Needed by</th><th>Answered by</th><th>Sources</th></tr></thead><tbody><tr><td class="id">C-36</td><td>Is your architecture document a <b>requirement</b> or a <b>recommendation</b>? Will your own developers maintain or extend the system after handover, and with which skills? Do you need SMS notifications?</td><td>Decides how far we follow it</td><td>A recommendation; we deliver our stack with full source and documentation</td><td>Before W1</td><td>Sponsor / IT</td><td>Review §8 (2026-10-03)</td></tr><tr><td class="id">C-37</td><td>Is the data dictionary the <b>required table design</b>, or the list of data you need captured?</td><td>Table design</td><td>The data to capture; our design captures every field</td><td>Before W1</td><td>Sponsor</td><td>Review §8; pack Q-18</td></tr><tr><td class="id">C-38</td><td><b>Weighing and the gate.</b> Do you weigh trucks, and is the payable quantity the weighbridge net, the bag count or the delivery note? Do you want the gate and weighbridge module in this release?</td><td>Could remove about 190 core hours, or confirm them</td><td>Gate module in scope; weights typed when the gate is off</td><td>Before W1</td><td>Sponsor / stores</td><td>Review §8; pack Q-01</td></tr><tr><td class="id">C-39</td><td><b>Who raises supplier payment requests:</b> your finance officer or the supplier? Should suppliers use the system at all?</td><td>A supplier portal is a separate scope</td><td>The finance officer; no supplier access in this release</td><td>Before W1</td><td>Finance</td><td>Review §8; pack Q-03</td></tr><tr><td class="id">C-40</td><td>Which documents or screens in v2 are final, and which are examples? Will a third revision with one coherent example follow?</td><td>Acceptance data (C-28)</td><td>The fields are final; the numbers are examples</td><td>Before W4</td><td>Sponsor</td><td>Review §8; pack Q-05</td></tr><tr><td class="id">C-41</td><td><b>Supplier delivery entry:</b> who records it (procurement, stores, security), and what does "Approve" on it mean?</td><td>The delivery record</td><td>Stores record it; "approve" = matches an open PO, send to inspection</td><td>Before W6</td><td>Procurement / stores</td><td>Review §8; pack Q-10</td></tr><tr><td class="id">C-42</td><td>Should <b>every</b> supplier invoice be approved, in addition to the payment request, or only invoices with a match difference?</td><td>Optional invoice approval</td><td>Only match differences</td><td>Before W1 (sizing: Q-04) / W8 (the rule)</td><td>Finance</td><td>Review §8; pack Q-04</td></tr><tr><td class="id">C-43</td><td>Are <b>rejected</b> (delivered, refused) and <b>short</b> (not delivered) quantities recorded separately?</td><td>Your GRN screen merges them</td><td>Separately</td><td>Before W6</td><td>Stores</td><td>Review §8; pack Q-11</td></tr><tr><td class="id">C-44</td><td>When raw material goes "for production", is it moved to a production staging store, or issued directly to the milling run?</td><td>Transfer vs issue</td><td>Issued to the work order</td><td>Before W10</td><td>Production</td><td>Review §8; pack Q-12</td></tr><tr><td class="id">C-45</td><td>Should counters see the system quantity or count blind? Do you count in Excel and import?</td><td>Count design</td><td>Blind; Excel import available</td><td>Before W7</td><td>Stores</td><td>Review §8; pack Q-14</td></tr><tr><td class="id">C-46</td><td>May an approved count be adjusted by a different figure?</td><td>Count integrity</td><td>No: a different figure needs a recount</td><td>Before W7</td><td>Stores / finance</td><td>Review §8; pack Q-15</td></tr><tr><td class="id">C-47</td><td>Do you budget purchases (the dictionary's budget code)? Record only, or should the system check budgets?</td><td>Budget code</td><td>Record and report only</td><td>Before W6</td><td>Finance</td><td>Review §8; pack Q-16</td></tr><tr><td class="id">C-48</td><td>Your architecture document lists non-conformance, production plans, finished-flour release, a stock check before sales-order approval and sales returns. Which do you need at go-live?</td><td>Scope at go-live</td><td>Finished-flour release and the stock check at go-live (now core); the rest after go-live</td><td>Before W1</td><td>Sponsor</td><td>Review §8; pack Q-20</td></tr><tr><td class="id">C-49</td><td>Can one person order, inspect <b>and</b> receive the same delivery? Which roles must be different people?</td><td>Segregation-of-duties rules</td><td>Three different people; logged administrator exceptions</td><td>Before W4</td><td>Management</td><td>Review §8; pack Q-23</td></tr></tbody></table></div></section></div><div class="panel wrap" role="tabpanel" id="panel-d" aria-labelledby="tab-d" hidden><section class="block"><h2 id="d-infrastructure-questions-for-the-client-adr-0019">D. Infrastructure questions for the client (ADR-0019)</h2>
+<p>The questions for the <b>test server</b> (I-01–I-04, I-06, I-15, I-16) are needed <b>before W1</b>, because the test server runs on the client's infrastructure from W4. The rest are needed before W12, so the production server is ready by W16 (<a href="adr/ADR-0025-everything-in-six-months.md">ADR-0025</a>). Until then the designs in <a href="../3-design/MOS-TDD.html">TDD</a> §20.3 stay proposals.</p>
+<div class="tbl"><table class=""><thead><tr><th>ID</th><th>Question</th><th>Why it matters</th><th>Default if unanswered</th><th>Needed by</th><th>Answered by</th></tr></thead><tbody><tr><td class="id">I-01</td><td>Where should the system run: your server room, a local data centre, or a cloud? Any rule that data must stay in Ethiopia?</td><td>The hosting option</td><td>On-premises</td><td>Before W1</td><td>IT</td></tr><tr><td class="id">I-02</td><td>Which servers are available (CPU, memory, disk), physical or virtual, and which operating system (Windows Server or Linux, version)?</td><td>Sizing and installation</td><td>A new virtual server, 8 vCPU / 32 GB / 500 GB</td><td>Before W1</td><td>IT</td></tr><tr><td class="id">I-03</td><td>May we run containers (Docker), or must services run natively?</td><td>Packaging</td><td>Native services</td><td>Before W1</td><td>IT</td></tr><tr><td class="id">I-04</td><td>Is there a spare server or VM for a staging environment?</td><td>Testing updates before production</td><td>A smaller staging VM</td><td>Before W1</td><td>IT</td></tr><tr><td class="id">I-05</td><td>Network: are the gate, weighbridge, lab, stores and offices on the same network? Wired or Wi-Fi? How reliable is it?</td><td>Station connectivity</td><td>Wired LAN to each station</td><td>Before W12</td><td>IT</td></tr><tr><td class="id">I-06</td><td>Internet: speed and reliability at the plant; is remote access (VPN) allowed for support?</td><td>Support and updates</td><td>VPN for support</td><td>Before W1</td><td>IT</td></tr><tr><td class="id">I-07</td><td>Power: is there a UPS for the server and the gate PCs? How often does power fail?</td><td>Degraded modes</td><td>UPS recommended</td><td>Before W12</td><td>IT / facilities</td></tr><tr><td class="id">I-08</td><td>Backups: where can backups go (a second disk, NAS, off-site copy)? Who checks them?</td><td>Backup target</td><td>Nightly to a NAS plus an off-site copy</td><td>Before W12</td><td>IT</td></tr><tr><td class="id">I-09</td><td>After a failure, how much data may be lost at most (RPO) and how long may the system be down (RTO)?</td><td>Backup frequency and recovery design</td><td>RPO 15 minutes, RTO 4 hours</td><td>Before W12</td><td>Management / IT</td></tr><tr><td class="id">I-10</td><td>Domain name and certificate: will users reach the system by a name (e.g. erp.company.et)? Who manages DNS?</td><td>TLS and access</td><td>An internal name with a certificate</td><td>Before W12</td><td>IT</td></tr><tr><td class="id">I-11</td><td>Email: is there an email server or relay MOS may send through (notifications, PO emails)?</td><td>Email is optional</td><td>No email; in-app notifications only</td><td>Before W12</td><td>IT</td></tr><tr><td class="id">I-12</td><td>Sign-in: do you use Active Directory, Microsoft Entra ID or another identity provider, and should MOS use it?</td><td>SSO is optional</td><td>Local accounts with TOTP</td><td>Before W12</td><td>IT</td></tr><tr><td class="id">I-13</td><td>Devices: PCs or tablets at the gate, weighbridge, lab, stores and production; printers (A4, label); barcode scanners; cameras for weighbridge photos</td><td>Screens and fallbacks</td><td>One PC per station; A4 printing; typing instead of scanning</td><td>Before W12</td><td>IT</td></tr><tr><td class="id">I-14</td><td>Weighbridges: make, model, indicator, capacity, division and calibration date</td><td>Manual entry and tolerances (capture is Later)</td><td>Manual entry</td><td>Before W10</td><td>Stores / facilities</td></tr><tr><td class="id">I-15</td><td>Security policy: password rules, MFA, who may administer the server, antivirus on servers</td><td>Configuration and hardening</td><td>Our defaults (ASVS L2)</td><td>Before W1</td><td>IT</td></tr><tr><td class="id">I-16</td><td>Who is the IT contact for installation and support, and in which hours?</td><td>Go-live and maintenance</td><td>—</td><td>Before W1</td><td>IT</td></tr><tr><td class="id">I-17</td><td>Other systems: banking platforms, the tax authority portal, the current accounting package; anything MOS must connect to later?</td><td>Integration roadmap (CSV export in v1)</td><td>CSV exports only</td><td>Before W12</td><td>Finance / IT</td></tr><tr><td class="id">I-18</td><td>Are the branches (operation units) at other locations, and how do they reach the central server: internet, VPN or a private line?</td><td>One central server must be reachable from every branch</td><td>One site, or branches over VPN</td><td>Before W12</td><td>IT</td></tr></tbody></table></div></section></div><div class="panel wrap" role="tabpanel" id="panel-trace" aria-labelledby="tab-trace" hidden><section class="block"><h2 id="e-where-every-earlier-question-went">E. Where every earlier question went</h2>
+<div class="tbl"><table class=""><thead><tr><th>Earlier question</th><th>Register row</th></tr></thead><tbody><tr><td>Q0 (Client-draft review §6 Q0)</td><td>C-01</td></tr><tr><td>Q1 (Client-draft review §6 Q1)</td><td>C-02</td></tr><tr><td>Q2 (Client-draft review §6 Q2)</td><td>C-25</td></tr><tr><td>Q3 (Client-draft review §6 Q3)</td><td>C-26</td></tr><tr><td>Q4 (Client-draft review §6 Q4)</td><td>C-21</td></tr><tr><td>Q5 (Client-draft review §6 Q5)</td><td>C-07</td></tr><tr><td>Q6 (Client-draft review §6 Q6)</td><td>C-08</td></tr><tr><td>Q7 (Client-draft review §6 Q7)</td><td>C-15</td></tr><tr><td>Q8 (Client-draft review §6 Q8)</td><td>C-14</td></tr><tr><td>Q9 (Client-draft review §6 Q9)</td><td>C-03</td></tr><tr><td>Q10 (Client-draft review §6 Q10)</td><td>C-23</td></tr><tr><td>Q11 (Client-draft review §6 Q11)</td><td>C-04</td></tr><tr><td>Q12 (Client-draft review §6 Q12)</td><td>C-09</td></tr><tr><td>Q13 (Client-draft review §6 Q13)</td><td>C-16</td></tr><tr><td>Q14 (Client-draft review §6 Q14)</td><td>C-17</td></tr><tr><td>Q15 (Client-draft review §6 Q15)</td><td>C-22</td></tr><tr><td>Q16 (Client-draft review §6 Q16)</td><td>C-27</td></tr><tr><td>Q17-GATE (Review Q17 (gate part))</td><td>C-29</td></tr><tr><td>Q17-MFG (Review Q17 (production part))</td><td>C-30</td></tr><tr><td>Q18 (Client-draft review §6 Q18)</td><td>C-31</td></tr><tr><td>Q18-FISCAL (Review Q18 (fiscal device))</td><td>C-32</td></tr><tr><td>BQ-28 (Brainstorm review BQ-28)</td><td>C-01</td></tr><tr><td>BQ-29 (Brainstorm review BQ-29)</td><td>C-24</td></tr><tr><td>BQ-30 (Brainstorm review BQ-30)</td><td>C-24</td></tr><tr><td>BQ-31 (Brainstorm review BQ-31)</td><td>C-13</td></tr><tr><td>BQ-32 (Brainstorm review BQ-32)</td><td>C-12</td></tr><tr><td>BQ-33 (Brainstorm review BQ-33)</td><td>C-07</td></tr><tr><td>BQ-34 (Brainstorm review BQ-34)</td><td>C-19</td></tr><tr><td>BQ-35 (Brainstorm review BQ-35)</td><td>C-21</td></tr><tr><td>BQ-36 (Brainstorm review BQ-36)</td><td>C-23</td></tr><tr><td>BQ-37 (Brainstorm review BQ-37)</td><td>C-30</td></tr><tr><td>BQ-38 (Brainstorm review BQ-38)</td><td>C-31</td></tr><tr><td>BQ-39 (Brainstorm review BQ-39)</td><td>C-29</td></tr><tr><td>BQ-40 (Brainstorm review BQ-40)</td><td>C-20</td></tr><tr><td>BQ-41 (Brainstorm review BQ-41)</td><td>C-17</td></tr><tr><td>BQ-42 (Brainstorm review BQ-42)</td><td>C-06</td></tr><tr><td>PM-1 (Process model §14.4 item 1)</td><td>C-34</td></tr><tr><td>PM-2 (Process model §14.4 item 2)</td><td>C-18</td></tr><tr><td>PM-3 (Process model §14.4 item 3)</td><td>C-33</td></tr><tr><td>PM-4 (Process model §14.4 item 4)</td><td>C-12</td></tr><tr><td>PM-5 (Process model §14.4 item 5)</td><td>C-24</td></tr><tr><td>PM-6 (Process model §14.4 item 6)</td><td>C-20</td></tr><tr><td>PM-7 (Process model §14.4 item 7)</td><td>C-06</td></tr><tr><td>DB-RET (Database design §18.3 (retention))</td><td>C-06</td></tr><tr><td>DB-WHT (Database design §18.3 (WHT layout))</td><td>C-18</td></tr><tr><td>DB-REFUND (Database design §18.3 (refunds))</td><td>C-34</td></tr><tr><td>DB-USD (Database design §18.3 (USD POs))</td><td>C-04</td></tr><tr><td>F-05 (Audit F-05)</td><td>C-17</td></tr><tr><td>F-07 (Audit F-07)</td><td>C-32</td></tr><tr><td>F-28 (Audit F-28)</td><td>C-28</td></tr><tr><td>F-32 (Audit F-32)</td><td>C-09</td></tr><tr><td>F-37 (Audit F-37)</td><td>C-25</td></tr><tr><td>P-14 (Audit P-14)</td><td>C-04</td></tr><tr><td>A-02 (Audit A-02)</td><td>C-01</td></tr></tbody></table></div>
+<p>Also carried here:</p>
+<ul class="clean"><li>the database design's owner items (PostgreSQL version, audit partitioning) → decided in Phase 6 (was O-17, O-19);</li><li>the TDD's Phase 6 items (Node, NestJS, queue) → decided in Phase 6 (was O-15, O-16, O-18);</li><li>the audit's Phase 6 items T-03 and T-05 → decided in Phase 6 (was O-15, O-16, O-18);</li><li>the Phase 4 commercial choices marked "[owner to confirm]" in the proposal → O-05…O-12 and O-26.</li></ul></section><section class="block"><h2 id="f-change-log">F. Change log</h2>
+<div class="tbl"><table class=""><thead><tr><th>Date</th><th>Change</th></tr></thead><tbody><tr><td>2026-09-28</td><td>First version (planning Phase 5)</td></tr><tr><td>2026-09-28</td><td>Planning Phase 6: 16 owner decisions recorded (A-26 onward; ADR-0020, ADR-0021, ADR-0022); O-26 added</td></tr><tr><td>2026-10-03</td><td><b>0.2:</b> the six-month calendar (A-42, ADR-0025); every needed-by week moved to the new plan; O-27…O-35 added; C-36…C-49 and I-18 added from the client-documents review</td></tr><tr><td>2026-10-03</td><td>The fixed price within ETB 1,000,000 recorded (A-43; O-35 closed)</td></tr></tbody></table></div></section></div>
+</main>
+<footer class="wrap foot"><p class="note">Source: <code>MOS/docs/6-decisions/MOS-DECISION-REGISTER.md</code> (the master copy). Kept locally in the MOS repository; not published.</p></footer>
+<script type="module">
+const MERMAID_URL = 'https://cdn.jsdelivr.net/npm/mermaid@12/dist/mermaid.esm.min.mjs';
+const tabs = [...document.querySelectorAll('[role="tab"]')];
+const panels = [...document.querySelectorAll('[role="tabpanel"]')];
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch { /* storage unavailable */ } },
+};
+const TABKEY = 'mos-pm-tab:' + location.pathname;
+function pickTab() { const k = store.get(TABKEY); if (k && document.getElementById('tab-' + k)) return k; const first = document.querySelector('[role="tab"]'); return first ? first.id.slice(4) : 'overview'; }
+
+
+function show(key, focusTab) {
+  let found = false;
+  for (const t of tabs) {
+    const on = t.id === `tab-${key}`;
+    t.setAttribute('aria-selected', String(on));
+    t.tabIndex = on ? 0 : -1;
+    if (on) { found = true; if (focusTab) t.focus(); }
+  }
+  if (!found) return show('overview', focusTab);
+  for (const p of panels) p.hidden = p.id !== `panel-${key}`;
+  store.set(TABKEY, key);
+  renderVisible();
+}
+tabs.forEach((t, i) => {
+  t.addEventListener('click', () => show(t.id.slice(4)));
+  t.addEventListener('keydown', (e) => {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    const next = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+    show(next.id.slice(4), true);
+  });
+});
+
+// ---- Mermaid, loaded from the CDN and drawn lazily (hidden diagrams cannot be measured)
+let mermaid = null;
+const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function initMermaid() {
+  const dark = matchMedia('(prefers-color-scheme: dark)').matches;
+  mermaid.initialize({
+    startOnLoad: false,
+    securityLevel: 'strict',
+    htmlLabels: false,
+    theme: 'base',
+    fontFamily: css('--font-body'),
+    themeVariables: {
+      darkMode: dark,
+      background: css('--surface'),
+      fontFamily: css('--font-body'),
+      fontSize: '13px',
+      primaryColor: css('--accent-soft'),
+      primaryBorderColor: css('--accent'),
+      primaryTextColor: css('--ink'),
+      secondaryColor: css('--amber-soft'),
+      tertiaryColor: css('--surface-2'),
+      lineColor: css('--ink-2'),
+      textColor: css('--ink'),
+      mainBkg: css('--accent-soft'),
+      clusterBkg: css('--surface-2'),
+      clusterBorder: css('--rule'),
+      edgeLabelBackground: css('--surface'),
+      actorBkg: css('--accent-soft'),
+      actorBorder: css('--accent'),
+      actorTextColor: css('--ink'),
+      actorLineColor: css('--rule'),
+      signalColor: css('--ink-2'),
+      signalTextColor: css('--ink'),
+      labelBoxBkgColor: css('--surface-2'),
+      labelBoxBorderColor: css('--rule'),
+      labelTextColor: css('--ink'),
+      loopTextColor: css('--ink-2'),
+      noteBkgColor: css('--amber-soft'),
+      noteBorderColor: css('--amber'),
+      noteTextColor: css('--ink'),
+      activationBkgColor: css('--surface-2'),
+      stateLabelColor: css('--ink'),
+      transitionColor: css('--ink-2'),
+      transitionLabelColor: css('--ink-2'),
+    },
+    flowchart: { htmlLabels: false, curve: 'basis', useMaxWidth: true },
+    sequence: { useMaxWidth: true, wrap: true, width: 170, messageFontSize: 13, actorFontSize: 13, noteFontSize: 12 },
+    state: { useMaxWidth: true },
+  });
+}
+let queue = Promise.resolve();
+function renderVisible() {
+  if (!mermaid) return queue;
+  queue = queue.then(async () => {
+    for (const el of document.querySelectorAll('.mmd:not([data-done])')) {
+      if (el.offsetParent === null) continue;
+      try {
+        const { svg } = await mermaid.render(`${el.id}-svg`, el.dataset.src);
+        el.innerHTML = svg;
+        el.dataset.done = '1';
+      } catch (err) {
+        el.dataset.done = 'error';
+        el.classList.add('failed');
+        el.textContent = 'This diagram could not be drawn; its source is shown below.';
+        el.nextElementSibling?.classList.add('show');
+      }
+    }
+  });
+  return queue;
+}
+import(MERMAID_URL)
+  .then(async (m) => {
+    // measure labels with the real web font, or they are clipped once it loads
+    await Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 3000))]);
+    mermaid = m.default; initMermaid(); renderVisible();
+  })
+  .catch(() => { document.body.classList.add('offline'); });
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+  if (!mermaid) return;
+  initMermaid();
+  document.querySelectorAll('.mmd[data-done="1"]').forEach((el) => { delete el.dataset.done; el.innerHTML = ''; });
+  renderVisible();
+});
+document.addEventListener('toggle', (e) => { if (e.target.open) renderVisible(); }, true);
+
+// ---- open / close all processes
+document.querySelectorAll('.toolbar .btn').forEach((b) => b.addEventListener('click', () => {
+  const open = b.dataset.act === 'expand';
+  b.closest('.panel').querySelectorAll('details.proc').forEach((d) => { d.open = open; });
+  renderVisible();
+}));
+
+// ---- in-page links switch to the right tab and open the right section
+function goTo(id) {
+  const target = document.getElementById(id);
+  if (!target) return false;
+  const panel = target.closest('[role="tabpanel"]');
+  if (panel) show(panel.id.slice(6));
+  if (target.tagName === 'DETAILS') target.open = true;
+  let d = target.parentElement?.closest('details');
+  while (d) { d.open = true; d = d.parentElement?.closest('details'); }
+  requestAnimationFrame(() => target.scrollIntoView({ block: 'start' }));
+  renderVisible();
+  return true;
+}
+document.addEventListener('click', (e) => {
+  const a = e.target.closest('a[href^="#"]');
+  if (!a) return;
+  const id = decodeURIComponent(a.getAttribute('href').slice(1));
+  if (goTo(id)) { e.preventDefault(); history.replaceState(null, '', `#${id}`); }
+});
+
+// ---- print: show everything, draw every diagram, then print
+const printBtn = document.getElementById('printBtn');
+let opened = [];
+function expandForPrint() {
+  panels.forEach((p) => { p.hidden = false; });
+  opened = [...document.querySelectorAll('details:not([open])')];
+  opened.forEach((d) => { d.open = true; });
+}
+function restoreAfterPrint() {
+  opened.forEach((d) => { d.open = false; });
+  opened = [];
+  show(pickTab());
+}
+printBtn.addEventListener('click', async () => {
+  expandForPrint();
+  await renderVisible();
+  setTimeout(() => window.print(), 250);
+});
+window.addEventListener('beforeprint', () => { if (!opened.length) expandForPrint(); });
+window.addEventListener('afterprint', restoreAfterPrint);
+
+// ---- start
+const initial = decodeURIComponent(location.hash.slice(1));
+if (!(initial && goTo(initial))) show(pickTab());
+
+</script>
+</body>
+</html>

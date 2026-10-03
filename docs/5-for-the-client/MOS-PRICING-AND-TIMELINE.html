@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pricing and timeline</title>
+<meta name="description" content="MOS pricing and timeline: fixed price by phase, sprint, module and feature.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+:root{
+  --ground:#f2f4f3; --surface:#ffffff; --surface-2:#f7f9f8;
+  --ink:#18212b; --ink-2:#44505c; --muted:#68737e; --rule:#d5dbdc; --rule-2:#e6eaea;
+  --accent:#2563b8; --accent-ink:#1d4f94; --accent-soft:#e7eef9;
+  --amber:#c9851c; --amber-soft:#f8eedd; --amber-ink:#7a4f0c;
+  --ok:#2f7a4f; --danger:#b3372f;
+  --font-display:"Barlow Semi Condensed","Arial Narrow",Arial,sans-serif;
+  --font-body:"Public Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#12171d; --surface:#1a2129; --surface-2:#161c23;
+    --ink:#e7ebef; --ink-2:#b8c2cc; --muted:#8e9aa6; --rule:#2e3844; --rule-2:#252e38;
+    --accent:#5b93e6; --accent-ink:#8db5f0; --accent-soft:#1d2c44;
+    --amber:#b8842c; --amber-soft:#2e2517; --amber-ink:#e2b46a;
+    --ok:#5fb383; --danger:#e37a70;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#12171d; --surface:#1a2129; --surface-2:#161c23;
+  --ink:#e7ebef; --ink-2:#b8c2cc; --muted:#8e9aa6; --rule:#2e3844; --rule-2:#252e38;
+  --accent:#5b93e6; --accent-ink:#8db5f0; --accent-soft:#1d2c44;
+  --amber:#b8842c; --amber-soft:#2e2517; --amber-ink:#e2b46a;
+  --ok:#5fb383; --danger:#e37a70;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.55;margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:20px}
+@media (max-width:520px){.wrap{padding-inline:16px}}
+h1,h2,h3,h4{font-family:var(--font-display);text-wrap:balance;margin:0;color:var(--ink);letter-spacing:.005em}
+h1{font-size:clamp(34px,5vw,48px);font-weight:700;line-height:1.05}
+h2{font-size:26px;font-weight:700;line-height:1.15;margin-top:6px}
+h3{font-size:19px;font-weight:600;line-height:1.25}
+h4{font-size:16px;font-weight:600}
+[id]{scroll-margin-top:64px}
+p{margin:0;max-width:78ch}
+a{color:var(--accent-ink)}
+code{font-family:var(--font-mono);font-size:.86em;background:var(--surface-2);border:1px solid var(--rule-2);border-radius:4px;padding:0 4px}
+.eyebrow{font-family:var(--font-mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.masthead{padding-block:34px 20px;display:grid;gap:14px}
+.masthead .lede{font-size:17px;color:var(--ink-2);max-width:80ch}
+.status-line{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.pill{display:inline-flex;align-items:center;font-family:var(--font-mono);font-size:12px;padding:3px 9px;border-radius:999px;border:1px solid var(--rule);background:var(--surface);color:var(--ink-2);white-space:nowrap}
+.pill.plan{border-color:var(--accent);color:var(--accent-ink);background:var(--accent-soft)}
+.pill.rev{border-color:var(--amber);color:var(--amber-ink);background:var(--amber-soft)}
+.spec{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));border:1px solid var(--rule);background:var(--surface);border-radius:6px}
+.spec div{padding:12px 14px;border-right:1px solid var(--rule-2)}
+.spec div:last-child{border-right:0}
+.spec b{display:block;font-family:var(--font-display);font-size:26px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.1}
+.spec span{font-size:12.5px;color:var(--muted)}
+.note{font-size:13.5px;color:var(--muted)}
+.btn{appearance:none;border:1px solid var(--rule);background:var(--surface);color:var(--ink);font:500 13px/1.2 var(--font-body);padding:7px 12px;border-radius:6px;cursor:pointer}
+.btn:hover{border-color:var(--accent);color:var(--accent-ink)}
+.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn.print{margin-left:auto}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap}
+.tabbar{position:sticky;top:0;z-index:5;background:var(--ground);border-bottom:1px solid var(--rule)}
+.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:thin}
+.tabs button{appearance:none;border:0;background:none;color:var(--ink-2);font-family:var(--font-display);font-size:16px;font-weight:600;padding:12px 14px 10px;border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tabs button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.panel{padding-block:26px 48px;display:grid;gap:30px}
+.panel[hidden]{display:none}
+section.block{display:grid;gap:14px;min-width:0}
+section.block > p,section.block > ul,section.block > ol{color:var(--ink-2)}
+ul.clean,ol.clean{margin:0;padding-left:20px;display:grid;gap:5px;max-width:86ch}
+ul.clean li,ol.clean li{color:var(--ink-2)}
+ul.clean ul.clean,ol.clean ul.clean{margin-top:5px}
+li b,p b{color:var(--ink)}
+.tbl{overflow-x:auto;border:1px solid var(--rule);border-radius:6px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{text-align:left;vertical-align:top;padding:8px 11px;border-bottom:1px solid var(--rule-2)}
+th{font-family:var(--font-display);font-weight:600;font-size:14px;color:var(--ink-2);background:var(--surface-2);letter-spacing:.01em;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.id{font-family:var(--font-mono);font-size:12px;white-space:nowrap;color:var(--accent-ink)}
+table.steps td:nth-child(4){min-width:300px}
+table.steps td:last-child{font-family:var(--font-mono);font-size:11px;color:var(--ink-2);min-width:170px;max-width:240px;overflow-wrap:anywhere}
+figure{margin:0;display:grid;gap:8px;min-width:0}
+.fig{overflow-x:auto;background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:14px}
+.fig svg{display:block;width:100%;height:auto;color:var(--ink)}
+.fig.hero svg{min-width:900px}
+figcaption{font-size:13.5px;color:var(--muted);max-width:92ch}
+svg text{font-family:var(--font-body)}
+svg .ttl{font-family:var(--font-display);font-size:15px;font-weight:600;fill:var(--ink)}
+svg .lbl{font-size:12px;fill:var(--ink-2)}
+svg .sm{font-size:10.5px;fill:var(--muted)}
+svg .st{fill:var(--surface);stroke:var(--ink-2);stroke-width:1.2}
+svg .st-auto{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.5}
+svg .st-person{fill:var(--amber-soft);stroke:var(--amber);stroke-width:1.4}
+svg .st-side{fill:var(--surface-2);stroke:var(--muted);stroke-width:1.1;stroke-dasharray:4 3}
+svg .edge{stroke:var(--ink-2);stroke-width:1.4;fill:none}
+svg .edge-async{stroke:var(--accent);stroke-width:1.5;fill:none;stroke-dasharray:6 4}
+svg .mk{fill:var(--ink-2)}
+svg .mk-auto{fill:var(--accent)}
+svg .hb rect{fill:var(--surface);stroke:var(--accent);stroke-width:1.2}
+svg .hb text{font-family:var(--font-mono);font-size:10px;fill:var(--accent-ink);text-anchor:middle;dominant-baseline:central}
+details{border:1px solid var(--rule);border-radius:6px;background:var(--surface)}
+details > summary{cursor:pointer;padding:11px 14px;font-family:var(--font-display);font-weight:600;font-size:16px}
+details > summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+details .inner{padding:4px 16px 18px;display:grid;gap:14px;min-width:0}
+details.proc{margin-top:10px}
+details.proc > summary{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;list-style-position:outside}
+details.proc[open] > summary{border-bottom:1px solid var(--rule-2)}
+.pid{font-family:var(--font-mono);font-size:12.5px;font-weight:500;color:var(--accent-ink);background:var(--accent-soft);border-radius:4px;padding:1px 7px}
+.pname{flex:1 1 320px}
+.meta{font-family:var(--font-mono);font-size:11.5px;font-weight:400;color:var(--muted)}
+.life-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,460px),1fr));gap:18px}
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:14px 16px;display:grid;gap:10px;align-content:start;min-width:0}
+.card.wide{grid-column:1/-1}
+.card .mmd{border:0;padding:0}
+.card p{font-size:14px;color:var(--ink-2)}
+.mmd-fig{margin:0}
+.mmd{overflow-x:auto;background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:12px;min-height:44px}
+.mmd:empty::before{content:"Drawing diagram\2026";color:var(--muted);font-size:13px}
+.mmd svg{display:block;margin:0 auto;height:auto}
+.mmd.failed{color:var(--danger);font-size:13px}
+.mmd-src{display:none;margin:0;overflow-x:auto;font-family:var(--font-mono);font-size:11.5px;line-height:1.45;background:var(--surface-2);border:1px solid var(--rule);border-radius:6px;padding:10px 12px;color:var(--ink-2)}
+.mmd-src.show{display:block}
+body.offline .mmd{display:none}
+body.offline .mmd-src{display:block}
+pre.code{margin:0;overflow-x:auto;font-family:var(--font-mono);font-size:12px;background:var(--surface-2);border:1px solid var(--rule);border-radius:6px;padding:10px 12px}
+blockquote.callout{margin:0;border-left:3px solid var(--accent);background:var(--accent-soft);padding:12px 16px;border-radius:0 6px 6px 0;display:grid;gap:8px}
+details.about .inner,details.graph .inner{padding-top:12px}
+.foot{padding-block:10px 40px}
+@media print{
+  :root,:root[data-theme="dark"],:root:not([data-theme="light"]){
+    --ground:#ffffff; --surface:#ffffff; --surface-2:#f6f7f7; --ink:#111; --ink-2:#333; --muted:#555; --rule:#ccc; --rule-2:#e2e2e2;
+    --accent:#2563b8; --accent-ink:#1d4f94; --accent-soft:#eef3fb; --amber:#c9851c; --amber-soft:#faf2e4; --amber-ink:#7a4f0c;
+    color-scheme:light;
+  }
+  body{font-size:11.5pt}
+  .tabbar,.toolbar,.btn,.offline-note{display:none !important}
+  .panel,.panel[hidden]{display:grid !important;padding-block:10px}
+  .wrap{max-width:none}
+  .fig.hero svg{min-width:0}
+  .mmd,figure,tr,.card{break-inside:avoid}
+  .mmd:empty{display:none}
+  .mmd:empty + .mmd-src{display:block}
+  details.proc{break-before:page}
+  details > summary{list-style:none}
+}
+
+/* nested tables and code must not widen the page on a phone */
+.panel,.panel>.block,.block li,.block ol,.block ul{min-width:0;max-width:100%}
+.block li .tbl{max-width:100%;overflow-x:auto;display:block}
+.block pre{max-width:100%;overflow-x:auto}
+.block :not(pre)>code{overflow-wrap:anywhere}
+.block p,.block li{overflow-wrap:break-word}
+
+</style>
+</head>
+<body>
+<style>@media print{.mos-nav{display:none}}</style><div class="mos-nav" style="font:14px/1.4 'Segoe UI',system-ui,sans-serif;padding:7px 16px;background:#1f6f6b;color:#fff"><a href="../../index.html" style="color:#fff;font-weight:600;text-decoration:none">&larr; MOS start page</a><span style="opacity:.8"> &nbsp;&middot;&nbsp; 5. For the client</span></div>
+<header class="wrap masthead">
+  <div class="eyebrow">Draft for the owner&#x27;s review · not sent · local file, not published</div>
+  <h1>Pricing and timeline</h1>
+  <p class="lede">One fixed price within ETB 1,000,000, broken down by phase, sprint, module and feature, with the timeline and the payment schedule.</p>
+  <div class="status-line"><span class="pill plan">Planning only · no code</span><span class="pill rev">Draft 0.1 · 3 Oct 2026</span>
+  <button type="button" class="btn print" id="printBtn">Print or save as PDF</button></div>
+  <div class="spec"><div><b>ETB 986,615</b><span>fixed total</span></div><div><b>98.7%</b><span>of the ETB 1,000,000 cap</span></div><div><b>199</b><span>features priced</span></div><div><b>13 + v1.1</b><span>sprints priced</span></div><div><b>W24</b><span>go-live</span></div></div>
+  
+</header>
+<nav class="tabbar" aria-label="Sections"><div class="wrap tabs" role="tablist"><button role="tab" type="button" id="tab-summary" aria-controls="panel-summary" aria-selected="false">Summary</button><button role="tab" type="button" id="tab-phase" aria-controls="panel-phase" aria-selected="false">Phases and modules</button><button role="tab" type="button" id="tab-sprint" aria-controls="panel-sprint" aria-selected="false">Sprints</button><button role="tab" type="button" id="tab-feature" aria-controls="panel-feature" aria-selected="false">Features</button><button role="tab" type="button" id="tab-golive" aria-controls="panel-golive" aria-selected="false">Go-live and v1.1</button><button role="tab" type="button" id="tab-pay" aria-controls="panel-pay" aria-selected="false">Payments and basis</button></div></nav>
+<main>
+<div class="panel wrap" role="tabpanel" id="panel-summary" aria-labelledby="tab-summary" hidden><section class="block"><details class="about"><summary>About this document</summary><div class="inner"><div class="tbl"><table class=""><thead><tr><th></th><th></th></tr></thead><tbody><tr><td>Document</td><td>The price and the timeline of the Factory ERP (MOS), broken down by phase, sprint, module and feature</td></tr><tr><td>Version</td><td><b>0.1, draft for the owner's review — not yet sent to the client</b></td></tr><tr><td>Date</td><td>2026-10-03</td></tr><tr><td>Total price</td><td><b>ETB 986,615</b> (about $6,090 at ETB 162.00 per US$), <b>fixed</b>, within the ETB 1,000,000 cap. Prices exclude VAT and withholding tax</td></tr><tr><td>Covers</td><td>Every requirement already given (all six modules: core, standard and full depth), and every go-live service: test and production servers set-up, testing and UAT, data migration, training, go-live and two weeks of close support</td></tr><tr><td>Does not cover</td><td>Maintenance after go-live (§9); new features or changes beyond the given requirements; hosting, servers, domains, certificates, email, third-party services and devices (bought at cost)</td></tr><tr><td>Plan</td><td><a href="../4-plan/MOS-IMPLEMENTATION-PLAN.html">Implementation plan 0.5</a> and <a href="../4-plan/MOS-SPRINT-PLAN.html">sprint plan 0.2</a>: everything in 26 weeks, go-live in week 24</td></tr></tbody></table></div></div></details></section><section class="block"><h2 id="1-summary">1. Summary</h2>
+<ul class="clean"><li><b>One fixed price: ETB 986,615.</b> It is 98.7% of the ETB 1,000,000 cap, leaving ETB 13,385 unused.</li><li><b>What it buys:</b> all six modules (procurement with supplier payment, inventory, lab and quality, gate and weighbridge, production, sales with receivables), every given requirement, and everything needed to go live.</li><li><b>When:</b></li></ul>
+<div class="tbl"><table class=""><thead><tr><th>Weeks</th><th>What happens</th></tr></thead><tbody><tr><td>1–20</td><td>The system is built in ten two-week sprints. Each module goes to your key users as soon as it is built</td></tr><tr><td>by 4 · by 16</td><td>Test server on your infrastructure · production server ready</td></tr><tr><td>21–22</td><td>System test and final acceptance test</td></tr><tr><td>23</td><td>Training and the migration rehearsal</td></tr><tr><td><b>24</b></td><td><b>Go-live</b></td></tr><tr><td>25–26</td><td>Close support (hypercare)</td></tr><tr><td>27–32</td><td>The remaining standard and full features (the v1.1 completion), unless built earlier</td></tr></tbody></table></div>
+<ul class="clean"><li><b>How the price is split:</b> by the share of the estimated work in each feature, sprint, phase and module. Every figure below comes from the same 4,027 hours of estimated work (3,177 hours of building and 850 hours of go-live work), at <b>ETB 245 per hour of estimated work</b>.</li><li><b>You pay as work is delivered</b> (§8): 10% at signature, then the value of what is accepted at each review.</li></ul>
+<h3 id="words-used-here">Words used here</h3>
+<div class="tbl"><table class=""><thead><tr><th>Word</th><th>Meaning</th></tr></thead><tbody><tr><td><b>Estimated work</b></td><td>The hours a feature should take, at the likely estimate. The price follows it, so a feature's price shows its size</td></tr><tr><td><b>Core / standard / full</b></td><td>Depth of a feature. Core is the flow with its key controls, delivered by go-live; standard and full are year-one conveniences and extras, delivered in the release if time allows, otherwise in the v1.1 completion (weeks 27–32). All three are in the price</td></tr><tr><td><b>Sprint</b></td><td>A two-week step of work, ending with a review where you see what was built</td></tr><tr><td><b>UAT</b></td><td>User acceptance testing: your key users test the system against agreed scripts</td></tr><tr><td><b>Hypercare</b></td><td>Close daily support right after go-live</td></tr></tbody></table></div></section></div><div class="panel wrap" role="tabpanel" id="panel-phase" aria-labelledby="tab-phase" hidden><section class="block"><h2 id="2-price-by-phase">2. Price by phase</h2>
+<div class="tbl"><table class=""><thead><tr><th>Phase</th><th>When</th><th>What it delivers</th><th>Est. hours</th><th>ETB</th><th>Share</th></tr></thead><tbody><tr><td><b>0 Mobilisation</b></td><td>before W1</td><td>Contract, team set-up, the "before W1" answers</td><td>—</td><td>—</td><td>—</td></tr><tr><td><b>1 Foundation</b></td><td>S1–S5 · W1–W10</td><td>The platform: users and roles, master data, approvals, numbering, documents, the stock ledger</td><td>854</td><td><b>209,230</b></td><td>21.2%</td></tr><tr><td><b>2 Procure-to-pay</b></td><td>S4–S8 · W7–W16</td><td>Procurement, payables, inventory and lab/quality: the client's procure-to-pay end to end</td><td>879</td><td><b>215,355</b></td><td>21.8%</td></tr><tr><td><b>3 Plant operations</b></td><td>S7–S10 · W13–W20</td><td>Gate and weighbridge, production, sales and receivables</td><td>598</td><td><b>146,510</b></td><td>14.8%</td></tr><tr><td><b>4 Hardening and freeze</b></td><td>S10 · W20</td><td>Security review, performance, restore drill, acceptance scripts, guides</td><td>108</td><td><b>26,460</b></td><td>2.7%</td></tr><tr><td><b>5 Go-live</b></td><td>W3–W26 (mostly S11–S13)</td><td>Test and production servers, rolling and final UAT, system test, migration, training, cutover (W24), hypercare</td><td>850</td><td><b>208,250</b></td><td>21.1%</td></tr><tr><td><b>6 v1.1 completion</b></td><td>W27–W32, or earlier if pulled in</td><td>The standard and full features of the given requirements not pulled into the release</td><td>738</td><td><b>180,810</b></td><td>18.3%</td></tr><tr><td></td><td></td><td><b>Total</b></td><td><b>4,027</b></td><td><b>986,615</b></td><td>100%</td></tr></tbody></table></div>
+<p>The phases overlap in time because three developers work in parallel; the price of each phase is the work in it, wherever it falls.</p></section><section class="block"><h2 id="3-price-by-module">3. Price by module</h2>
+<div class="tbl"><table class=""><thead><tr><th>Module</th><th>What it covers</th><th>Core (by go-live)</th><th>Standard + full (v1.1 completion)</th><th>Total est. hours</th><th>ETB</th><th>Share</th></tr></thead><tbody><tr><td><b>Foundation</b></td><td>Users, roles, sign-in; company, stores and silos, items, partners, taxes; approvals and segregation of duties; numbering, periods, audit, documents, PDFs; the stock ledger</td><td>854 h · ETB 209,230</td><td>166 h · ETB 40,670</td><td>1,020</td><td><b>249,900</b></td><td>25.3%</td></tr><tr><td><b>Procurement</b></td><td>Suppliers with protected bank details, requisitions, purchase orders, the supplier delivery record, goods receipt, returns</td><td>279 h · ETB 68,355</td><td>80 h · ETB 19,600</td><td>359</td><td><b>87,955</b></td><td>8.9%</td></tr><tr><td><b>Payables</b></td><td>Invoices and matching, debit notes, payment requests drafted from the receipt, approval, payment with cheques and withholding, supplier ledger, journal export</td><td>256 h · ETB 62,720</td><td>60 h · ETB 14,700</td><td>316</td><td><b>77,420</b></td><td>7.8%</td></tr><tr><td><b>Inventory</b></td><td>Stock documents, transfers, adjustments, bin and stock cards, counts, period close, silo levels</td><td>168 h · ETB 41,160</td><td>146 h · ETB 35,770</td><td>314</td><td><b>76,930</b></td><td>7.8%</td></tr><tr><td><b>Lab/QC</b></td><td>Specifications, sampling, results, grading and score, decisions, quality deductions</td><td>176 h · ETB 43,120</td><td>48 h · ETB 11,760</td><td>224</td><td><b>54,880</b></td><td>5.6%</td></tr><tr><td><b>Gate</b></td><td>Arrivals, weigh tickets with blind verification, exit clearance, gate passes</td><td>222 h · ETB 54,390</td><td>94 h · ETB 23,030</td><td>316</td><td><b>77,420</b></td><td>7.8%</td></tr><tr><td><b>Production</b></td><td>Recipes, work orders, milling runs, issues, output and packing, finished-flour release, cost settlement, traceability</td><td>178 h · ETB 43,610</td><td>62 h · ETB 15,190</td><td>240</td><td><b>58,800</b></td><td>6.0%</td></tr><tr><td><b>Sales</b></td><td>Customers and credit, price lists, orders with stock check, delivery through the gate, invoices, cash sales, receipts</td><td>198 h · ETB 48,510</td><td>46 h · ETB 11,270</td><td>244</td><td><b>59,780</b></td><td>6.1%</td></tr><tr><td><b>Hardening</b></td><td>Security review, performance test, restore drill, acceptance scripts, user and administration guides</td><td>108 h · ETB 26,460</td><td>36 h · ETB 8,820</td><td>144</td><td><b>35,280</b></td><td>3.6%</td></tr><tr><td><b>Go-live services</b></td><td>Servers, testing and UAT, migration, training, cutover, hypercare (§6)</td><td>850 h · ETB 208,250</td><td>—</td><td>850</td><td><b>208,250</b></td><td>21.1%</td></tr><tr><td></td><td><b>Total</b></td><td>3,289 h · ETB 805,805</td><td>738 h · ETB 180,810</td><td><b>4,027</b></td><td><b>986,615</b></td><td>100%</td></tr></tbody></table></div>
+<p><b>Why the foundation is the largest line:</b> it is the platform every module stands on (sign-in, approvals, numbering, audit, documents, master data, the stock ledger). It is built once and serves all six modules.</p></section></div><div class="panel wrap" role="tabpanel" id="panel-sprint" aria-labelledby="tab-sprint" hidden><section class="block"><h2 id="4-price-by-sprint">4. Price by sprint</h2>
+<p>What is built in each sprint, and its value. Build sprints follow the recommended three-developer plan; a feature that spans two sprints is split between them by its weeks.</p>
+<div class="tbl"><table class=""><thead><tr><th>Sprint</th><th>Weeks</th><th>What is built or done</th><th>Review</th><th>ETB</th><th>Cumulative</th></tr></thead><tbody><tr><td><b>S1</b></td><td>W1–W2</td><td>repository and CI, platform core, web shell, sign-in, users, roles</td><td>sprint review</td><td>50,873</td><td>50,873</td></tr><tr><td><b>S2</b></td><td>W3–W4</td><td>platform core, web shell, sign-in, users, roles, approvals, company set-up and master data; test server set-up</td><td>M1; test server live</td><td>77,063</td><td>127,936</td></tr><tr><td><b>S3</b></td><td>W5–W6</td><td>approvals, company set-up and master data, stock ledger</td><td>sprint review</td><td>48,032</td><td>175,968</td></tr><tr><td><b>S4</b></td><td>W7–W8</td><td>company set-up and master data, stock ledger, inventory, procurement; rolling UAT</td><td>M2</td><td>70,826</td><td>246,794</td></tr><tr><td><b>S5</b></td><td>W9–W10</td><td>stock ledger, inventory, procurement, payables; rolling UAT</td><td>sprint review</td><td>58,312</td><td>305,106</td></tr><tr><td><b>S6</b></td><td>W11–W12</td><td>inventory, procurement, payables, lab and quality; rolling UAT</td><td>M3</td><td>77,780</td><td>382,886</td></tr><tr><td><b>S7</b></td><td>W13–W14</td><td>procurement, payables, lab and quality, gate and weighbridge, production; rolling UAT</td><td>sprint review</td><td>75,789</td><td>458,676</td></tr><tr><td><b>S8</b></td><td>W15–W16</td><td>payables, gate and weighbridge, production, sales; production server set-up; rolling UAT</td><td>M4: procure-to-pay end to end; production server ready</td><td>93,460</td><td>552,136</td></tr><tr><td><b>S9</b></td><td>W17–W18</td><td>gate and weighbridge, production, sales; migration mapping; rolling UAT</td><td>sprint review</td><td>56,509</td><td>608,645</td></tr><tr><td><b>S10</b></td><td>W19–W20</td><td>sales; hardening; migration dry run; rolling UAT</td><td>M5; feature freeze</td><td>50,650</td><td>659,295</td></tr><tr><td><b>S11</b></td><td>W21–W22</td><td>System test of every scenario; final UAT; role guides</td><td>UAT sign-off</td><td>73,132</td><td>732,428</td></tr><tr><td><b>S12</b></td><td>W23–W24</td><td>Training and migration rehearsal (W23); cutover and go-live (W24)</td><td>Go-live (W24)</td><td>51,082</td><td>783,510</td></tr><tr><td><b>S13</b></td><td>W25–W26</td><td>Hypercare: daily support and fixes; handover to maintenance</td><td>End of hypercare</td><td>22,295</td><td>805,805</td></tr><tr><td><b>v1.1</b></td><td>W27–W32</td><td>The standard and full features not pulled into the release (§7)</td><td>v1.1 acceptance</td><td>180,810</td><td>986,615</td></tr><tr><td></td><td></td><td></td><td><b>Total</b></td><td><b>986,615</b></td><td></td></tr></tbody></table></div>
+<h3 id="41-sprint-by-module-etb">4.1 Sprint by module (ETB)</h3>
+<div class="tbl"><table class=""><thead><tr><th>Sprint</th><th>Foundation</th><th>Procurement</th><th>Payables</th><th>Inventory</th><th>Lab/QC</th><th>Gate</th><th>Production</th><th>Sales</th><th>Hardening</th><th>Go-live services</th><th>Total</th></tr></thead><tbody><tr><td>S1</td><td>50,873</td><td>·</td><td>·</td><td>·</td><td>·</td><td>·</td><td>·</td><td>·</td><td>·</td><td>·</td><td><b>50,873</b></td></tr><tr><td>S2</td><td>71,183</td><td>·</td><td>·</td><td>·</td><td>·</td><td>·</td><td>·</td><td>·</td><td>·</td><td>5,880</td><td><b>77,063</b></td></tr><tr><td>S3</td><td>48,032</td><td>·</td><td>·</td><td>·</td><td>·</td><td>·</td><td>·</td><td>·</td><td>·</td><td>·</td><td><b>48,032</b></td></tr><tr><td>S4</td><td>39,040</td><td>11,606</td><td>·</td><td>16,540</td><td>·</td><td>·</td><td>·</td><td>·</td><td>·</td><td>3,640</td><td><b>70,826</b></td></tr><tr><td>S5</td><td>102</td><td>27,126</td><td>3,950</td><td>23,494</td><td>·</td><td>·</td><td>·</td><td>·</td><td>·</td><td>3,640</td><td><b>58,312</b></td></tr><tr><td>S6</td><td>·</td><td>27,126</td><td>23,520</td><td>1,126</td><td>22,367</td><td>·</td><td>·</td><td>·</td><td>·</td><td>3,640</td><td><b>77,780</b></td></tr><tr><td>S7</td><td>·</td><td>2,496</td><td>23,520</td><td>·</td><td>20,753</td><td>22,640</td><td>2,741</td><td>·</td><td>·</td><td>3,640</td><td><b>75,789</b></td></tr><tr><td>S8</td><td>·</td><td>·</td><td>11,730</td><td>·</td><td>·</td><td>27,126</td><td>23,494</td><td>11,790</td><td>·</td><td>19,320</td><td><b>93,460</b></td></tr><tr><td>S9</td><td>·</td><td>·</td><td>·</td><td>·</td><td>·</td><td>4,624</td><td>17,375</td><td>23,520</td><td>·</td><td>10,990</td><td><b>56,509</b></td></tr><tr><td class="id">S10</td><td>·</td><td>·</td><td>·</td><td>·</td><td>·</td><td>·</td><td>·</td><td>13,200</td><td>26,460</td><td>10,990</td><td><b>50,650</b></td></tr><tr><td class="id">S11</td><td>·</td><td>·</td><td>·</td><td>·</td><td>·</td><td>·</td><td>·</td><td>·</td><td>·</td><td>73,132</td><td><b>73,132</b></td></tr><tr><td class="id">S12</td><td>·</td><td>·</td><td>·</td><td>·</td><td>·</td><td>·</td><td>·</td><td>·</td><td>·</td><td>51,082</td><td><b>51,082</b></td></tr><tr><td class="id">S13</td><td>·</td><td>·</td><td>·</td><td>·</td><td>·</td><td>·</td><td>·</td><td>·</td><td>·</td><td>22,295</td><td><b>22,295</b></td></tr><tr><td>v1.1</td><td>40,670</td><td>19,600</td><td>14,700</td><td>35,770</td><td>11,760</td><td>23,030</td><td>15,190</td><td>11,270</td><td>8,820</td><td>·</td><td><b>180,810</b></td></tr><tr><td><b>Total</b></td><td><b>249,900</b></td><td><b>87,955</b></td><td><b>77,420</b></td><td><b>76,930</b></td><td><b>54,880</b></td><td><b>77,420</b></td><td><b>58,800</b></td><td><b>59,780</b></td><td><b>35,280</b></td><td><b>208,250</b></td><td><b>986,615</b></td></tr></tbody></table></div></section></div><div class="panel wrap" role="tabpanel" id="panel-feature" aria-labelledby="tab-feature" hidden><section class="block"><h2 id="5-price-by-feature-module-by-module">5. Price by feature, module by module</h2>
+<p>Every feature of the given requirements, with its depth, when it is built (sprint and weeks in the recommended plan) and its price. Standard and full features show <b>v1.1</b>: they are delivered in the release if the team runs ahead, otherwise in weeks 27–32. Features marked <i>(new)</i> come from your documents of 1–2 October.</p>
+<h3 id="51-foundation-etb-249900">5.1 Foundation: ETB 249,900</h3>
+<p>Users, roles, sign-in; company, stores and silos, items, partners, taxes; approvals and segregation of duties; numbering, periods, audit, documents, PDFs; the stock ledger.</p>
+<div class="tbl"><table class=""><thead><tr><th>Key</th><th>Feature</th><th>Depth</th><th>When</th><th>Est. h</th><th>ETB</th></tr></thead><tbody><tr><td><code>f00a</code></td><td>Monorepo layout, workspaces, shared packages</td><td>Core</td><td>S1 (W1)</td><td>12</td><td>2,940</td></tr><tr><td><code>f00b</code></td><td>Lint, formatting, dependency-cruiser tier rules</td><td>Core</td><td>S1 (W1)</td><td>8</td><td>1,960</td></tr><tr><td><code>f00c</code></td><td>CI: types, unit and integration tests on PostgreSQL as mos_app, migration-safety check, build</td><td>Core</td><td>S1 (W1)</td><td>20</td><td>4,900</td></tr><tr><td><code>f01a</code></td><td>Unit of work: transactions, serialisation retry, request context</td><td>Core</td><td>S1 (W1)</td><td>16</td><td>3,920</td></tr><tr><td><code>f04a</code></td><td>App shell, navigation, sign-in pages, message catalogues, one date formatter</td><td>Core</td><td>S1 (W1)</td><td>20</td><td>4,900</td></tr><tr><td><code>f00d</code></td><td>Development environment, env contract templates, seed scripts</td><td>Core</td><td>S1 (W1)</td><td>10</td><td>2,450</td></tr><tr><td><code>f00e</code></td><td>Test harness: factories, fixtures, database reset</td><td>Core</td><td>S1 (W1–W2)</td><td>14</td><td>3,430</td></tr><tr><td><code>f01b</code></td><td>Idempotency keys</td><td>Core</td><td>S1 (W1–W2)</td><td>10</td><td>2,450</td></tr><tr><td><code>f04b</code></td><td>Shared components: data grid, line-items form, document page, scan input, lookups</td><td>Core</td><td>S1 (W1–W2)</td><td>48</td><td>11,760</td></tr><tr><td><code>f01c</code></td><td>Outbox, relay, processed events, process-exception records</td><td>Core</td><td>S1 (W2)</td><td>28</td><td>6,860</td></tr><tr><td><code>f01d</code></td><td>Audit log of every create, submit, approve, post, reverse, override and sign-in</td><td>Core</td><td>S1 (W2)</td><td>10</td><td>2,450</td></tr><tr><td><code>f02a</code></td><td>Local accounts: password policy, hashing, lockout, admin reset, forced change</td><td>Core</td><td>S1–S2 (W2–W3)</td><td>24</td><td>5,880</td></tr><tr><td><code>f01f</code></td><td>Error model, env validation, health, structured logs</td><td>Core</td><td>S1–S2 (W2–W3)</td><td>12</td><td>2,940</td></tr><tr><td><code>f04c</code></td><td>Approvals inbox, usable on a phone</td><td>Core</td><td>S1–S2 (W2–W3)</td><td>16</td><td>3,920</td></tr><tr><td><code>f01g</code></td><td>Table registry, generated grants, posted-row guard trigger</td><td>Core</td><td>S2 (W3)</td><td>10</td><td>2,450</td></tr><tr><td><code>f02d</code></td><td>Sessions, CSRF, idle and absolute expiry, sign-out</td><td>Core</td><td>S2 (W3)</td><td>12</td><td>2,940</td></tr><tr><td><code>f04e</code></td><td>Attachment service: content check, size limit, fingerprint, local-disk or S3 storage</td><td>Core</td><td>S2 (W3)</td><td>12</td><td>2,940</td></tr><tr><td><code>f01i</code></td><td>Document engine: lifecycles, named actions, status map, lock ranks, posting and reversal base</td><td>Core</td><td>S2 (W3–W4)</td><td>32</td><td>7,840</td></tr><tr><td><code>f02e</code></td><td>Users, invitations, role and permission editor, site-scoped access in every query</td><td>Core</td><td>S2 (W3–W4)</td><td>32</td><td>7,840</td></tr><tr><td><code>f04g</code></td><td>PDF template engine with a branded base template and QR code</td><td>Core</td><td>S2 (W3)</td><td>20</td><td>4,900</td></tr><tr><td><code>f04h</code></td><td>In-app notifications</td><td>Core</td><td>S2 (W3–W4)</td><td>10</td><td>2,450</td></tr><tr><td><code>f01j</code></td><td>Job queue port and scheduler</td><td>Core</td><td>S2 (W4)</td><td>6</td><td>1,470</td></tr><tr><td><code>f02f</code></td><td>Operation-unit selection after sign-in</td><td>Core</td><td>S2 (W4)</td><td>6</td><td>1,470</td></tr><tr><td><code>f07a</code></td><td>Approval matrix: amount bands, site, category, flags; admin screen</td><td>Core</td><td>S2 (W4)</td><td>28</td><td>6,860</td></tr><tr><td><code>f04j</code></td><td>List export to XLSX/CSV within scopes and filters</td><td>Core</td><td>S2 (W4)</td><td>8</td><td>1,960</td></tr><tr><td><code>f03a</code></td><td>Setup wizard, company profile, sites, departments, site time zones</td><td>Core</td><td>S2 (W4)</td><td>16</td><td>3,920</td></tr><tr><td><code>f04l</code></td><td>Process-exception work queue</td><td>Core</td><td>S2 (W4)</td><td>8</td><td>1,960</td></tr><tr><td><code>f03b</code></td><td>Warehouses and storage units: types, permissions, allowed categories and statuses, keepers, stock levels</td><td>Core</td><td>S2 (W4)</td><td>22</td><td>5,390</td></tr><tr><td><code>f04m</code></td><td>Build fingerprint</td><td>Core</td><td>S2 (W4)</td><td>4</td><td>980</td></tr><tr><td><code>f04o</code></td><td>Typed attachment slots per document, each with a "Verify" action <i>(new)</i></td><td>Core</td><td>S2 (W4)</td><td>6</td><td>1,470</td></tr><tr><td><code>f07b</code></td><td>Approval chains: submit, approve, reject, request changes, recall; sequential stages, one-of-N</td><td>Core</td><td>S2–S3 (W4–W5)</td><td>28</td><td>6,860</td></tr><tr><td><code>f03d</code></td><td>Units of measure and versioned item conversions</td><td>Core</td><td>S2–S3 (W4–W5)</td><td>14</td><td>3,430</td></tr><tr><td><code>f03e</code></td><td>Items, categories, item stock levels</td><td>Core</td><td>S3 (W5)</td><td>20</td><td>4,900</td></tr><tr><td><code>f07e</code></td><td>SoD rules, actor tracking, exclusion at assignment and posting, eligible-approver check</td><td>Core</td><td>S3 (W5)</td><td>24</td><td>5,880</td></tr><tr><td><code>f03g</code></td><td>Business partners (organisations and individuals), addresses, contacts, categories, TIN rules</td><td>Core</td><td>S3 (W5)</td><td>18</td><td>4,410</td></tr><tr><td><code>f07f</code></td><td>Approval history (immutable)</td><td>Core</td><td>S3 (W5)</td><td>6</td><td>1,470</td></tr><tr><td><code>f03i</code></td><td>Bank master; company paying accounts (bank, cash, mobile money)</td><td>Core</td><td>S3 (W5–W6)</td><td>10</td><td>2,450</td></tr><tr><td><code>f03j</code></td><td>Tax codes and groups, withholding profiles, payment terms, currencies and rates, reason codes</td><td>Core</td><td>S3 (W6)</td><td>24</td><td>5,880</td></tr><tr><td><code>f05a</code></td><td>Stock ledger, buckets and balances with sorted locking</td><td>Core</td><td>S3 (W6)</td><td>28</td><td>6,860</td></tr><tr><td><code>f03k</code></td><td>Numbering: series, patterns, gap-free counters with a concurrency test</td><td>Core</td><td>S3 (W6)</td><td>20</td><td>4,900</td></tr><tr><td><code>f05b</code></td><td>Moving-average valuation at company level</td><td>Core</td><td>S3–S4 (W6–W7)</td><td>20</td><td>4,900</td></tr><tr><td><code>f03l</code></td><td>Fiscal years, periods, per-module period status, close and reopen</td><td>Core</td><td>S3–S4 (W6–W7)</td><td>16</td><td>3,920</td></tr><tr><td><code>f03m</code></td><td>Module switches, deactivate-only masters, backdating windows, date checks</td><td>Core</td><td>S4 (W7)</td><td>12</td><td>2,940</td></tr><tr><td><code>f05c</code></td><td>Capacity check and commingled-silo FIFO</td><td>Core</td><td>S4 (W7)</td><td>20</td><td>4,900</td></tr><tr><td><code>f03n</code></td><td>Import framework: CSV/XLSX templates, dry-run report, all-or-nothing commit</td><td>Core</td><td>S4 (W7)</td><td>20</td><td>4,900</td></tr><tr><td><code>f05d</code></td><td>Inventory posting and reversal framework, negative-stock refusal, pending-issue hook</td><td>Core</td><td>S4 (W7–W8)</td><td>24</td><td>5,880</td></tr><tr><td><code>f03p</code></td><td>Grain/flour industry pack: items, categories, reason codes, templates</td><td>Core</td><td>S4 (W7)</td><td>12</td><td>2,940</td></tr><tr><td><code>f03q</code></td><td>Storage-master fields from the client dictionary (type, description, flags, dedicated item, temperature, minimum level); mixed items/lots rule at posting <i>(new)</i></td><td>Core</td><td>S4 (W7–W8)</td><td>8</td><td>1,960</td></tr><tr><td><code>f03r</code></td><td>Client fields the first review missed: remarks on documents, storage statuses, bin type, contact status, invoice type, supplier item code, count scope, issue received-by <i>(new)</i></td><td>Core</td><td>S4 (W8)</td><td>6</td><td>1,470</td></tr><tr><td><code>f05e</code></td><td>Property tests: invariants over at least 10,000 generated sequences</td><td>Core</td><td>S4 (W8)</td><td>32</td><td>7,840</td></tr><tr><td><code>f05f</code></td><td>Lots and genealogy links</td><td>Core</td><td>S4–S5 (W8–W9)</td><td>12</td><td>2,940</td></tr><tr><td><code>f01e</code></td><td>Audit hash chain with daily sealing and verification</td><td>Standard</td><td>v1.1</td><td>10</td><td>2,450</td></tr><tr><td><code>f01h</code></td><td>Privilege boot probe; grant and trigger catalogue test</td><td>Standard</td><td>v1.1</td><td>10</td><td>2,450</td></tr><tr><td><code>f02b</code></td><td>TOTP second factor, enforceable per role</td><td>Standard</td><td>v1.1</td><td>14</td><td>3,430</td></tr><tr><td><code>f02c</code></td><td>Optional OpenID Connect sign-in with invitation matching</td><td>Full</td><td>v1.1</td><td>20</td><td>4,900</td></tr><tr><td><code>f02g</code></td><td>Access-review export; sign-in event log</td><td>Standard</td><td>v1.1</td><td>8</td><td>1,960</td></tr><tr><td><code>f02h</code></td><td>Password reset by email link</td><td>Full</td><td>v1.1</td><td>6</td><td>1,470</td></tr><tr><td><code>f03c</code></td><td>Silo geometry tables and bulk density</td><td>Standard</td><td>v1.1</td><td>6</td><td>1,470</td></tr><tr><td><code>f03f</code></td><td>Category attribute schemas for lots</td><td>Standard</td><td>v1.1</td><td>8</td><td>1,960</td></tr><tr><td><code>f03h</code></td><td>Fuzzy duplicate-name warning</td><td>Full</td><td>v1.1</td><td>6</td><td>1,470</td></tr><tr><td><code>f03o</code></td><td>Import templates for every master and opening balance</td><td>Standard</td><td>v1.1</td><td>12</td><td>2,940</td></tr><tr><td><code>f04d</code></td><td>Inbox KPI tiles and bulk approve/reject</td><td>Standard</td><td>v1.1</td><td>8</td><td>1,960</td></tr><tr><td><code>f04f</code></td><td>Virus-scan adapter for an optional scanner</td><td>Full</td><td>v1.1</td><td>6</td><td>1,470</td></tr><tr><td><code>f04i</code></td><td>Email notifications through SMTP, with per-user opt-out</td><td>Standard</td><td>v1.1</td><td>8</td><td>1,960</td></tr><tr><td><code>f04k</code></td><td>Global search</td><td>Full</td><td>v1.1</td><td>14</td><td>3,430</td></tr><tr><td><code>f04n</code></td><td>API documentation (OpenAPI) generated from the contracts <i>(new)</i></td><td>Standard</td><td>v1.1</td><td>8</td><td>1,960</td></tr><tr><td><code>f07c</code></td><td>Delegation</td><td>Standard</td><td>v1.1</td><td>10</td><td>2,450</td></tr><tr><td><code>f07d</code></td><td>Reminders and fallback escalation</td><td>Standard</td><td>v1.1</td><td>10</td><td>2,450</td></tr><tr><td><code>f07g</code></td><td>Attestation text with an "I agree" box for the submitter and the approver <i>(new)</i></td><td>Standard</td><td>v1.1</td><td>2</td><td>490</td></tr><tr><td></td><td><b>Foundation total</b> (core 854 h · standard and full 166 h)</td><td></td><td></td><td><b>1,020</b></td><td><b>249,900</b></td></tr></tbody></table></div>
+<h3 id="52-procurement-etb-87955">5.2 Procurement: ETB 87,955</h3>
+<p>Suppliers with protected bank details, requisitions, purchase orders, the supplier delivery record, goods receipt, returns.</p>
+<div class="tbl"><table class=""><thead><tr><th>Key</th><th>Feature</th><th>Depth</th><th>When</th><th>Est. h</th><th>ETB</th></tr></thead><tbody><tr><td><code>f08a</code></td><td>Supplier 5-step wizard with drafts; onboarding document checklist</td><td>Core</td><td>S4 (W8)</td><td>24</td><td>5,880</td></tr><tr><td><code>f08c</code></td><td>Supplier lifecycle actions and order/receipt/payment eligibility</td><td>Core</td><td>S4 (W8)</td><td>12</td><td>2,940</td></tr><tr><td><code>f08e</code></td><td>Supplier bank accounts (encrypted, masked, audited reveal) and bank-change control</td><td>Core</td><td>S4–S5 (W8–W9)</td><td>28</td><td>6,860</td></tr><tr><td><code>f08g</code></td><td>Purchase requisition with live available stock, quantity to purchase, approval, conversion tracking</td><td>Core</td><td>S5 (W9)</td><td>32</td><td>7,840</td></tr><tr><td><code>f08i</code></td><td>Purchase order: terms, lines, discounts, taxes, schedules, tolerances, approval, issue by PDF/email</td><td>Core</td><td>S5 (W9–W10)</td><td>44</td><td>10,780</td></tr><tr><td><code>f08k</code></td><td>PO closure (auto, short-close, cancel) and stale-PO report</td><td>Core</td><td>S5 (W10)</td><td>10</td><td>2,450</td></tr><tr><td><code>f08l</code></td><td>GRN with the gate off: pre-fill, accepted/rejected with disposition, batches, weights, bags, tolerances, valuation</td><td>Core</td><td>S5–S6 (W10–W11)</td><td>56</td><td>13,720</td></tr><tr><td><code>f08n</code></td><td>Supplier returns and replacement</td><td>Core</td><td>S6 (W11–W12)</td><td>20</td><td>4,900</td></tr><tr><td><code>f08o</code></td><td>Procurement reports: open PRs and POs, ageing, status, outstanding deliveries</td><td>Core</td><td>S6 (W12)</td><td>10</td><td>2,450</td></tr><tr><td><code>f08q</code></td><td>Procurement dashboard</td><td>Core</td><td>S6 (W12)</td><td>8</td><td>1,960</td></tr><tr><td><code>f08r</code></td><td>PDF templates: PO, GRN, supplier receipt with deductions, rejection note</td><td>Core</td><td>S6 (W12)</td><td>12</td><td>2,940</td></tr><tr><td><code>f08s</code></td><td>Supplier delivery (arrival) record with the gate module off: PO lines, delivery note, plate, driver, declared quantities; hand-off to inspection and the GRN <i>(new)</i></td><td>Core</td><td>S6–S7 (W12–W13)</td><td>20</td><td>4,900</td></tr><tr><td><code>f08t</code></td><td>Small fields: supplier default bank account; PR purpose list <i>(new)</i></td><td>Core</td><td>S7 (W13)</td><td>3</td><td>735</td></tr><tr><td><code>f08b</code></td><td>Supplier document expiry tracking</td><td>Standard</td><td>v1.1</td><td>8</td><td>1,960</td></tr><tr><td><code>f08d</code></td><td>Approved supplier list with enforcement</td><td>Standard</td><td>v1.1</td><td>8</td><td>1,960</td></tr><tr><td><code>f08f</code></td><td>Document-expiry notification job</td><td>Standard</td><td>v1.1</td><td>6</td><td>1,470</td></tr><tr><td><code>f08h</code></td><td>Sourcing policy, quotations on the PO, sole-source justification</td><td>Standard</td><td>v1.1</td><td>14</td><td>3,430</td></tr><tr><td><code>f08j</code></td><td>PO amendments as re-approved revisions</td><td>Standard</td><td>v1.1</td><td>20</td><td>4,900</td></tr><tr><td><code>f08m</code></td><td>Service and non-stock receipt confirmation</td><td>Standard</td><td>v1.1</td><td>10</td><td>2,450</td></tr><tr><td><code>f08p</code></td><td>Price history and spend reports</td><td>Standard</td><td>v1.1</td><td>10</td><td>2,450</td></tr><tr><td><code>f08u</code></td><td>Budget code on PR and PO (recorded and reported; no budget control) <i>(new)</i></td><td>Standard</td><td>v1.1</td><td>4</td><td>980</td></tr><tr><td></td><td><b>Procurement total</b> (core 279 h · standard and full 80 h)</td><td></td><td></td><td><b>359</b></td><td><b>87,955</b></td></tr></tbody></table></div>
+<h3 id="53-payables-etb-77420">5.3 Payables: ETB 77,420</h3>
+<p>Invoices and matching, debit notes, payment requests drafted from the receipt, approval, payment with cheques and withholding, supplier ledger, journal export.</p>
+<div class="tbl"><table class=""><thead><tr><th>Key</th><th>Feature</th><th>Depth</th><th>When</th><th>Est. h</th><th>ETB</th></tr></thead><tbody><tr><td><code>f11a</code></td><td>Supplier invoice capture (list and inline on the PV), duplicate detection, due dates</td><td>Core</td><td>S5–S6 (W10–W11)</td><td>20</td><td>4,900</td></tr><tr><td><code>f11b</code></td><td>Matching: three-way/two-way on payable quantity and adjusted price, tolerances, PPV, holds</td><td>Core</td><td>S6 (W11)</td><td>40</td><td>9,800</td></tr><tr><td><code>f11c</code></td><td>Match-exception resolution through the approval matrix</td><td>Core</td><td>S6 (W11–W12)</td><td>12</td><td>2,940</td></tr><tr><td><code>f11d</code></td><td>Debit notes (quality and return) and their allocation</td><td>Core</td><td>S6 (W12)</td><td>10</td><td>2,450</td></tr><tr><td><code>f11g</code></td><td>PV drafted from the GRN; lines, gross/VAT/WHT/net, reservation, approval, lifecycle</td><td>Core</td><td>S6–S7 (W12–W13)</td><td>40</td><td>9,800</td></tr><tr><td><code>f11h</code></td><td>Payment recording: paying account, cheque, bank reference, proof, allocation, bank-detail re-check</td><td>Core</td><td>S7 (W13)</td><td>28</td><td>6,860</td></tr><tr><td><code>f11i</code></td><td>Cheque register</td><td>Core</td><td>S7 (W13–W14)</td><td>12</td><td>2,940</td></tr><tr><td><code>f11k</code></td><td>Withholding computation and certificates</td><td>Core</td><td>S7 (W14)</td><td>14</td><td>3,430</td></tr><tr><td><code>f11l</code></td><td>Partner ledger: open items, entries, allocations, balances, statements, ageing</td><td>Core</td><td>S7 (W14)</td><td>28</td><td>6,860</td></tr><tr><td><code>f11m</code></td><td>Journals: posting rules, account map, CSV export batches</td><td>Core</td><td>S7–S8 (W14–W15)</td><td>32</td><td>7,840</td></tr><tr><td><code>f11p</code></td><td>Payables dashboard</td><td>Core</td><td>S8 (W15)</td><td>8</td><td>1,960</td></tr><tr><td><code>f11q</code></td><td>PDF templates: self-billed voucher, PV, payment voucher, debit note, WHT certificate</td><td>Core</td><td>S8 (W15)</td><td>12</td><td>2,940</td></tr><tr><td><code>f11e</code></td><td>Automatic quality debit note</td><td>Standard</td><td>v1.1</td><td>6</td><td>1,470</td></tr><tr><td><code>f11f</code></td><td>Self-billed vouchers and their rules</td><td>Standard</td><td>v1.1</td><td>16</td><td>3,920</td></tr><tr><td><code>f11j</code></td><td>Cheque books with gap detection; cleared and stale cheques</td><td>Standard</td><td>v1.1</td><td>8</td><td>1,960</td></tr><tr><td><code>f11n</code></td><td>Tax registers (input VAT, withholding)</td><td>Standard</td><td>v1.1</td><td>10</td><td>2,450</td></tr><tr><td><code>f11o</code></td><td>GRNI reconciliation report</td><td>Standard</td><td>v1.1</td><td>12</td><td>2,940</td></tr><tr><td><code>f11r</code></td><td>Optional approval of every supplier invoice (a setting; default: only match exceptions) <i>(new)</i></td><td>Standard</td><td>v1.1</td><td>8</td><td>1,960</td></tr><tr><td></td><td><b>Payables total</b> (core 256 h · standard and full 60 h)</td><td></td><td></td><td><b>316</b></td><td><b>77,420</b></td></tr></tbody></table></div>
+<h3 id="54-inventory-etb-76930">5.4 Inventory: ETB 76,930</h3>
+<p>Stock documents, transfers, adjustments, bin and stock cards, counts, period close, silo levels.</p>
+<div class="tbl"><table class=""><thead><tr><th>Key</th><th>Feature</th><th>Depth</th><th>When</th><th>Est. h</th><th>ETB</th></tr></thead><tbody><tr><td><code>f06a</code></td><td>Miscellaneous receipts and issues (consumption, scrap) at moving average</td><td>Core</td><td>S4 (W7–W8)</td><td>20</td><td>4,900</td></tr><tr><td><code>f06b</code></td><td>Intra-site transfers</td><td>Core</td><td>S4 (W8)</td><td>12</td><td>2,940</td></tr><tr><td><code>f06d</code></td><td>Stock adjustments routed by value through the approval matrix</td><td>Core</td><td>S4 (W8)</td><td>16</td><td>3,920</td></tr><tr><td><code>f06e</code></td><td>Status changes: block, damage, recovery</td><td>Core</td><td>S4 (W8)</td><td>16</td><td>3,920</td></tr><tr><td><code>f06f</code></td><td>Lot attributes and backward/forward trace</td><td>Core</td><td>S4–S5 (W8–W9)</td><td>12</td><td>2,940</td></tr><tr><td><code>f06h</code></td><td>Stock balance with status breakdown and transaction history</td><td>Core</td><td>S5 (W9)</td><td>24</td><td>5,880</td></tr><tr><td><code>f06j</code></td><td>Silo levels and level alerts</td><td>Core</td><td>S5 (W9)</td><td>10</td><td>2,450</td></tr><tr><td><code>f06m</code></td><td>Inventory dashboard</td><td>Core</td><td>S5 (W9–W10)</td><td>8</td><td>1,960</td></tr><tr><td><code>f06n</code></td><td>Bin card and stock card from the one ledger, with the opening balance for the period <i>(new)</i></td><td>Core</td><td>S5 (W10)</td><td>10</td><td>2,450</td></tr><tr><td><code>f12a</code></td><td>Counts: count, approval, generated adjustment</td><td>Core</td><td>S5 (W10)</td><td>20</td><td>4,900</td></tr><tr><td><code>f12e</code></td><td>Inventory period close with checklist and value snapshot</td><td>Core</td><td>S5–S6 (W10–W11)</td><td>20</td><td>4,900</td></tr><tr><td><code>f06c</code></td><td>Inter-site transfers through in-transit, short receipts, transit loss</td><td>Standard</td><td>v1.1</td><td>20</td><td>4,900</td></tr><tr><td><code>f06g</code></td><td>Lot split (relabel) with genealogy</td><td>Full</td><td>v1.1</td><td>8</td><td>1,960</td></tr><tr><td><code>f06i</code></td><td>Movement ledger, valuation, expiry, adjustments register, in-transit ageing</td><td>Standard</td><td>v1.1</td><td>12</td><td>2,940</td></tr><tr><td><code>f06k</code></td><td>Reorder report that creates PRs</td><td>Standard</td><td>v1.1</td><td>10</td><td>2,450</td></tr><tr><td><code>f06l</code></td><td>PDF labels with barcode/QR; scanner input</td><td>Standard</td><td>v1.1</td><td>12</td><td>2,940</td></tr><tr><td><code>f12b</code></td><td>Count modes (freeze or cut-off), blind counting, forced recount</td><td>Standard</td><td>v1.1</td><td>16</td><td>3,920</td></tr><tr><td><code>f12c</code></td><td>Silo dip measurement</td><td>Standard</td><td>v1.1</td><td>14</td><td>3,430</td></tr><tr><td><code>f12d</code></td><td>Fumigation and treatment holds</td><td>Standard</td><td>v1.1</td><td>12</td><td>2,940</td></tr><tr><td><code>f12f</code></td><td>Exception reports (the detective controls)</td><td>Standard</td><td>v1.1</td><td>24</td><td>5,880</td></tr><tr><td><code>f12g</code></td><td>Background report jobs</td><td>Full</td><td>v1.1</td><td>12</td><td>2,940</td></tr><tr><td><code>f12h</code></td><td>Count import from Excel; printable count sheet <i>(new)</i></td><td>Standard</td><td>v1.1</td><td>6</td><td>1,470</td></tr><tr><td></td><td><b>Inventory total</b> (core 168 h · standard and full 146 h)</td><td></td><td></td><td><b>314</b></td><td><b>76,930</b></td></tr></tbody></table></div>
+<h3 id="55-labqc-etb-54880">5.5 Lab/QC: ETB 54,880</h3>
+<p>Specifications, sampling, results, grading and score, decisions, quality deductions.</p>
+<div class="tbl"><table class=""><thead><tr><th>Key</th><th>Feature</th><th>Depth</th><th>When</th><th>Est. h</th><th>ETB</th></tr></thead><tbody><tr><td><code>f09a</code></td><td>Test methods, parameters, versioned and approved specs, QC policies, fixed-count sampling</td><td>Core</td><td>S6 (W11)</td><td>24</td><td>5,880</td></tr><tr><td><code>f09c</code></td><td>Inspection lots (from the gate, from quarantine, gate off with weights), inspection record, samples and labels</td><td>Core</td><td>S6 (W11–W12)</td><td>28</td><td>6,860</td></tr><tr><td><code>f09e</code></td><td>Result entry grid, insert-only results, invalidation</td><td>Core</td><td>S6 (W12)</td><td>28</td><td>6,860</td></tr><tr><td><code>f09f</code></td><td>Evaluation, grading schemes, quality score</td><td>Core</td><td>S6–S7 (W12–W13)</td><td>28</td><td>6,860</td></tr><tr><td><code>f09h</code></td><td>Usage decisions, their stock effects, decision changes</td><td>Core</td><td>S7 (W13)</td><td>24</td><td>5,880</td></tr><tr><td><code>f09i</code></td><td>Quality price and weight rules; deduction results</td><td>Core</td><td>S7 (W13–W14)</td><td>24</td><td>5,880</td></tr><tr><td><code>f09k</code></td><td>Lab dashboard</td><td>Core</td><td>S7 (W14)</td><td>8</td><td>1,960</td></tr><tr><td><code>f09m</code></td><td>Flour-pack QC seed: wheat parameters, specs, grades, deduction rules</td><td>Core</td><td>S7 (W14)</td><td>12</td><td>2,940</td></tr><tr><td><code>f09b</code></td><td>Percentage and composite sampling plans</td><td>Standard</td><td>v1.1</td><td>8</td><td>1,960</td></tr><tr><td><code>f09g</code></td><td>Out-of-spec retest and concessions</td><td>Standard</td><td>v1.1</td><td>20</td><td>4,900</td></tr><tr><td><code>f09j</code></td><td>Certificate-of-analysis gate; retention samples</td><td>Full</td><td>v1.1</td><td>10</td><td>2,450</td></tr><tr><td><code>f09l</code></td><td>QC reports</td><td>Standard</td><td>v1.1</td><td>6</td><td>1,470</td></tr><tr><td><code>f09n</code></td><td>"Checked by" second confirmation on the usage decision <i>(new)</i></td><td>Standard</td><td>v1.1</td><td>4</td><td>980</td></tr><tr><td></td><td><b>Lab/QC total</b> (core 176 h · standard and full 48 h)</td><td></td><td></td><td><b>224</b></td><td><b>54,880</b></td></tr></tbody></table></div>
+<h3 id="56-gate-etb-77420">5.6 Gate: ETB 77,420</h3>
+<p>Arrivals, weigh tickets with blind verification, exit clearance, gate passes.</p>
+<div class="tbl"><table class=""><thead><tr><th>Key</th><th>Feature</th><th>Depth</th><th>When</th><th>Est. h</th><th>ETB</th></tr></thead><tbody><tr><td><code>f10a</code></td><td>Gate masters: posts, weighbridges, vehicles, tares, drivers, tolerance rules, checklists</td><td>Core</td><td>S7 (W13)</td><td>18</td><td>4,410</td></tr><tr><td><code>f10c</code></td><td>Guard shifts</td><td>Core</td><td>S7 (W13)</td><td>6</td><td>1,470</td></tr><tr><td><code>f10e</code></td><td>Expected arrivals</td><td>Core</td><td>S7 (W13)</td><td>10</td><td>2,450</td></tr><tr><td><code>f10f</code></td><td>Inbound visits: arrival by plate, entry, one open visit per vehicle, documents, seals, checklist, events</td><td>Core</td><td>S7 (W13–W14)</td><td>36</td><td>8,820</td></tr><tr><td><code>f10g</code></td><td>Weigh tickets: gap-free per weighbridge, direction, blind verification, tolerances, stored tare, re-weighing</td><td>Core</td><td>S7–S8 (W14–W15)</td><td>40</td><td>9,800</td></tr><tr><td><code>f10h</code></td><td>Inspection hand-off and unloading pre-flight checks</td><td>Core</td><td>S8 (W15)</td><td>16</td><td>3,920</td></tr><tr><td><code>f10i</code></td><td>GRN prepared at tare; receipt exceptions</td><td>Core</td><td>S8 (W15–W16)</td><td>28</td><td>6,860</td></tr><tr><td><code>f10j</code></td><td>Exit clearance, overrides, exit passes</td><td>Core</td><td>S8 (W16)</td><td>16</td><td>3,920</td></tr><tr><td><code>f10o</code></td><td>Outbound visit class (dispatch, returns, transfers)</td><td>Core</td><td>S8 (W16)</td><td>16</td><td>3,920</td></tr><tr><td><code>f10p</code></td><td>Inbound failure-case suite and idempotency replay tests</td><td>Core</td><td>S8–S9 (W16–W17)</td><td>20</td><td>4,900</td></tr><tr><td><code>f10s</code></td><td>Gate reports and dashboard</td><td>Core</td><td>S9 (W17)</td><td>10</td><td>2,450</td></tr><tr><td><code>f10t</code></td><td>PDF templates: weigh ticket, gate pass, exit pass</td><td>Core</td><td>S9 (W17)</td><td>6</td><td>1,470</td></tr><tr><td><code>f10b</code></td><td>Blacklist with approval</td><td>Standard</td><td>v1.1</td><td>6</td><td>1,470</td></tr><tr><td><code>f10k</code></td><td>Material gate passes</td><td>Standard</td><td>v1.1</td><td>20</td><td>4,900</td></tr><tr><td><code>f10l</code></td><td>Incidents and weight disputes</td><td>Full</td><td>v1.1</td><td>10</td><td>2,450</td></tr><tr><td><code>f10m</code></td><td>Yard board</td><td>Standard</td><td>v1.1</td><td>8</td><td>1,960</td></tr><tr><td><code>f10n</code></td><td>Paper mode and back-entry workbench</td><td>Standard</td><td>v1.1</td><td>28</td><td>6,860</td></tr><tr><td><code>f10q</code></td><td>Remaining failure cases</td><td>Standard</td><td>v1.1</td><td>12</td><td>2,940</td></tr><tr><td><code>f10r</code></td><td>Supplier notifications</td><td>Full</td><td>v1.1</td><td>10</td><td>2,450</td></tr><tr><td></td><td><b>Gate total</b> (core 222 h · standard and full 94 h)</td><td></td><td></td><td><b>316</b></td><td><b>77,420</b></td></tr></tbody></table></div>
+<h3 id="57-production-etb-58800">5.7 Production: ETB 58,800</h3>
+<p>Recipes, work orders, milling runs, issues, output and packing, finished-flour release, cost settlement, traceability.</p>
+<div class="tbl"><table class=""><thead><tr><th>Key</th><th>Feature</th><th>Depth</th><th>When</th><th>Est. h</th><th>ETB</th></tr></thead><tbody><tr><td><code>f14a</code></td><td>Work centres and shift calendar</td><td>Core</td><td>S7 (W14)</td><td>10</td><td>2,450</td></tr><tr><td><code>f14b</code></td><td>Recipes with co- and by-products and a mass-balance band, versioned and approved</td><td>Core</td><td>S7–S8 (W14–W15)</td><td>24</td><td>5,880</td></tr><tr><td><code>f14c</code></td><td>Work orders (standard and packing) and release</td><td>Core</td><td>S8 (W15)</td><td>20</td><td>4,900</td></tr><tr><td><code>f14e</code></td><td>Milling run: grist from silos, extraction rate</td><td>Core</td><td>S8 (W15–W16)</td><td>20</td><td>4,900</td></tr><tr><td><code>f14g</code></td><td>Material issue: silo draw-down, scan issue, backflush, pending issues; supervisor screens</td><td>Core</td><td>S8 (W16)</td><td>28</td><td>6,860</td></tr><tr><td><code>f14h</code></td><td>Output by lot with co- and by-products; packing into bag SKUs</td><td>Core</td><td>S8–S9 (W16–W17)</td><td>20</td><td>4,900</td></tr><tr><td><code>f14i</code></td><td>Finished-goods QC and release</td><td>Core</td><td>S9 (W17)</td><td>8</td><td>1,960</td></tr><tr><td><code>f14j</code></td><td>Material-cost settlement</td><td>Core</td><td>S9 (W17–W18)</td><td>32</td><td>7,840</td></tr><tr><td><code>f14l</code></td><td>Traceability backward and forward</td><td>Core</td><td>S9 (W18)</td><td>8</td><td>1,960</td></tr><tr><td><code>f14o</code></td><td>Production reports (extraction rate, yield) and dashboard</td><td>Core</td><td>S9 (W18)</td><td>8</td><td>1,960</td></tr><tr><td><code>f14d</code></td><td>Campaign work orders</td><td>Standard</td><td>v1.1</td><td>8</td><td>1,960</td></tr><tr><td><code>f14f</code></td><td>Tempering and fortification dosing</td><td>Standard</td><td>v1.1</td><td>12</td><td>2,940</td></tr><tr><td><code>f14k</code></td><td>Shift logs and downtime</td><td>Standard</td><td>v1.1</td><td>14</td><td>3,430</td></tr><tr><td><code>f14m</code></td><td>Recall report</td><td>Standard</td><td>v1.1</td><td>6</td><td>1,470</td></tr><tr><td><code>f14n</code></td><td>Planner's demand and material view</td><td>Full</td><td>v1.1</td><td>14</td><td>3,430</td></tr><tr><td><code>f14p</code></td><td>Further production reports</td><td>Standard</td><td>v1.1</td><td>8</td><td>1,960</td></tr><tr><td></td><td><b>Production total</b> (core 178 h · standard and full 62 h)</td><td></td><td></td><td><b>240</b></td><td><b>58,800</b></td></tr></tbody></table></div>
+<h3 id="58-sales-etb-59780">5.8 Sales: ETB 59,780</h3>
+<p>Customers and credit, price lists, orders with stock check, delivery through the gate, invoices, cash sales, receipts.</p>
+<div class="tbl"><table class=""><thead><tr><th>Key</th><th>Feature</th><th>Depth</th><th>When</th><th>Est. h</th><th>ETB</th></tr></thead><tbody><tr><td><code>f15a</code></td><td>Customers with approval, credit limits and changes, ship-to addresses</td><td>Core</td><td>S8 (W15–W16)</td><td>24</td><td>5,880</td></tr><tr><td><code>f15b</code></td><td>Price lists with approval, floor prices, discount limits</td><td>Core</td><td>S8 (W16)</td><td>12</td><td>2,940</td></tr><tr><td><code>f15d</code></td><td>Sales orders with credit, price and discount holds</td><td>Core</td><td>S8–S9 (W16–W17)</td><td>28</td><td>6,860</td></tr><tr><td><code>f15e</code></td><td>Availability check and soft reservation</td><td>Core</td><td>S9 (W17)</td><td>8</td><td>1,960</td></tr><tr><td><code>f15f</code></td><td>Delivery orders through the outbound gate: pick, load, weigh, goods issue, exit</td><td>Core</td><td>S9 (W17–W18)</td><td>36</td><td>8,820</td></tr><tr><td><code>f15g</code></td><td>Goods issue posting at average cost</td><td>Core</td><td>S9 (W18)</td><td>12</td><td>2,940</td></tr><tr><td><code>f15h</code></td><td>Customer invoicing (gap-free, fiscal reference)</td><td>Core</td><td>S9 (W18)</td><td>24</td><td>5,880</td></tr><tr><td><code>f15i</code></td><td>Cash sales and cash sessions</td><td>Core</td><td>S9–S10 (W18–W19)</td><td>20</td><td>4,900</td></tr><tr><td><code>f15j</code></td><td>Customer receipts with allocation</td><td>Core</td><td>S10 (W19)</td><td>16</td><td>3,920</td></tr><tr><td><code>f15m</code></td><td>Statements, ageing, sales reports and dashboard</td><td>Core</td><td>S10 (W19)</td><td>10</td><td>2,450</td></tr><tr><td><code>f15p</code></td><td>PDF templates: delivery note, customer invoice, credit note, receipt</td><td>Core</td><td>S10 (W19–W20)</td><td>8</td><td>1,960</td></tr><tr><td><code>f15k</code></td><td>Customer advances and cash-before-delivery</td><td>Standard</td><td>v1.1</td><td>8</td><td>1,960</td></tr><tr><td><code>f15l</code></td><td>Customer returns and credit notes</td><td>Standard</td><td>v1.1</td><td>28</td><td>6,860</td></tr><tr><td><code>f15n</code></td><td>Output VAT register; further sales reports</td><td>Standard</td><td>v1.1</td><td>10</td><td>2,450</td></tr><tr><td></td><td><b>Sales total</b> (core 198 h · standard and full 46 h)</td><td></td><td></td><td><b>244</b></td><td><b>59,780</b></td></tr></tbody></table></div>
+<h3 id="59-hardening-etb-35280">5.9 Hardening: ETB 35,280</h3>
+<p>Security review, performance test, restore drill, acceptance scripts, user and administration guides.</p>
+<div class="tbl"><table class=""><thead><tr><th>Key</th><th>Feature</th><th>Depth</th><th>When</th><th>Est. h</th><th>ETB</th></tr></thead><tbody><tr><td><code>f13a</code></td><td>Security review (ASVS L2, local-account attacks) and fixes</td><td>Core</td><td>S10 (W20)</td><td>40</td><td>9,800</td></tr><tr><td><code>f13b</code></td><td>Performance test at the NFR targets</td><td>Core</td><td>S10 (W20)</td><td>16</td><td>3,920</td></tr><tr><td><code>f13d</code></td><td>Backup and restore drill on development</td><td>Core</td><td>S10 (W20)</td><td>8</td><td>1,960</td></tr><tr><td><code>f13e</code></td><td>Acceptance scripts and user-guide drafts (developer share)</td><td>Core</td><td>S10 (W20)</td><td>20</td><td>4,900</td></tr><tr><td><code>f13g</code></td><td>Administration guide and runbook drafts</td><td>Core</td><td>S10 (W20)</td><td>24</td><td>5,880</td></tr><tr><td><code>f13c</code></td><td>Extended performance test and tuning</td><td>Standard</td><td>v1.1</td><td>16</td><td>3,920</td></tr><tr><td><code>f13f</code></td><td>Further acceptance scripts and guides</td><td>Standard</td><td>v1.1</td><td>20</td><td>4,900</td></tr><tr><td></td><td><b>Hardening total</b> (core 108 h · standard and full 36 h)</td><td></td><td></td><td><b>144</b></td><td><b>35,280</b></td></tr></tbody></table></div></section></div><div class="panel wrap" role="tabpanel" id="panel-golive" aria-labelledby="tab-golive" hidden><section class="block"><h2 id="6-go-live-services">6. Go-live services</h2>
+<div class="tbl"><table class=""><thead><tr><th>Weeks</th><th>Sprint</th><th>Service</th><th>Est. hours</th><th>ETB</th></tr></thead><tbody><tr><td>W3–W4</td><td>S2</td><td>Test server on your infrastructure: install, deploy pipeline, first release</td><td>24</td><td>5,880</td></tr><tr><td>W8–W20</td><td>S4–S10</td><td>Rolling UAT: test script per module, key-user sessions, triage</td><td>49</td><td>12,005</td></tr><tr><td>W8–W20</td><td>S4–S10</td><td>Rolling UAT: fix what the key users find</td><td>55</td><td>13,475</td></tr><tr><td>W15–W16</td><td>S8</td><td>Production server: set-up, hardening, backups with a tested restore, monitoring, runbook</td><td>64</td><td>15,680</td></tr><tr><td>W17–W20</td><td>S9–S10</td><td>Data migration: mapping, templates, first dry run</td><td>60</td><td>14,700</td></tr><tr><td>W21–W22</td><td>S11</td><td>System test: every acceptance scenario end to end, regression</td><td>98</td><td>24,010</td></tr><tr><td>W21–W22</td><td>S11</td><td>System test: fix defects</td><td>79</td><td>19,355</td></tr><tr><td>W21–W22</td><td>S11</td><td>Final acceptance test: the whole flow with key users; sign-off</td><td>33</td><td>8,085</td></tr><tr><td>W21–W22</td><td>S11</td><td>Final acceptance test: fix defects</td><td>55</td><td>13,475</td></tr><tr><td>W21–W23</td><td>S11–S12</td><td>Training: role guides and role sessions</td><td>67</td><td>16,415</td></tr><tr><td class="id">W23</td><td>S12</td><td>Training: administrator and key-user sessions</td><td>50</td><td>12,250</td></tr><tr><td>W23–W24</td><td>S12</td><td>Data migration: rehearsal and final load</td><td>60</td><td>14,700</td></tr><tr><td>W23–W24</td><td>S12</td><td>Data migration: reconciliation checks</td><td>17</td><td>4,165</td></tr><tr><td class="id">W24</td><td>S12</td><td>Cutover and go-live</td><td>40</td><td>9,800</td></tr><tr><td class="id">W24</td><td>S12</td><td>Cutover checks</td><td>8</td><td>1,960</td></tr><tr><td>W25–W26</td><td>S13</td><td>Hypercare: fixes and support</td><td>77</td><td>18,865</td></tr><tr><td>W25–W26</td><td>S13</td><td>Hypercare: verification</td><td>14</td><td>3,430</td></tr><tr><td></td><td></td><td><b>Total</b></td><td><b>850</b></td><td><b>208,250</b></td></tr></tbody></table></div></section><section class="block"><h2 id="7-the-v11-completion-weeks-2732">7. The v1.1 completion (weeks 27–32)</h2>
+<p>The standard and full features (738 estimated hours, ETB 180,810) are part of the given requirements, so they are in the price. They are built in the release whenever the team runs ahead of plan (each one is pulled in only if it can be finished and tested before the week-20 freeze). Whatever remains is delivered as one follow-up release in <b>weeks 27–32</b>, tested by your key users and accepted at the end. The features are listed with their prices in §5 (marked v1.1).</p></section></div><div class="panel wrap" role="tabpanel" id="panel-pay" aria-labelledby="tab-pay" hidden><section class="block"><h2 id="8-payment-schedule">8. Payment schedule</h2>
+<p>You pay as work is accepted: an advance at signature, then the value of what was delivered since the previous review, less the share of the advance it recovers.</p>
+<div class="tbl"><table class=""><thead><tr><th>When</th><th>What is accepted</th><th>Value delivered (ETB)</th><th>Payment (ETB)</th></tr></thead><tbody><tr><td><b>Signature</b></td><td>— (advance, recovered across the later payments)</td><td>—</td><td><b>98,662</b></td></tr><tr><td><b>M1 review (W4)</b></td><td>Sign-in, the shell, the platform core; the test server</td><td>127,936</td><td><b>115,142</b></td></tr><tr><td><b>M2 review (W8)</b></td><td>Master data, approvals, the stock ledger</td><td>118,858</td><td><b>106,972</b></td></tr><tr><td><b>M3 review (W12)</b></td><td>Inventory; suppliers, requisitions, orders, deliveries</td><td>136,092</td><td><b>122,483</b></td></tr><tr><td><b>M4 review (W16)</b></td><td>Procure-to-pay end to end; the production server</td><td>169,250</td><td><b>152,325</b></td></tr><tr><td><b>M5 review and freeze (W20)</b></td><td>Gate, production, sales; hardening</td><td>107,159</td><td><b>96,443</b></td></tr><tr><td><b>UAT sign-off (W22)</b></td><td>System test and final UAT</td><td>73,132</td><td><b>65,819</b></td></tr><tr><td><b>Go-live (W24)</b></td><td>Training, migration, cutover</td><td>51,082</td><td><b>45,974</b></td></tr><tr><td><b>End of hypercare (W26)</b></td><td>Two weeks of close support</td><td>22,295</td><td><b>20,066</b></td></tr><tr><td><b>v1.1 acceptance (W32)</b></td><td>The remaining standard and full features</td><td>180,810</td><td><b>162,729</b></td></tr><tr><td></td><td><b>Total</b></td><td>986,615</td><td><b>986,615</b></td></tr></tbody></table></div>
+<ul class="clean"><li>Each payment is due 15 days after its review is accepted <b>[owner to confirm]</b>.</li><li>If a feature planned for a review is not accepted, its value moves to the next review; the total does not change.</li><li>Invoices are in ETB. The price is fixed in birr, so exchange-rate changes do not move it.</li></ul></section><section class="block"><h2 id="9-not-in-the-price">9. Not in the price</h2>
+<div class="tbl"><table class=""><thead><tr><th>Item</th><th>How it is charged</th></tr></thead><tbody><tr><td><b>Maintenance and support after hypercare</b></td><td>A monthly retainer: Basic 30 h (ETB 24,300 / month), Standard 60 h (ETB 48,600), Premium 100 h (ETB 81,000) <b>[owner to confirm the maintenance rate under the fixed-price model]</b></td></tr><tr><td><b>New features or changes</b> beyond the given requirements</td><td>Estimated in hours, approved by you in writing first, billed at the hourly rate</td></tr><tr><td><b>Hosting and infrastructure</b></td><td>At cost: servers or virtual servers, backup storage, domain name, TLS certificate, email relay, internet, UPS, PCs, tablets, printers and scanners</td></tr><tr><td><b>Third-party services and licences</b></td><td>At cost, with your approval first</td></tr><tr><td><b>Travel beyond the team's city</b></td><td>At cost, with your approval first</td></tr><tr><td>VAT and withholding tax</td><td>Added as the law requires</td></tr></tbody></table></div></section><section class="block"><h2 id="10-how-the-price-was-built">10. How the price was built</h2>
+<ol class="clean"><li><b>The work:</b> every given requirement was broken into 199 features and each was estimated in hours (<a href="../4-plan/MOS-IMPLEMENTATION-PLAN.html">implementation plan</a> Appendix A): 2,439 hours of core, 738 of standard and full. The go-live services add 850 hours (servers, testing, migration, training, cutover, hypercare).</li><li><b>The price:</b> fixed at ETB 986,615, within the ETB 1,000,000 cap, and spread over the 4,027 hours of estimated work at ETB 245 each. The same rate is used everywhere, so every line of this document adds up to the total.</li><li><b>The timeline:</b> the recommended plan with three developers, AI assistance and a QA engineer (<a href="../4-plan/MOS-SPRINT-PLAN.html">sprint plan</a>). The price does not change with the team we use; the dates and the scope are what we commit to.</li><li><b>Checks:</b> the phases, modules, sprints, features and payments each add up to ETB 986,615 exactly (checked by script).</li></ol></section></div>
+</main>
+<footer class="wrap foot"><p class="note">Source: <code>MOS/docs/5-for-the-client/MOS-PRICING-AND-TIMELINE.md</code> (the master copy). Kept locally in the MOS repository; not published.</p></footer>
+<script type="module">
+const MERMAID_URL = 'https://cdn.jsdelivr.net/npm/mermaid@12/dist/mermaid.esm.min.mjs';
+const tabs = [...document.querySelectorAll('[role="tab"]')];
+const panels = [...document.querySelectorAll('[role="tabpanel"]')];
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch { /* storage unavailable */ } },
+};
+const TABKEY = 'mos-pm-tab:' + location.pathname;
+function pickTab() { const k = store.get(TABKEY); if (k && document.getElementById('tab-' + k)) return k; const first = document.querySelector('[role="tab"]'); return first ? first.id.slice(4) : 'overview'; }
+
+
+function show(key, focusTab) {
+  let found = false;
+  for (const t of tabs) {
+    const on = t.id === `tab-${key}`;
+    t.setAttribute('aria-selected', String(on));
+    t.tabIndex = on ? 0 : -1;
+    if (on) { found = true; if (focusTab) t.focus(); }
+  }
+  if (!found) return show('overview', focusTab);
+  for (const p of panels) p.hidden = p.id !== `panel-${key}`;
+  store.set(TABKEY, key);
+  renderVisible();
+}
+tabs.forEach((t, i) => {
+  t.addEventListener('click', () => show(t.id.slice(4)));
+  t.addEventListener('keydown', (e) => {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    const next = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+    show(next.id.slice(4), true);
+  });
+});
+
+// ---- Mermaid, loaded from the CDN and drawn lazily (hidden diagrams cannot be measured)
+let mermaid = null;
+const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function initMermaid() {
+  const dark = matchMedia('(prefers-color-scheme: dark)').matches;
+  mermaid.initialize({
+    startOnLoad: false,
+    securityLevel: 'strict',
+    htmlLabels: false,
+    theme: 'base',
+    fontFamily: css('--font-body'),
+    themeVariables: {
+      darkMode: dark,
+      background: css('--surface'),
+      fontFamily: css('--font-body'),
+      fontSize: '13px',
+      primaryColor: css('--accent-soft'),
+      primaryBorderColor: css('--accent'),
+      primaryTextColor: css('--ink'),
+      secondaryColor: css('--amber-soft'),
+      tertiaryColor: css('--surface-2'),
+      lineColor: css('--ink-2'),
+      textColor: css('--ink'),
+      mainBkg: css('--accent-soft'),
+      clusterBkg: css('--surface-2'),
+      clusterBorder: css('--rule'),
+      edgeLabelBackground: css('--surface'),
+      actorBkg: css('--accent-soft'),
+      actorBorder: css('--accent'),
+      actorTextColor: css('--ink'),
+      actorLineColor: css('--rule'),
+      signalColor: css('--ink-2'),
+      signalTextColor: css('--ink'),
+      labelBoxBkgColor: css('--surface-2'),
+      labelBoxBorderColor: css('--rule'),
+      labelTextColor: css('--ink'),
+      loopTextColor: css('--ink-2'),
+      noteBkgColor: css('--amber-soft'),
+      noteBorderColor: css('--amber'),
+      noteTextColor: css('--ink'),
+      activationBkgColor: css('--surface-2'),
+      stateLabelColor: css('--ink'),
+      transitionColor: css('--ink-2'),
+      transitionLabelColor: css('--ink-2'),
+    },
+    flowchart: { htmlLabels: false, curve: 'basis', useMaxWidth: true },
+    sequence: { useMaxWidth: true, wrap: true, width: 170, messageFontSize: 13, actorFontSize: 13, noteFontSize: 12 },
+    state: { useMaxWidth: true },
+  });
+}
+let queue = Promise.resolve();
+function renderVisible() {
+  if (!mermaid) return queue;
+  queue = queue.then(async () => {
+    for (const el of document.querySelectorAll('.mmd:not([data-done])')) {
+      if (el.offsetParent === null) continue;
+      try {
+        const { svg } = await mermaid.render(`${el.id}-svg`, el.dataset.src);
+        el.innerHTML = svg;
+        el.dataset.done = '1';
+      } catch (err) {
+        el.dataset.done = 'error';
+        el.classList.add('failed');
+        el.textContent = 'This diagram could not be drawn; its source is shown below.';
+        el.nextElementSibling?.classList.add('show');
+      }
+    }
+  });
+  return queue;
+}
+import(MERMAID_URL)
+  .then(async (m) => {
+    // measure labels with the real web font, or they are clipped once it loads
+    await Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 3000))]);
+    mermaid = m.default; initMermaid(); renderVisible();
+  })
+  .catch(() => { document.body.classList.add('offline'); });
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+  if (!mermaid) return;
+  initMermaid();
+  document.querySelectorAll('.mmd[data-done="1"]').forEach((el) => { delete el.dataset.done; el.innerHTML = ''; });
+  renderVisible();
+});
+document.addEventListener('toggle', (e) => { if (e.target.open) renderVisible(); }, true);
+
+// ---- open / close all processes
+document.querySelectorAll('.toolbar .btn').forEach((b) => b.addEventListener('click', () => {
+  const open = b.dataset.act === 'expand';
+  b.closest('.panel').querySelectorAll('details.proc').forEach((d) => { d.open = open; });
+  renderVisible();
+}));
+
+// ---- in-page links switch to the right tab and open the right section
+function goTo(id) {
+  const target = document.getElementById(id);
+  if (!target) return false;
+  const panel = target.closest('[role="tabpanel"]');
+  if (panel) show(panel.id.slice(6));
+  if (target.tagName === 'DETAILS') target.open = true;
+  let d = target.parentElement?.closest('details');
+  while (d) { d.open = true; d = d.parentElement?.closest('details'); }
+  requestAnimationFrame(() => target.scrollIntoView({ block: 'start' }));
+  renderVisible();
+  return true;
+}
+document.addEventListener('click', (e) => {
+  const a = e.target.closest('a[href^="#"]');
+  if (!a) return;
+  const id = decodeURIComponent(a.getAttribute('href').slice(1));
+  if (goTo(id)) { e.preventDefault(); history.replaceState(null, '', `#${id}`); }
+});
+
+// ---- print: show everything, draw every diagram, then print
+const printBtn = document.getElementById('printBtn');
+let opened = [];
+function expandForPrint() {
+  panels.forEach((p) => { p.hidden = false; });
+  opened = [...document.querySelectorAll('details:not([open])')];
+  opened.forEach((d) => { d.open = true; });
+}
+function restoreAfterPrint() {
+  opened.forEach((d) => { d.open = false; });
+  opened = [];
+  show(pickTab());
+}
+printBtn.addEventListener('click', async () => {
+  expandForPrint();
+  await renderVisible();
+  setTimeout(() => window.print(), 250);
+});
+window.addEventListener('beforeprint', () => { if (!opened.length) expandForPrint(); });
+window.addEventListener('afterprint', restoreAfterPrint);
+
+// ---- start
+const initial = decodeURIComponent(location.hash.slice(1));
+if (!(initial && goTo(initial))) show(pickTab());
+
+</script>
+</body>
+</html>

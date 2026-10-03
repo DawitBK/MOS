@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Package audit v0.3</title>
+<meta name="description" content="MOS package audit v0.3 (history).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+:root{
+  --ground:#f2f4f3; --surface:#ffffff; --surface-2:#f7f9f8;
+  --ink:#18212b; --ink-2:#44505c; --muted:#68737e; --rule:#d5dbdc; --rule-2:#e6eaea;
+  --accent:#2563b8; --accent-ink:#1d4f94; --accent-soft:#e7eef9;
+  --amber:#c9851c; --amber-soft:#f8eedd; --amber-ink:#7a4f0c;
+  --ok:#2f7a4f; --danger:#b3372f;
+  --font-display:"Barlow Semi Condensed","Arial Narrow",Arial,sans-serif;
+  --font-body:"Public Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#12171d; --surface:#1a2129; --surface-2:#161c23;
+    --ink:#e7ebef; --ink-2:#b8c2cc; --muted:#8e9aa6; --rule:#2e3844; --rule-2:#252e38;
+    --accent:#5b93e6; --accent-ink:#8db5f0; --accent-soft:#1d2c44;
+    --amber:#b8842c; --amber-soft:#2e2517; --amber-ink:#e2b46a;
+    --ok:#5fb383; --danger:#e37a70;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#12171d; --surface:#1a2129; --surface-2:#161c23;
+  --ink:#e7ebef; --ink-2:#b8c2cc; --muted:#8e9aa6; --rule:#2e3844; --rule-2:#252e38;
+  --accent:#5b93e6; --accent-ink:#8db5f0; --accent-soft:#1d2c44;
+  --amber:#b8842c; --amber-soft:#2e2517; --amber-ink:#e2b46a;
+  --ok:#5fb383; --danger:#e37a70;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.55;margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:20px}
+@media (max-width:520px){.wrap{padding-inline:16px}}
+h1,h2,h3,h4{font-family:var(--font-display);text-wrap:balance;margin:0;color:var(--ink);letter-spacing:.005em}
+h1{font-size:clamp(34px,5vw,48px);font-weight:700;line-height:1.05}
+h2{font-size:26px;font-weight:700;line-height:1.15;margin-top:6px}
+h3{font-size:19px;font-weight:600;line-height:1.25}
+h4{font-size:16px;font-weight:600}
+[id]{scroll-margin-top:64px}
+p{margin:0;max-width:78ch}
+a{color:var(--accent-ink)}
+code{font-family:var(--font-mono);font-size:.86em;background:var(--surface-2);border:1px solid var(--rule-2);border-radius:4px;padding:0 4px}
+.eyebrow{font-family:var(--font-mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.masthead{padding-block:34px 20px;display:grid;gap:14px}
+.masthead .lede{font-size:17px;color:var(--ink-2);max-width:80ch}
+.status-line{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.pill{display:inline-flex;align-items:center;font-family:var(--font-mono);font-size:12px;padding:3px 9px;border-radius:999px;border:1px solid var(--rule);background:var(--surface);color:var(--ink-2);white-space:nowrap}
+.pill.plan{border-color:var(--accent);color:var(--accent-ink);background:var(--accent-soft)}
+.pill.rev{border-color:var(--amber);color:var(--amber-ink);background:var(--amber-soft)}
+.spec{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));border:1px solid var(--rule);background:var(--surface);border-radius:6px}
+.spec div{padding:12px 14px;border-right:1px solid var(--rule-2)}
+.spec div:last-child{border-right:0}
+.spec b{display:block;font-family:var(--font-display);font-size:26px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.1}
+.spec span{font-size:12.5px;color:var(--muted)}
+.note{font-size:13.5px;color:var(--muted)}
+.btn{appearance:none;border:1px solid var(--rule);background:var(--surface);color:var(--ink);font:500 13px/1.2 var(--font-body);padding:7px 12px;border-radius:6px;cursor:pointer}
+.btn:hover{border-color:var(--accent);color:var(--accent-ink)}
+.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn.print{margin-left:auto}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap}
+.tabbar{position:sticky;top:0;z-index:5;background:var(--ground);border-bottom:1px solid var(--rule)}
+.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:thin}
+.tabs button{appearance:none;border:0;background:none;color:var(--ink-2);font-family:var(--font-display);font-size:16px;font-weight:600;padding:12px 14px 10px;border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tabs button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.panel{padding-block:26px 48px;display:grid;gap:30px}
+.panel[hidden]{display:none}
+section.block{display:grid;gap:14px;min-width:0}
+section.block > p,section.block > ul,section.block > ol{color:var(--ink-2)}
+ul.clean,ol.clean{margin:0;padding-left:20px;display:grid;gap:5px;max-width:86ch}
+ul.clean li,ol.clean li{color:var(--ink-2)}
+ul.clean ul.clean,ol.clean ul.clean{margin-top:5px}
+li b,p b{color:var(--ink)}
+.tbl{overflow-x:auto;border:1px solid var(--rule);border-radius:6px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{text-align:left;vertical-align:top;padding:8px 11px;border-bottom:1px solid var(--rule-2)}
+th{font-family:var(--font-display);font-weight:600;font-size:14px;color:var(--ink-2);background:var(--surface-2);letter-spacing:.01em;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.id{font-family:var(--font-mono);font-size:12px;white-space:nowrap;color:var(--accent-ink)}
+table.steps td:nth-child(4){min-width:300px}
+table.steps td:last-child{font-family:var(--font-mono);font-size:11px;color:var(--ink-2);min-width:170px;max-width:240px;overflow-wrap:anywhere}
+figure{margin:0;display:grid;gap:8px;min-width:0}
+.fig{overflow-x:auto;background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:14px}
+.fig svg{display:block;width:100%;height:auto;color:var(--ink)}
+.fig.hero svg{min-width:900px}
+figcaption{font-size:13.5px;color:var(--muted);max-width:92ch}
+svg text{font-family:var(--font-body)}
+svg .ttl{font-family:var(--font-display);font-size:15px;font-weight:600;fill:var(--ink)}
+svg .lbl{font-size:12px;fill:var(--ink-2)}
+svg .sm{font-size:10.5px;fill:var(--muted)}
+svg .st{fill:var(--surface);stroke:var(--ink-2);stroke-width:1.2}
+svg .st-auto{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.5}
+svg .st-person{fill:var(--amber-soft);stroke:var(--amber);stroke-width:1.4}
+svg .st-side{fill:var(--surface-2);stroke:var(--muted);stroke-width:1.1;stroke-dasharray:4 3}
+svg .edge{stroke:var(--ink-2);stroke-width:1.4;fill:none}
+svg .edge-async{stroke:var(--accent);stroke-width:1.5;fill:none;stroke-dasharray:6 4}
+svg .mk{fill:var(--ink-2)}
+svg .mk-auto{fill:var(--accent)}
+svg .hb rect{fill:var(--surface);stroke:var(--accent);stroke-width:1.2}
+svg .hb text{font-family:var(--font-mono);font-size:10px;fill:var(--accent-ink);text-anchor:middle;dominant-baseline:central}
+details{border:1px solid var(--rule);border-radius:6px;background:var(--surface)}
+details > summary{cursor:pointer;padding:11px 14px;font-family:var(--font-display);font-weight:600;font-size:16px}
+details > summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+details .inner{padding:4px 16px 18px;display:grid;gap:14px;min-width:0}
+details.proc{margin-top:10px}
+details.proc > summary{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;list-style-position:outside}
+details.proc[open] > summary{border-bottom:1px solid var(--rule-2)}
+.pid{font-family:var(--font-mono);font-size:12.5px;font-weight:500;color:var(--accent-ink);background:var(--accent-soft);border-radius:4px;padding:1px 7px}
+.pname{flex:1 1 320px}
+.meta{font-family:var(--font-mono);font-size:11.5px;font-weight:400;color:var(--muted)}
+.life-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,460px),1fr));gap:18px}
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:14px 16px;display:grid;gap:10px;align-content:start;min-width:0}
+.card.wide{grid-column:1/-1}
+.card .mmd{border:0;padding:0}
+.card p{font-size:14px;color:var(--ink-2)}
+.mmd-fig{margin:0}
+.mmd{overflow-x:auto;background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:12px;min-height:44px}
+.mmd:empty::before{content:"Drawing diagram\2026";color:var(--muted);font-size:13px}
+.mmd svg{display:block;margin:0 auto;height:auto}
+.mmd.failed{color:var(--danger);font-size:13px}
+.mmd-src{display:none;margin:0;overflow-x:auto;font-family:var(--font-mono);font-size:11.5px;line-height:1.45;background:var(--surface-2);border:1px solid var(--rule);border-radius:6px;padding:10px 12px;color:var(--ink-2)}
+.mmd-src.show{display:block}
+body.offline .mmd{display:none}
+body.offline .mmd-src{display:block}
+pre.code{margin:0;overflow-x:auto;font-family:var(--font-mono);font-size:12px;background:var(--surface-2);border:1px solid var(--rule);border-radius:6px;padding:10px 12px}
+blockquote.callout{margin:0;border-left:3px solid var(--accent);background:var(--accent-soft);padding:12px 16px;border-radius:0 6px 6px 0;display:grid;gap:8px}
+details.about .inner,details.graph .inner{padding-top:12px}
+.foot{padding-block:10px 40px}
+@media print{
+  :root,:root[data-theme="dark"],:root:not([data-theme="light"]){
+    --ground:#ffffff; --surface:#ffffff; --surface-2:#f6f7f7; --ink:#111; --ink-2:#333; --muted:#555; --rule:#ccc; --rule-2:#e2e2e2;
+    --accent:#2563b8; --accent-ink:#1d4f94; --accent-soft:#eef3fb; --amber:#c9851c; --amber-soft:#faf2e4; --amber-ink:#7a4f0c;
+    color-scheme:light;
+  }
+  body{font-size:11.5pt}
+  .tabbar,.toolbar,.btn,.offline-note{display:none !important}
+  .panel,.panel[hidden]{display:grid !important;padding-block:10px}
+  .wrap{max-width:none}
+  .fig.hero svg{min-width:0}
+  .mmd,figure,tr,.card{break-inside:avoid}
+  .mmd:empty{display:none}
+  .mmd:empty + .mmd-src{display:block}
+  details.proc{break-before:page}
+  details > summary{list-style:none}
+}
+
+/* nested tables and code must not widen the page on a phone */
+.panel,.panel>.block,.block li,.block ol,.block ul{min-width:0;max-width:100%}
+.block li .tbl{max-width:100%;overflow-x:auto;display:block}
+.block pre{max-width:100%;overflow-x:auto}
+.block :not(pre)>code{overflow-wrap:anywhere}
+.block p,.block li{overflow-wrap:break-word}
+
+</style>
+</head>
+<body>
+<style>@media print{.mos-nav{display:none}}</style><div class="mos-nav" style="font:14px/1.4 'Segoe UI',system-ui,sans-serif;padding:7px 16px;background:#1f6f6b;color:#fff"><a href="../../index.html" style="color:#fff;font-weight:600;text-decoration:none">&larr; MOS start page</a><span style="opacity:.8"> &nbsp;&middot;&nbsp; 7. Reviews</span></div>
+<header class="wrap masthead">
+  <div class="eyebrow">MOS · history (27 Sep) · local file, not published</div>
+  <h1>Package audit v0.3</h1>
+  <p class="lede">What the v0.3 audit found in the v0.2 planning package, and how each finding was resolved.</p>
+  <div class="status-line"><span class="pill plan">Planning only · no code</span><span class="pill rev">History · 27 Sep 2026</span>
+  <button type="button" class="btn print" id="printBtn">Print or save as PDF</button></div>
+  <div class="spec"><div><b>135</b><span>findings</span></div><div><b>History</b><span>27 Sep</span></div></div>
+  
+</header>
+<nav class="tabbar" aria-label="Sections"><div class="wrap tabs" role="tablist"><button role="tab" type="button" id="tab-overview" aria-controls="panel-overview" aria-selected="false">Re-framing and top findings</button><button role="tab" type="button" id="tab-findings" aria-controls="panel-findings" aria-selected="false">All findings</button><button role="tab" type="button" id="tab-rest" aria-controls="panel-rest" aria-selected="false">Changes and verification</button></div></nav>
+<main>
+<div class="panel wrap" role="tabpanel" id="panel-overview" aria-labelledby="tab-overview" hidden><section class="block"><details class="about"><summary>About this document</summary><div class="inner"><div class="tbl"><table class=""><thead><tr><th></th><th></th></tr></thead><tbody><tr><td>Document</td><td>Audit report for planning Phase 1 ("audit and re-baseline")</td></tr><tr><td>Date</td><td>2026-09-27</td></tr><tr><td>Audited</td><td>v0.2 of the FRD, TDD, implementation plan, master plan (<code>.md</code> + <code>.html</code>), client-draft review, ADR-0001…0016, README, CLAUDE.md, PROGRESS</td></tr><tr><td>Method</td><td><br>1. Three parallel line-by-line reviews: FRD; TDD + ADRs; plan + master + review + HTML. <br>2. The client's PDF was re-checked page by page and all 21 embedded images inspected. <br>3. Library and version claims were verified on the web. <br>4. The author verified findings before fixing them. Key domain claims were re-checked against the client's screens: "Addis Flour Factory", 450 bags = 22,500 kg, the stock-screen double counts, the payment screen's totals and method, the "Supplier Portal" title. <br>5. Mechanical checks ran on IDs, links and columns.</td></tr><tr><td>Result</td><td><b>135 findings</b> (some overlap between reviews): 24 High, 64 Medium, 46 Low, 1 Info. All resolved in v0.3, or explicitly deferred to a named later planning phase</td></tr><tr><td>Audience</td><td>Product owner (review), developers (traceability)</td></tr></tbody></table></div></div></details></section><section class="block"><h2 id="1-the-re-framing-applied-owner-direction-2026-09-27">1. The re-framing applied (owner direction, 2026-09-27)</h2>
+<div class="tbl"><table class=""><thead><tr><th>Change</th><th>Where recorded</th><th>Effect on the package</th></tr></thead><tbody><tr><td><b>Single tenant, single company in v1</b>, with expansion seams; SaaS later</td><td><a href="../6-decisions/adr/ADR-0017-single-tenant-single-company-v1.md">ADR-0017</a> (supersedes ADR-0004)</td><td><br>• tenancy requirements moved to FRD Appendix F, IDs kept <br>• the TDD tenancy design became Appendix A (expansion playbook) <br>• new guards: privilege boot probe and grant/trigger catalog test <br>• the company dimension is kept in the schema</td></tr><tr><td><b>All six modules in ≤ 6 months of development + 2 months to go live</b>; team paths A/B/C</td><td><a href="../6-decisions/adr/ADR-0018-lean-v1-six-months.md">ADR-0018</a></td><td><br>• MVP/P2/P3 replaced by v1 (month) / v1.1 / Later <br>• production and sales became v1 <br>• leaner approvals, audit and lock design <br>• edge agent deferred</td></tr><tr><td><b>Infrastructure not assumed</b></td><td><a href="../6-decisions/adr/ADR-0019-infrastructure-not-assumed.md">ADR-0019</a></td><td><br>• deployment options became proposals <br>• queue and file storage behind ports <br>• NFR targets became proposed defaults <br>• device-dependent features got fallbacks (NFR-14)</td></tr><tr><td><b>Documents stay local; phase-gated work</b></td><td><code>MOS/CLAUDE.md</code>, root <code>CLAUDE.md</code></td><td>The HTML view is a local file; nothing is republished</td></tr></tbody></table></div></section><section class="block"><h2 id="2-most-important-findings">2. Most important findings</h2>
+<ol class="clean"><li><b>The swimlane is not the client's</b> (A-01).<ul class="clean"><li>The client's PDF and DOCX contain no swimlane: their 21 images are the sign-in screen and 16 other screens.</li><li>The swimlane is byte-identical to the owner's ChatGPT drawing.</li><li>Moved to <code>9-inputs/owner-brainstorm/</code>; the attribution is corrected everywhere.</li></ul></li><li><b>The client is a flour mill</b> (A-02, F-01). "Addis Flour Factory", durum wheat in 50 kg bags, bran in stock.<ul class="clean"><li>The "Flooring" reference pack and the tile-style examples came from reading "Floor Manufacturing" literally.</li></ul></li><li><b>Three design defects would have failed in production</b> (T-01, T-02, T-06):<ul class="clean"><li>the posted-record lock would block matching and payment;</li><li>QC result correction needed a forbidden UPDATE;</li><li>streaming routes held database transactions open for hours.</li></ul></li><li><b>Foundation was under-weighted and payables unweighted</b> in the first 6-month draft (P-08). The weights were revised, and the lean v1 needs about 2.2 effective FTE: path A just fits, B and C need depth cuts.</li><li><b>Production and sales had no design, no acceptance criteria and no scenarios</b> (T-04, F-08, F-38). They now have full v1 requirements (with flour-mill specifics), a TDD design and scenarios AS-14…19.</li><li><b>Several money rules contradicted each other or were missing:</b><ul class="clean"><li>invoice-over-payable (F-04);</li><li>gross vs net WHT (F-05);</li><li>a non-existent "invoice approver" in the SoD rules (F-03);</li><li>output valuation (F-06);</li><li>legal sales invoicing (F-07).</li></ul></li><li><b>The client draft has about 40 defects</b>, not 20. The v0.3 review adds 20 missed items, including:<ul class="clean"><li>the USD vs ETB currency mix;</li><li>a payment-method change after approval;</li><li>screens that don't form one scenario;</li><li>over-invoicing;</li><li>kg + pcs totals.</li></ul></li></ol></section></div><div class="panel wrap" role="tabpanel" id="panel-findings" aria-labelledby="tab-findings" hidden><section class="block"><h2 id="3-findings">3. Findings</h2>
+<p><b>Status values:</b></p>
+<ul class="clean"><li><b>Fixed:</b> resolved in v0.3 documents.</li><li><b>Retired:</b> it concerned the v0.2 schedule, which is replaced.</li><li><b>Phase n:</b> deferred to that planning phase, where it belongs.</li><li><b>Question:</b> needs a client or owner answer, and is carried to the Phase 5 register.</li></ul>
+<h3 id="31-authors-own-findings-a">3.1 Author's own findings (A)</h3>
+<div class="tbl"><table class=""><thead><tr><th>ID</th><th>Sev</th><th>Where</th><th>Finding</th><th>Resolution</th><th>Status</th></tr></thead><tbody><tr><td class="id">A-01</td><td>High</td><td>Review header and §1, master plan, HTML Client tab, README, <code>9-inputs/from-client/</code></td><td>The swimlane was attributed to the client, but it is the owner's ChatGPT image (same SHA-256); the client files contain no swimlane</td><td>File moved to <code>9-inputs/owner-brainstorm/</code> with a README; every reference corrected; review §1 re-sourced to the narrative</td><td>Fixed</td></tr><tr><td class="id">A-02</td><td>High</td><td>FRD §1.3, glossary, examples; plan; master</td><td>"Floor" read literally (flooring pack, tile examples)</td><td>Flour-milling pack only in v1; examples changed; client question Q0</td><td>Fixed + Question</td></tr><tr><td class="id">A-03</td><td>Med</td><td>ADR-0018 (first draft), plan</td><td>The owner's 6-month constraint made the v0.2 phasing (10.4-month MVP, 22–24 months in total) obsolete</td><td>ADR-0018; plan rewritten as a 6+2-month roadmap</td><td>Fixed</td></tr><tr><td class="id">A-04</td><td>Med</td><td>TDD §14.1 vs review §8</td><td><code>{FY}</code> and <code>{YYYY}</code> used inconsistently; the review's note said <code>{YYYY}</code> meant the fiscal year</td><td>Token set defined once (FR-PLT-040): <code>{FY}</code>, <code>{YYYY}</code>, <code>{YYYYMMDD}</code>, <code>{SITE}</code>, <code>{SEQ:n}</code></td><td>Fixed</td></tr><tr><td class="id">A-05</td><td>Low</td><td>Review header</td><td>"17 screen mock-ups" vs 21 images</td><td>Stated as 17 screens (21 images; the supplier wizard is 5 images)</td><td>Fixed</td></tr><tr><td class="id">A-06</td><td>Low</td><td>Master plan §12, HTML</td><td>The HTML was described as published</td><td>Local-only everywhere; HTML footer and pills updated</td><td>Fixed</td></tr><tr><td class="id">A-07</td><td>Med</td><td>FRD, plan</td><td>No team-path concept (the owner wants A/B/C options)</td><td>ADR-0018 and plan §5 with depth lists per path</td><td>Fixed</td></tr><tr><td class="id">A-08</td><td>Med</td><td>FRD NFR, TDD §18</td><td>Hosting targets stated as facts</td><td>Proposed defaults pending ADR-0019 answers</td><td>Fixed</td></tr><tr><td class="id">A-09</td><td>Low</td><td>Memory / conventions</td><td>Owner preferences (local-only, phase-gated) not recorded</td><td>Saved as feedback memories and in <code>MOS/CLAUDE.md</code></td><td>Fixed</td></tr></tbody></table></div>
+<h3 id="32-frd-findings-f">3.2 FRD findings (F)</h3>
+<div class="tbl"><table class=""><thead><tr><th>ID</th><th>Sev</th><th>Where (v0.2)</th><th>Finding</th><th>Resolution (v0.3)</th><th>Status</th></tr></thead><tbody><tr><td class="id">F-01</td><td>High</td><td>§1.3; MD-002/004; MFG-007; SAL-005</td><td>Flooring pack and tile examples come from the "Floor" typo</td><td>Flour pack; flour examples; shade constraint dropped</td><td>Fixed</td></tr><tr><td class="id">F-02</td><td>High</td><td>QC-004/006; PRC-013; AS-13</td><td>No inspection-lot path with the gate off (the client's own flow)</td><td>New FR-QC-025; flow C (§9.3); QC-004 acceptance criterion for gate-off</td><td>Fixed</td></tr><tr><td class="id">F-03</td><td>High</td><td>SOD-03/04/05; BR-AP-05</td><td>SoD rules reference an undefined "invoice approver"</td><td>SoD restated around the PV approver and the match-exception approver; BR-AP-05 rewritten</td><td>Fixed</td></tr><tr><td class="id">F-04</td><td>High</td><td>AP-005 vs BR-AP-01 vs §9.4 #24</td><td>Three conflicting rules for invoice &gt; payable quantity</td><td>One rule: auto debit note if the excess equals the deduction, otherwise hold; BR-AP-01 reworded</td><td>Fixed</td></tr><tr><td class="id">F-05</td><td>High</td><td>AP-007/008</td><td>No gross/WHT/net on the PV; the approver approves gross while the cheque is net</td><td>New FR-AP-013; WHT agent status and rates are client questions</td><td>Fixed + Question</td></tr><tr><td class="id">F-06</td><td>High</td><td>MFG-010</td><td>No v1 rule values production output</td><td>New FR-MFG-014 material-cost settlement; TDD §14.3</td><td>Fixed</td></tr><tr><td class="id">F-07</td><td>High</td><td>SAL-008/011</td><td>Legal sales invoicing (fiscal device) undefined</td><td>New FR-SAL-012 (fiscal reference); SAL-011 "v1 if legally required"; question Q18</td><td>Fixed + Question</td></tr><tr><td class="id">F-08</td><td>High</td><td>§16</td><td>No production or sales acceptance scenarios</td><td>AS-14…AS-19 added</td><td>Fixed</td></tr><tr><td class="id">F-09</td><td>High</td><td>Whole document</td><td>Multi-tenant framing contradicts ADR-0017</td><td>Re-framed; Appendix F</td><td>Fixed</td></tr><tr><td class="id">F-10</td><td>Med</td><td>Role table</td><td>"The swimlane's 'Management'"</td><td>"The client narrative's 'Management'"</td><td>Fixed</td></tr><tr><td class="id">F-11</td><td>Med</td><td>INB-002; AS-01; INB-005</td><td>"GRN generated/auto-posted" contradicts ADR-0016's confirm default</td><td>Reworded: prepared → confirmed; AS-01 covers both modes</td><td>Fixed</td></tr><tr><td class="id">F-12</td><td>Med</td><td>QC-013/022</td><td>Combination of multiple deductions undefined</td><td>Order, caps and a "no stacking" setting defined; acceptance criterion with two deductions</td><td>Fixed</td></tr><tr><td class="id">F-13</td><td>Med</td><td>PRC-013; BR-QC-03</td><td>GRN valuation with payable ≠ physical undefined</td><td>New FR-INV-022</td><td>Fixed</td></tr><tr><td class="id">F-14</td><td>Med</td><td>AP-002</td><td>Match against the raw PO price creates false price exceptions</td><td>Expected price = quality-adjusted GRN price</td><td>Fixed</td></tr><tr><td class="id">F-15</td><td>Med</td><td>AP-003 vs BR-AP-01</td><td>Quantity tolerance contradicts a hard cap</td><td>Tolerance semantics defined; BR-AP-01 includes the tolerance</td><td>Fixed</td></tr><tr><td class="id">F-16</td><td>Med</td><td>BR-AP-04</td><td>Bank account required even for cheque or cash payments</td><td>Rule per method (transfer / cheque / cash)</td><td>Fixed</td></tr><tr><td class="id">F-17</td><td>Med</td><td>§9.4 #34</td><td>WHT correction path ignores WHT timing</td><td>Path depends on timing</td><td>Fixed</td></tr><tr><td class="id">F-18</td><td>Med</td><td>AP-012</td><td>Cheque register gaps (clearing, books, stale, voids after posting)</td><td>New FR-AP-016</td><td>Fixed</td></tr><tr><td class="id">F-19</td><td>Med</td><td>PLT-043</td><td>Future-date ban blocks post-dated cheques</td><td>The ban applies to posting dates only</td><td>Fixed</td></tr><tr><td class="id">F-20</td><td>Med</td><td>PLT-041 vs review §8</td><td>Gap-free list inconsistent; PV irreversible point undefined</td><td>List aligned (incl. weigh tickets and sales documents); PV numbered at submission, number kept on cancel</td><td>Fixed</td></tr><tr><td class="id">F-21</td><td>Med</td><td>INV-014</td><td>Acceptance criterion untestable (the draft's example doesn't reconcile)</td><td>Corrected fixture in the acceptance criterion; damage is a status move</td><td>Fixed</td></tr><tr><td class="id">F-22</td><td>Med</td><td>INV-009</td><td>Freezing impractical for silos; system quantity basis wrong</td><td>FREEZE or CUT_OFF modes; on-hand across statuses; silo measurement (FR-INV-020)</td><td>Fixed</td></tr><tr><td class="id">F-23</td><td>Med</td><td>MFG-003</td><td>A strict mass-balance check rejects real milling</td><td>Gain/loss band; tempering water (FR-MFG-015)</td><td>Fixed</td></tr><tr><td class="id">F-24</td><td>Med</td><td>GATE-010</td><td>Deferred verification: does the GRN post or block?</td><td>The GRN posts; matching and payment are blocked until verified</td><td>Fixed</td></tr><tr><td class="id">F-25</td><td>Med</td><td>GATE-016 vs 023</td><td>An outage stops all dispatch without saying so</td><td>Paper-mode exit rule stated as a deliberate stop</td><td>Fixed</td></tr><tr><td class="id">F-26</td><td>Med</td><td>Several</td><td>Status vocabulary inconsistent; missing lifecycles</td><td>Canonical vocabulary (FRD §1.5); diagrams in Phase 2</td><td>Fixed; diagrams drawn in Phase 2 (<a href="../2-requirements/MOS-PROCESS-MODEL.html#6-l3-lifecycles">process model §6</a>)</td></tr><tr><td class="id">F-27</td><td>Med</td><td>PLT-002/003; INV-010; AP-010</td><td>Multi-company acceptance criteria contradict single company</td><td>One company in the acceptance criteria; company-level valuation in v1</td><td>Fixed</td></tr><tr><td class="id">F-28</td><td>Med</td><td>AS-13</td><td>The draft's screens don't form one scenario</td><td>Coherent AS-13 fixture defined; confirm with the client</td><td>Fixed + Question</td></tr><tr><td class="id">F-29</td><td>Med</td><td>§15.1</td><td>The PV approver could record the payment</td><td>SOD-15</td><td>Fixed</td></tr><tr><td class="id">F-30</td><td>Med</td><td>PRC-004</td><td>3 distinct people for bank changes may not exist; initial account unclear</td><td>1 independent approver + call-back, 2nd approver as a setting; initial account verified at supplier approval</td><td>Fixed</td></tr><tr><td class="id">F-31</td><td>Med</td><td>PLT-041</td><td>Weigh tickets not gap-free</td><td>FR-GATE-030</td><td>Fixed</td></tr><tr><td class="id">F-32</td><td>Med</td><td>PRC-001/020</td><td>"Supplier Portal" title suggests self-registration</td><td>Noted in PRC-001; question Q12</td><td>Question</td></tr><tr><td class="id">F-33</td><td>Med</td><td>PRC-013; QC-024</td><td>Bagged wheat: no bag tare</td><td>New FR-PRC-021</td><td>Fixed</td></tr><tr><td class="id">F-34</td><td>Med</td><td>AP-006</td><td>Self-billing lacks tax rules and SoD</td><td>New FR-AP-018, SOD-16</td><td>Fixed</td></tr><tr><td class="id">F-35</td><td>Med</td><td>AP-010</td><td>Journal sources omit production and sales; GRNI unnamed</td><td>Sources extended; GRNI in the glossary; TDD §13.4</td><td>Fixed</td></tr><tr><td class="id">F-36</td><td>Med</td><td>Many (AV scan, SMTP, camera, TV, printers, tablets, uptime, containers)</td><td>Infrastructure stated as requirements</td><td>Settings with fallbacks (NFR-14); proposed defaults; questions to Phase 5</td><td>Fixed + Phase 5</td></tr><tr><td class="id">F-37</td><td>Med</td><td>QC-022/023</td><td>Scoring formula undefined; acceptance criterion depends on a missing table</td><td>Formula defined; the "92.4" example pending the client's weights</td><td>Fixed + Question</td></tr><tr><td class="id">F-38</td><td>Med</td><td>28 rows</td><td>Acceptance criterion "—"</td><td>Every non-appendix requirement now has an acceptance criterion (checked by script)</td><td>Fixed</td></tr><tr><td class="id">F-39</td><td>Low</td><td>Glossary</td><td>DAMAGED missing</td><td>Added</td><td>Fixed</td></tr><tr><td class="id">F-40</td><td>Low</td><td>GATE-011</td><td>False direction anomaly for rejected trucks</td><td>Excluded</td><td>Fixed</td></tr><tr><td class="id">F-41</td><td>Low</td><td>§9.4 #18</td><td>"X hours" undefined</td><td><code>photo_pending_max_hours</code>, default 4</td><td>Fixed</td></tr><tr><td class="id">F-42</td><td>Low</td><td>INV-019; MD-003/010</td><td>Stock-level semantics and precedence undefined</td><td>Defined with validation and precedence</td><td>Fixed</td></tr><tr><td class="id">F-43</td><td>Low</td><td>PRC-015</td><td>Acceptance criterion unconditional</td><td>Made conditional</td><td>Fixed</td></tr><tr><td class="id">F-44</td><td>Low</td><td>AP-008</td><td>Cash and mobile payments have no account</td><td>FR-AP-015</td><td>Fixed</td></tr><tr><td class="id">F-45</td><td>Low</td><td>Several</td><td>Actor names inconsistent</td><td>Role codes used; TRS/CSH clarified</td><td>Fixed</td></tr><tr><td class="id">F-46</td><td>Low</td><td>QC-012</td><td>Inspector vs QAM decision rights unclear</td><td>LAB confirms the suggested outcome; QAM overrides, approves concessions and partial acceptance</td><td>Fixed</td></tr><tr><td class="id">F-47</td><td>Low</td><td>Review "As-is"</td><td>Delete icons on approvals; "Close Warehouse"</td><td>FR-PLT-053/054</td><td>Fixed</td></tr><tr><td class="id">F-48</td><td>Low</td><td>Client stock screen</td><td>kg + pcs summed</td><td>FR-RPT-005</td><td>Fixed</td></tr><tr><td class="id">F-49</td><td>Low</td><td>Review §5</td><td>Missed defects (paying account; PR dates)</td><td>Review #21, #26; FR-PLT-055</td><td>Fixed</td></tr><tr><td class="id">F-50</td><td>Low</td><td>§17</td><td>Assumptions still v0.2</td><td>Rewritten</td><td>Fixed</td></tr><tr><td class="id">F-51</td><td>Low</td><td>Everywhere</td><td>MVP/P2/P3 vocabulary</td><td>Re-tagged (script-checked)</td><td>Fixed</td></tr><tr><td class="id">F-52</td><td>Low</td><td>GATE-006</td><td>Step sequences per visit class undefined</td><td>Tabulated in the process model</td><td>Fixed in Phase 2 (<a href="../2-requirements/MOS-PROCESS-MODEL.html#7-gate-step-sequences-per-visit-class">process model §7</a>)</td></tr><tr><td class="id">F-53</td><td>Low</td><td>INV-002</td><td>"Only AVAILABLE can be issued" conflicts with scrap/return</td><td>Narrowed</td><td>Fixed</td></tr><tr><td class="id">F-54</td><td>Low</td><td>INV-011 vs MFG-006</td><td>Backflush shortage vs no negative stock</td><td>Pending-issue mechanism</td><td>Fixed</td></tr><tr><td class="id">F-55</td><td>Low</td><td>PRC-007</td><td>Available stock ignores reservations</td><td>Available-to-use</td><td>Fixed</td></tr><tr><td class="id">F-56</td><td>Low</td><td>AS-02</td><td>Aflatoxin at the gate conflicts with long-test timing</td><td>Rapid test at the gate + a long-test variant</td><td>Fixed</td></tr><tr><td class="id">F-57</td><td>Low</td><td>Several acceptance criteria; NFRs</td><td>Weak acceptance criteria; NFRs untestable</td><td>NFR verification column; key acceptance criteria tightened; the rest tightened as stories are written</td><td>Partly fixed; Phase 4</td></tr></tbody></table></div>
+<h3 id="33-tdd-and-adr-findings-t">3.3 TDD and ADR findings (T)</h3>
+<div class="tbl"><table class=""><thead><tr><th>ID</th><th>Sev</th><th>Where (v0.2)</th><th>Finding</th><th>Resolution (v0.3 TDD)</th><th>Status</th></tr></thead><tbody><tr><td class="id">T-01</td><td>High</td><td>§7.4 vs §9, §12</td><td>The immutability trigger blocks matching, payment and export</td><td>Side tables (<code>grn_line_settlement</code>, <code>invoice_open_item</code>, <code>delivery_line_billing</code>, <code>export_batch_item</code>) (§8.4)</td><td>Fixed</td></tr><tr><td class="id">T-02</td><td>High</td><td>§10 vs §7.4</td><td>QC correction needs an UPDATE the grants revoke</td><td><code>qc.result_invalidation</code> insert-only (§11)</td><td>Fixed</td></tr><tr><td class="id">T-03</td><td>High</td><td>§2</td><td>Node 22 end of life (2027-04-30) falls at go-live</td><td>Node 24 LTS recommended; Phase 6 confirms</td><td>Fixed + Phase 6</td></tr><tr><td class="id">T-04</td><td>High</td><td>§1, §12</td><td>Production, sales and AR have no design</td><td>§14 production, §15 sales and receivables; AR invariants</td><td>Fixed</td></tr><tr><td class="id">T-05</td><td>Med</td><td>§2; §13.3</td><td>NestJS 12 and BullMQ 6 released; repeatable jobs removed</td><td>Versions recorded; Job Schedulers / pg-boss cron; Phase 6 decides</td><td>Fixed + Phase 6</td></tr><tr><td class="id">T-06</td><td>High</td><td>§6.2</td><td>SSE and download routes inside long transactions</td><td><code>@NoUnitOfWork</code>; short read-only GETs (§7.2)</td><td>Fixed</td></tr><tr><td class="id">T-07</td><td>Med</td><td>§14.1</td><td>Separate numbering transaction can starve the pool</td><td>One same-transaction mechanism (§17.1); ADR-0011 amended</td><td>Fixed</td></tr><tr><td class="id">T-08</td><td>Med</td><td>§14.2</td><td>Outbox semantics under-specified</td><td>Lease, <code>jobId</code>, DONE on consumer success, AOF, source re-check (§17.2)</td><td>Fixed</td></tr><tr><td class="id">T-09</td><td>Med</td><td>§8.3/8.6/12.4</td><td>Rounding inconsistent between ledger and journals</td><td>One helper; 4 dp internally; export rounding lines; company rounding mode (§9.6)</td><td>Fixed</td></tr><tr><td class="id">T-10</td><td>Med</td><td>§7.6, §8.3</td><td>Moving-average residual and negative-value cases</td><td>Residual clamp in the same apply; fungible-reversal limitation stated (§8.6, §9.3)</td><td>Fixed</td></tr><tr><td class="id">T-11</td><td>Med</td><td>§8.5</td><td>In-transit valued at the destination average</td><td><code>AT_REFERENCE</code> to the dispatch entry (§9.5)</td><td>Fixed</td></tr><tr><td class="id">T-12</td><td>Med</td><td>§6.3, §7.5</td><td>Lock hierarchy inconsistent and incomplete</td><td>Six ranks with table order; explicit R3 step (§7.3, §8.5)</td><td>Fixed</td></tr><tr><td class="id">T-13</td><td>Med</td><td>§6.3; ADR-0008</td><td>Deadlock risks; "structurally impossible" overstated</td><td><code>FOR NO KEY UPDATE</code>; header before lines; wording corrected</td><td>Fixed</td></tr><tr><td class="id">T-14</td><td>Med</td><td>§4.6</td><td>Capacity BLOCK check races</td><td>BLOCK-mode units locked <code>FOR NO KEY UPDATE</code> (§5)</td><td>Fixed</td></tr><tr><td class="id">T-15</td><td>Med</td><td>§6.4</td><td>Idempotency keys global</td><td>PK (principal, key) + route; TTL; 2xx only (§7.4)</td><td>Fixed</td></tr><tr><td class="id">T-16</td><td>Med</td><td>§11.2</td><td>PV uniqueness assumes one invoice per PV</td><td>One automatic PV per GRN; open-item CHECK (§12.3)</td><td>Fixed</td></tr><tr><td class="id">T-17</td><td>Med</td><td>§11.2</td><td>Settlement triggers contradict ADR-0016</td><td>Per-mode settlement (§12.3)</td><td>Fixed</td></tr><tr><td class="id">T-18</td><td>Med</td><td>§1.3; ADR-0003</td><td>Dependency rule broken (cycles)</td><td>Tiers with ports (§1.3); ADR-0003 amended</td><td>Fixed</td></tr><tr><td class="id">T-19</td><td>Med</td><td>§7.3; §11.2</td><td>State machines drift from the FRD; exit-without-tare and abandoned missing</td><td>Stored vs derived statuses (§8.3); visit table redrawn on confirm default with #6/#7 and flow C (§12.2)</td><td>Fixed</td></tr><tr><td class="id">T-20</td><td>Low</td><td>§5</td><td>§5.5 missing</td><td>Renumbered (sections 1–22 contiguous)</td><td>Fixed</td></tr><tr><td class="id">T-21</td><td>Low</td><td>§15.1</td><td>Cited AS-01…12 only</td><td>AS-01…19</td><td>Fixed</td></tr><tr><td class="id">T-22</td><td>Low</td><td>§4.6</td><td>Org/storage model inside the tenancy section</td><td>Own section (§5)</td><td>Fixed</td></tr><tr><td class="id">T-23</td><td>Med</td><td>§5.1</td><td><code>email_verified</code> blocks Entra ID</td><td>Per-IdP email-verification config (§6.2)</td><td>Fixed</td></tr><tr><td class="id">T-24</td><td>Med</td><td>§5.3</td><td>CSP in the wrong layer</td><td>Nonce in Next <code>proxy.ts</code>; API <code>default-src &#x27;none&#x27;</code> (§6.5)</td><td>Fixed</td></tr><tr><td class="id">T-25</td><td>Low</td><td>§5.6</td><td>k-anonymity wording wrong for an offline list</td><td>Bundled top-N list, v1.1 (§6.1)</td><td>Fixed</td></tr><tr><td class="id">T-26</td><td>Med</td><td>§6.2</td><td>Retry policy conflicts with the p95 target</td><td>Retry 40P01 only; 55P03 → 409; savepoint catch scope (§7.2)</td><td>Fixed</td></tr><tr><td class="id">T-27</td><td>Low</td><td>ADR-0006; §11.2</td><td>"Exactly once" overstated</td><td>Database effects only; notification dedupe (§17.2)</td><td>Fixed</td></tr><tr><td class="id">T-28</td><td>Low</td><td>§6.1</td><td>Pipes vs interceptors order</td><td>Documented (§7.1)</td><td>Fixed</td></tr><tr><td class="id">T-29</td><td>Low</td><td>§14.1; ADR-0011</td><td>Cancelled numbered documents; per-site collisions</td><td>Number kept; <code>{SITE}</code> required</td><td>Fixed</td></tr><tr><td class="id">T-30</td><td>Low</td><td>§8.3/8.6; ADR-0008</td><td><code>valuation_layer</code> redundant</td><td>Dropped</td><td>Fixed</td></tr><tr><td class="id">T-31</td><td>Low</td><td>§8.1, §12.4</td><td>Per-row constraint triggers are quadratic</td><td>Poster check + flagged backstop (§9.1, §13.4)</td><td>Fixed</td></tr><tr><td class="id">T-32</td><td>Low</td><td>§7.5, §12.3</td><td>Master-data checks at payment unlocked</td><td>R4 <code>FOR SHARE</code> on supplier and bank rows</td><td>Fixed</td></tr><tr><td class="id">T-33</td><td>Low</td><td>§9</td><td>CHECK "unless approval exists" is inexpressible</td><td><code>+ approved_excess_qty</code>; ACCEPT_UNPAID removed</td><td>Fixed</td></tr><tr><td class="id">T-34</td><td>Low</td><td>FR-PLT-032</td><td>Bulk approve undesigned</td><td>Savepoint per item (§16.2)</td><td>Fixed</td></tr><tr><td class="id">T-35</td><td>Low</td><td>§14.2</td><td>SSE through BullMQ and Redis pub/sub unnecessary</td><td>In-process emitter / LISTEN-NOTIFY (§17.7)</td><td>Fixed</td></tr><tr><td class="id">T-36</td><td>Low</td><td>§19</td><td>"Short idle timeout" vs 8 h</td><td>Wording aligned</td><td>Fixed</td></tr><tr><td class="id">T-37</td><td>Low</td><td>§18.3; ADR-0013</td><td>Presigned URLs assume an S3 endpoint</td><td>Downloads streamed through the API by default; ADR-0019</td><td>Fixed</td></tr><tr><td class="id">T-38</td><td>Info</td><td>ADR-0005</td><td>"MOS-native passwords rejected" not annotated</td><td>Annotated "reversed by ADR-0015"</td><td>Fixed</td></tr></tbody></table></div>
+<h3 id="34-plan-master-review-and-html-findings-p">3.4 Plan, master, review and HTML findings (P)</h3>
+<div class="tbl"><table class=""><thead><tr><th>ID</th><th>Sev</th><th>Where (v0.2)</th><th>Finding</th><th>Resolution (v0.3)</th><th>Status</th></tr></thead><tbody><tr><td class="id">P-01</td><td>High</td><td>Review, master, HTML, README</td><td>Swimlane attributed to the client; fail branch only in the ChatGPT image</td><td>See A-01; the fail branch flagged as a question</td><td>Fixed</td></tr><tr><td class="id">P-02</td><td>High</td><td>HTML; review header</td><td>Broken image and file reference after the move</td><td>HTML rewritten without the image; review header corrected</td><td>Fixed</td></tr><tr><td class="id">P-03</td><td>High</td><td>All plan documents</td><td>v0.2 timeline figures conflict with 6+2 months</td><td>Replaced everywhere; v0.2 figures appear only in history rows</td><td>Fixed</td></tr><tr><td class="id">P-04</td><td>High</td><td>Master, HTML, plan, README, CLAUDE</td><td>Tenancy/SaaS framing stale</td><td>Re-framed per ADR-0017</td><td>Fixed</td></tr><tr><td class="id">P-05</td><td>High</td><td>Plan §3</td><td>FR-PLT-006 and 044 (and 045, 048, 049, 051) had no owning work package</td><td>Owners assigned (plan §4: WP-03, WP-04)</td><td>Fixed</td></tr><tr><td class="id">P-06</td><td>High</td><td>Review #9; plan acceptance criterion; FRD INV-014</td><td>Stock example understated; acceptance criterion unmeetable</td><td>Review #9 extended; FRD fixture</td><td>Fixed</td></tr><tr><td class="id">P-07</td><td>High</td><td>Plan; FRD §11–12</td><td>Gate, production and sales have no client input or acceptance criteria</td><td>Workshops before M4/M5 (plan §7); acceptance criteria and scenarios written</td><td>Fixed + Question</td></tr><tr><td class="id">P-08</td><td>High</td><td>ADR-0018 draft</td><td>Foundation under-weighted; payables not weighted</td><td>Weights revised: 1.5 / 0.75 / 0.75 / 0.5 / 0.5 / 1.0 / 0.75 / 0.25</td><td>Fixed</td></tr><tr><td class="id">P-09</td><td>Med</td><td>v0.2 Gantt</td><td>Weekly over-allocation (peak 2.83 FTE)</td><td>Retired; Phase 4 levels the new plan per path</td><td>Retired / Phase 4</td></tr><tr><td class="id">P-10</td><td>Med</td><td>v0.2 plan</td><td>Three dependency violations</td><td>Retired; the new WP table respects the order</td><td>Retired</td></tr><tr><td class="id">P-11</td><td>Med</td><td>v0.2 plan</td><td>AS-05 and AS-03 owned by the wrong work packages</td><td>AS-05 → WP-11; AS-03 split WP-09/WP-11</td><td>Fixed</td></tr><tr><td class="id">P-12</td><td>Med</td><td>Master §3</td><td>Promised scope with no estimate</td><td>Listed as v1.1 / Later with no date</td><td>Fixed</td></tr><tr><td class="id">P-13</td><td>Med</td><td>Master, HTML, plan, FRD</td><td>Flooring pack from the "Floor" misreading</td><td>See F-01</td><td>Fixed</td></tr><tr><td class="id">P-14</td><td>Med</td><td>Review</td><td>USD PO vs ETB payment conflicts with §9.4 #33</td><td>Review #25; FRD §9.5 #33; question Q11</td><td>Fixed + Question</td></tr><tr><td class="id">P-15</td><td>Med</td><td>Review</td><td>Payment method change; paying account shows the supplier's</td><td>Review #26; FR-AP-007/008</td><td>Fixed</td></tr><tr><td class="id">P-16</td><td>Med</td><td>FRD AS-13; plan</td><td>The draft does not chain as one scenario</td><td>See F-28</td><td>Fixed + Question</td></tr><tr><td class="id">P-17</td><td>Med</td><td>HTML head</td><td>No doctype, charset or viewport</td><td>Added</td><td>Fixed</td></tr><tr><td class="id">P-18</td><td>Med</td><td>Master, HTML, plan</td><td>Infrastructure assumed</td><td>Proposals only (ADR-0019)</td><td>Fixed</td></tr><tr><td class="id">P-19</td><td>Med</td><td>Review §6</td><td>Q6/Q7/Q8 partly answered by the PDF</td><td>Re-phrased as confirmations</td><td>Fixed</td></tr><tr><td class="id">P-20</td><td>Med</td><td>Review §6</td><td>Missing questions (currency, fiscal, flour, production, sales, gate, Document No., partial accept, hosting)</td><td>Q0, Q11–Q19 added</td><td>Fixed</td></tr><tr><td class="id">P-21</td><td>Med</td><td>Master; HTML</td><td>SoD overstated vs the FRD</td><td>FRD SoD extended (SOD-03/04/15/16), wording aligned</td><td>Fixed</td></tr><tr><td class="id">P-22</td><td>Med</td><td>README, CLAUDE, master</td><td>Residual issues in the rewritten files (missing audit doc, "published" claim, dropped <code>mos_app</code> test rule)</td><td>Audit written; claims corrected; rule restored</td><td>Fixed</td></tr><tr><td class="id">P-23</td><td>Low</td><td>v0.2 plan</td><td>Rounding of 45.6 weeks stated as 45</td><td>Retired (noted in review §7)</td><td>Retired</td></tr><tr><td class="id">P-24</td><td>Low</td><td>v0.2 plan</td><td>"Was" annotations untraceable</td><td>Retired</td><td>Retired</td></tr><tr><td class="id">P-25</td><td>Low</td><td>Review; plan</td><td>Storage-unit type lists disagree</td><td>The FRD list is used everywhere</td><td>Fixed</td></tr><tr><td class="id">P-26</td><td>Low</td><td>Plan; HTML</td><td>"FIFO" deferred while commingled FIFO is built</td><td>"FIFO valuation option" wording</td><td>Fixed</td></tr><tr><td class="id">P-27</td><td>Low</td><td>Plan</td><td>Undefined alias "WP-40 (WP-D)"</td><td>Removed</td><td>Fixed</td></tr><tr><td class="id">P-28</td><td>Low</td><td>HTML; FRD; plan</td><td>"Every requirement has an acceptance criterion" was false</td><td>Now true (script-checked)</td><td>Fixed</td></tr><tr><td class="id">P-29</td><td>Low</td><td>PROGRESS</td><td>Client list mismatched review §6</td><td>PROGRESS rewritten</td><td>Fixed</td></tr><tr><td class="id">P-30</td><td>Low</td><td>HTML</td><td>Grouped issues table incomplete</td><td>Rewritten; the full list lives in review §5</td><td>Fixed</td></tr><tr><td class="id">P-31</td><td>Low</td><td>v0.2 plan</td><td>M-F set at the end of hardening</td><td>Retired</td><td>Retired</td></tr></tbody></table></div></section></div><div class="panel wrap" role="tabpanel" id="panel-rest" aria-labelledby="tab-rest" hidden><section class="block"><h2 id="4-what-changed-per-document">4. What changed per document</h2>
+<div class="tbl"><table class=""><thead><tr><th>Document</th><th>v0.3 change</th></tr></thead><tbody><tr><td><a href="../2-requirements/MOS-FRD.html">MOS-FRD.md</a></td><td>Rewritten:<br>• 225 requirements (198 kept, 27 new), every one with an acceptance criterion; tags v1 (M1–M6) / v1.1 / Later / Future<br>• status vocabulary §1.5; flow C<br>• NFRs with verification; SoD-15/16<br>• AS-14…19; Appendix F</td></tr><tr><td><a href="../3-design/MOS-TDD.html">MOS-TDD.md</a></td><td>Rewritten:<br>• installation model and guards<br>• defects T-01/02/06/07/15/16/18 fixed<br>• six lock ranks; approval matrix; sealed audit log<br>• production (§14) and sales/receivables (§15)<br>• queue options for Phase 6; deployment proposals<br>• Appendix A expansion playbook; Appendix B deferred edge agent</td></tr><tr><td><a href="../4-plan/MOS-IMPLEMENTATION-PLAN.html">MOS-IMPLEMENTATION-PLAN.md</a></td><td>Rewritten:<br>• 6+2-month roadmap with revised weights<br>• work packages with owners for every cross-cutting requirement<br>• team paths A/B/C with depth lists<br>• go-live plan; client inputs by month; risks R17–R21</td></tr><tr><td><a href="../1-overview/MOS-MASTER-PLAN.html">MOS-MASTER-PLAN.md</a> + <a href="../1-overview/MOS-MASTER-PLAN.html">.html</a></td><td>Rewritten for v0.3; the HTML is local-only with a new roadmap chart</td></tr><tr><td><a href="MOS-CLIENT-P2P-DRAFT-REVIEW.html">MOS-CLIENT-P2P-DRAFT-REVIEW.md</a></td><td>Attribution corrected; 20 defects added (40 in total); questions re-worked; v0.3 timeline column</td></tr><tr><td><a href="../6-decisions/adr/">docs/6-decisions/adr/</a></td><td>New 0017, 0018, 0019; 0004 superseded; 0001, 0003, 0005, 0006, 0008, 0010, 0011, 0013 amended; wording fixes in 0002, 0009, 0012, 0015, 0016; README updated</td></tr><tr><td><code>9-inputs/owner-brainstorm/</code></td><td>New: the ChatGPT PDF, DOCX, ERP picture and swimlane, with a README</td></tr><tr><td><code>README.md</code>, <code>CLAUDE.md</code>, <code>PROGRESS.md</code></td><td>v0.3 framing; local-only and phase-gating rules; progress tracker for the phase programme</td></tr><tr><td>Root <code>CLAUDE.md</code></td><td>MOS paragraph: v0.3 framing, local-only rule</td></tr></tbody></table></div></section><section class="block"><h2 id="5-verification-run-2026-09-27">5. Verification (run 2026-09-27)</h2>
+<div class="tbl"><table class=""><thead><tr><th>Check</th><th>Result</th></tr></thead><tbody><tr><td>FR IDs unique; all 198 v0.2 IDs still present</td><td>Pass: 225 unique; 0 missing</td></tr><tr><td>Every FR row has a valid tag and an acceptance criterion</td><td>Pass: 199 v1, 11 v1.1, 13 Later, 2 Future; 0 without an acceptance criterion</td></tr><tr><td>Every FR ID cited by the TDD, plan and ADRs exists</td><td>Pass</td></tr><tr><td>Table rows well-formed (FRD)</td><td>Pass</td></tr><tr><td>TDD sections contiguous (1–22)</td><td>Pass</td></tr><tr><td>Tenancy/RLS/SaaS terms only in history rows, expansion sections, Appendix A/F and superseded ADR-0004</td><td>Pass (see §6)</td></tr><tr><td>Old v0.2 figures (59.5 dev-weeks, ≈45 weeks, 22–24 months) only in history/comparison rows</td><td>Pass (see §6)</td></tr><tr><td>Relative links resolve</td><td>Pass (see §6)</td></tr><tr><td>No code files in <code>MOS/</code></td><td>Pass</td></tr><tr><td>Git: <code>MOS/</code> untracked, nothing committed; root shows only <code>.gitignore</code> and <code>CLAUDE.md</code> modified</td><td>Pass (see §6)</td></tr></tbody></table></div></section><section class="block"><h2 id="6-verification-detail">6. Verification detail</h2>
+<ul class="clean"><li><b>Links:</b> every relative link in the 30 Markdown files resolves (checked by script). The one Phase 2 forward reference is plain text, not a link.</li><li><b>v0.2 figures</b> (10.4 months, 59.5 dev-weeks, ≈ 45 weeks, 22–24 months) remain only in these places:<ul class="clean"><li>revision-history rows (implementation plan);</li><li>the v0.1/v0.2/v0.3 comparison table in review §7;</li><li>ADR-0018's context and alternatives;</li><li>this audit;</li><li>the PROGRESS session log.</li></ul></li><li><b>Tenancy wording</b> remains only in these places:<ul class="clean"><li>statements of its absence (<code>MOS/CLAUDE.md</code>, TDD §4.1) and the expansion seams (TDD §4.4);</li><li>TDD Appendix A and FRD Appendix F;</li><li>superseded ADR-0004 and the historical bodies of ADR-0002/0005/0006 (each carries an amendment line);</li><li>the Later lists.</li></ul></li><li><b>HTML view:</b><ul class="clean"><li>it has a doctype, a UTF-8 charset and a viewport;</li><li>its inline script passes <code>node --check</code>;</li><li>its tags balance (55 div, 12 table and 3 svg pairs);</li><li>it has 6 tab panels and a print stylesheet;</li><li>it references no local images, so it cannot break when files move.</li></ul></li><li><b>Files in <code>MOS/</code>:</b> 30 <code>.md</code>, 1 <code>.html</code>, 2 <code>.pdf</code>, 2 <code>.docx</code>, 2 <code>.png</code>. There are no code or DDL files.</li><li><b>Git:</b> <code>MOS/</code> is untracked (no commits). The root repo shows only <code> M .gitignore</code> and <code> M CLAUDE.md</code>. Nothing was committed.</li><li><b>Publishing:</b> no Artifact was published or republished in Phase 1. The v0.2 artifact on claude.ai is unchanged and now stale; it is deleted only if the owner asks.</li></ul></section></div>
+</main>
+<footer class="wrap foot"><p class="note">Source: <code>MOS/docs/7-reviews/MOS-PACKAGE-AUDIT-v0.3.md</code> (the master copy). Kept locally in the MOS repository; not published.</p></footer>
+<script type="module">
+const MERMAID_URL = 'https://cdn.jsdelivr.net/npm/mermaid@12/dist/mermaid.esm.min.mjs';
+const tabs = [...document.querySelectorAll('[role="tab"]')];
+const panels = [...document.querySelectorAll('[role="tabpanel"]')];
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch { /* storage unavailable */ } },
+};
+const TABKEY = 'mos-pm-tab:' + location.pathname;
+function pickTab() { const k = store.get(TABKEY); if (k && document.getElementById('tab-' + k)) return k; const first = document.querySelector('[role="tab"]'); return first ? first.id.slice(4) : 'overview'; }
+
+
+function show(key, focusTab) {
+  let found = false;
+  for (const t of tabs) {
+    const on = t.id === `tab-${key}`;
+    t.setAttribute('aria-selected', String(on));
+    t.tabIndex = on ? 0 : -1;
+    if (on) { found = true; if (focusTab) t.focus(); }
+  }
+  if (!found) return show('overview', focusTab);
+  for (const p of panels) p.hidden = p.id !== `panel-${key}`;
+  store.set(TABKEY, key);
+  renderVisible();
+}
+tabs.forEach((t, i) => {
+  t.addEventListener('click', () => show(t.id.slice(4)));
+  t.addEventListener('keydown', (e) => {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    const next = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+    show(next.id.slice(4), true);
+  });
+});
+
+// ---- Mermaid, loaded from the CDN and drawn lazily (hidden diagrams cannot be measured)
+let mermaid = null;
+const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function initMermaid() {
+  const dark = matchMedia('(prefers-color-scheme: dark)').matches;
+  mermaid.initialize({
+    startOnLoad: false,
+    securityLevel: 'strict',
+    htmlLabels: false,
+    theme: 'base',
+    fontFamily: css('--font-body'),
+    themeVariables: {
+      darkMode: dark,
+      background: css('--surface'),
+      fontFamily: css('--font-body'),
+      fontSize: '13px',
+      primaryColor: css('--accent-soft'),
+      primaryBorderColor: css('--accent'),
+      primaryTextColor: css('--ink'),
+      secondaryColor: css('--amber-soft'),
+      tertiaryColor: css('--surface-2'),
+      lineColor: css('--ink-2'),
+      textColor: css('--ink'),
+      mainBkg: css('--accent-soft'),
+      clusterBkg: css('--surface-2'),
+      clusterBorder: css('--rule'),
+      edgeLabelBackground: css('--surface'),
+      actorBkg: css('--accent-soft'),
+      actorBorder: css('--accent'),
+      actorTextColor: css('--ink'),
+      actorLineColor: css('--rule'),
+      signalColor: css('--ink-2'),
+      signalTextColor: css('--ink'),
+      labelBoxBkgColor: css('--surface-2'),
+      labelBoxBorderColor: css('--rule'),
+      labelTextColor: css('--ink'),
+      loopTextColor: css('--ink-2'),
+      noteBkgColor: css('--amber-soft'),
+      noteBorderColor: css('--amber'),
+      noteTextColor: css('--ink'),
+      activationBkgColor: css('--surface-2'),
+      stateLabelColor: css('--ink'),
+      transitionColor: css('--ink-2'),
+      transitionLabelColor: css('--ink-2'),
+    },
+    flowchart: { htmlLabels: false, curve: 'basis', useMaxWidth: true },
+    sequence: { useMaxWidth: true, wrap: true, width: 170, messageFontSize: 13, actorFontSize: 13, noteFontSize: 12 },
+    state: { useMaxWidth: true },
+  });
+}
+let queue = Promise.resolve();
+function renderVisible() {
+  if (!mermaid) return queue;
+  queue = queue.then(async () => {
+    for (const el of document.querySelectorAll('.mmd:not([data-done])')) {
+      if (el.offsetParent === null) continue;
+      try {
+        const { svg } = await mermaid.render(`${el.id}-svg`, el.dataset.src);
+        el.innerHTML = svg;
+        el.dataset.done = '1';
+      } catch (err) {
+        el.dataset.done = 'error';
+        el.classList.add('failed');
+        el.textContent = 'This diagram could not be drawn; its source is shown below.';
+        el.nextElementSibling?.classList.add('show');
+      }
+    }
+  });
+  return queue;
+}
+import(MERMAID_URL)
+  .then(async (m) => {
+    // measure labels with the real web font, or they are clipped once it loads
+    await Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 3000))]);
+    mermaid = m.default; initMermaid(); renderVisible();
+  })
+  .catch(() => { document.body.classList.add('offline'); });
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+  if (!mermaid) return;
+  initMermaid();
+  document.querySelectorAll('.mmd[data-done="1"]').forEach((el) => { delete el.dataset.done; el.innerHTML = ''; });
+  renderVisible();
+});
+document.addEventListener('toggle', (e) => { if (e.target.open) renderVisible(); }, true);
+
+// ---- open / close all processes
+document.querySelectorAll('.toolbar .btn').forEach((b) => b.addEventListener('click', () => {
+  const open = b.dataset.act === 'expand';
+  b.closest('.panel').querySelectorAll('details.proc').forEach((d) => { d.open = open; });
+  renderVisible();
+}));
+
+// ---- in-page links switch to the right tab and open the right section
+function goTo(id) {
+  const target = document.getElementById(id);
+  if (!target) return false;
+  const panel = target.closest('[role="tabpanel"]');
+  if (panel) show(panel.id.slice(6));
+  if (target.tagName === 'DETAILS') target.open = true;
+  let d = target.parentElement?.closest('details');
+  while (d) { d.open = true; d = d.parentElement?.closest('details'); }
+  requestAnimationFrame(() => target.scrollIntoView({ block: 'start' }));
+  renderVisible();
+  return true;
+}
+document.addEventListener('click', (e) => {
+  const a = e.target.closest('a[href^="#"]');
+  if (!a) return;
+  const id = decodeURIComponent(a.getAttribute('href').slice(1));
+  if (goTo(id)) { e.preventDefault(); history.replaceState(null, '', `#${id}`); }
+});
+
+// ---- print: show everything, draw every diagram, then print
+const printBtn = document.getElementById('printBtn');
+let opened = [];
+function expandForPrint() {
+  panels.forEach((p) => { p.hidden = false; });
+  opened = [...document.querySelectorAll('details:not([open])')];
+  opened.forEach((d) => { d.open = true; });
+}
+function restoreAfterPrint() {
+  opened.forEach((d) => { d.open = false; });
+  opened = [];
+  show(pickTab());
+}
+printBtn.addEventListener('click', async () => {
+  expandForPrint();
+  await renderVisible();
+  setTimeout(() => window.print(), 250);
+});
+window.addEventListener('beforeprint', () => { if (!opened.length) expandForPrint(); });
+window.addEventListener('afterprint', restoreAfterPrint);
+
+// ---- start
+const initial = decodeURIComponent(location.hash.slice(1));
+if (!(initial && goTo(initial))) show(pickTab());
+
+</script>
+</body>
+</html>

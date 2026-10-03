@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Client documents discussion</title>
+<style>:root{
+  --bg:#f6f5f1; --card:#ffffff; --soft:#f0efe9;
+  --ink:#1f2328; --ink2:#4a525b; --muted:#6b737c; --rule:#dcd9cf; --rule2:#e9e7df;
+  --accent:#1f6f6b; --accent-soft:#e2f0ee; --accent-ink:#17534f;
+  --q:#a35d00; --q-soft:#fbefdc;
+  --font:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:Consolas,"SFMono-Regular",ui-monospace,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#15181b; --card:#1d2125; --soft:#22272c;
+    --ink:#e8eaec; --ink2:#bfc5cb; --muted:#8f979f; --rule:#343a41; --rule2:#2a3036;
+    --accent:#5fb8b1; --accent-soft:#1c3331; --accent-ink:#8fd3cd;
+    --q:#e2a554; --q-soft:#33281a;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#15181b; --card:#1d2125; --soft:#22272c;
+  --ink:#e8eaec; --ink2:#bfc5cb; --muted:#8f979f; --rule:#343a41; --rule2:#2a3036;
+  --accent:#5fb8b1; --accent-soft:#1c3331; --accent-ink:#8fd3cd;
+  --q:#e2a554; --q-soft:#33281a;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:17px;line-height:1.6}
+.wrap{max-width:1100px;margin:0 auto;padding-inline:24px}
+@media (max-width:600px){.wrap{padding-inline:16px} body{font-size:16px}}
+.top{background:var(--card);border-bottom:1px solid var(--rule);padding:28px 0 20px}
+.eyebrow{margin:0 0 6px;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:600}
+h1{margin:0;font-size:clamp(28px,4.2vw,40px);line-height:1.15;font-weight:700;text-wrap:balance}
+h2{font-size:27px;line-height:1.2;margin:0 0 14px;font-weight:700;text-wrap:balance}
+h3{font-size:20px;margin:30px 0 10px;font-weight:650;color:var(--accent-ink);text-wrap:balance}
+h4{font-size:17px;margin:20px 0 8px}
+[id]{scroll-margin-top:70px}
+p{margin:10px 0;max-width:75ch}
+a{color:var(--accent-ink)}
+strong{font-weight:650}
+code{font-family:var(--mono);font-size:.88em;background:var(--soft);border:1px solid var(--rule2);border-radius:4px;padding:0 4px}
+.tools{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
+.tools button{font:inherit;font-size:14px;padding:6px 14px;border-radius:999px;border:1px solid var(--rule);background:var(--soft);color:var(--ink);cursor:pointer}
+.tools button:hover{border-color:var(--accent)}
+.toc{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(6px);border-bottom:1px solid var(--rule)}
+.toc .wrap{display:flex;gap:4px;overflow-x:auto;padding-block:8px;scrollbar-width:thin}
+.toc a{flex:none;font-size:14px;text-decoration:none;color:var(--ink2);padding:5px 12px;border-radius:999px;white-space:nowrap}
+.toc a:hover{background:var(--accent-soft);color:var(--accent-ink)}
+.sec{background:var(--card);border:1px solid var(--rule);border-radius:14px;padding:26px 28px;margin:22px 0}
+@media (max-width:600px){.sec{padding:18px 16px;border-radius:10px}}
+ul,ol{margin:8px 0;padding-left:24px}
+li{margin:4px 0}
+li>ul,li>ol{margin:4px 0}
+blockquote{margin:16px 0;padding:14px 18px;background:var(--accent-soft);border-left:4px solid var(--accent);border-radius:8px;color:var(--ink)}
+.tbl{overflow-x:auto;margin:14px 0;border:1px solid var(--rule);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:15.5px}
+th,td{text-align:left;vertical-align:top;padding:10px 12px;border-bottom:1px solid var(--rule2)}
+th{background:var(--soft);font-weight:650;font-size:14px;color:var(--ink2)}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even) td{background:color-mix(in srgb,var(--soft) 45%,transparent)}
+td.key{font-weight:650;white-space:nowrap}
+td.ans{min-width:180px}
+.q{display:inline-block;font-weight:700;font-size:.85em;color:var(--q);background:var(--q-soft);border-radius:6px;padding:0 6px;white-space:nowrap}
+.flow{list-style:none;padding:0;margin:16px 0;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.flow li{margin:0;background:var(--accent-soft);color:var(--accent-ink);border:1px solid color-mix(in srgb,var(--accent) 35%,transparent);border-radius:999px;padding:6px 14px;font-weight:600;font-size:15px}
+.flow li:not(:last-child)::after{content:"→";margin-left:12px;color:var(--muted);font-weight:400}
+.shots{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin:8px 0 14px}
+.shot{display:block;text-decoration:none;color:var(--muted);font-size:13px;border:1px solid var(--rule);border-radius:10px;overflow:hidden;background:var(--soft)}
+.shot img{display:block;width:100%;height:170px;object-fit:cover;object-position:top;background:#fff}
+.shot span{display:block;padding:5px 10px}
+.shot:hover{border-color:var(--accent)}
+.foot{color:var(--muted);font-size:13px;padding-block:24px 40px}
+@media print{
+  body{background:#fff;font-size:12pt}
+  .toc,.tools,.foot{display:none}
+  .top{border:0;padding:0 0 10px}
+  .sec{border:0;padding:0;margin:0 0 18px;break-inside:auto}
+  .sec+.sec{break-before:page}
+  .shots{grid-template-columns:repeat(3,1fr)}
+  .shot img{height:130px}
+  .tbl{overflow:visible;border:0}
+  th,td{border:1px solid #bbb}
+  td.ans{min-width:6cm;height:1.6cm}
+  tr{break-inside:avoid}
+  a{color:inherit;text-decoration:none}
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<p class="eyebrow">Discussion pack · 3 October 2026</p>
+<h1>Discussion: your procure-to-pay screens and data dictionary</h1>
+<div class="tools"><button type="button" onclick="window.print()">Print / save as PDF</button>
+<button type="button" id="theme">Dark / light</button></div>
+</div></header>
+<nav class="toc"><div class="wrap"><a href="#agenda">Agenda</a><a href="#1-what-we-understood">1. What we understood</a><a href="#2-the-screens-one-by-one">2. The screens, one by one</a><a href="#3-the-data-dictionary">3. The data dictionary</a><a href="#4-the-four-decisions-that-change-the-size-of-the-work">4. The four decisions that change the size of the work</a><a href="#5-other-questions">5. Other questions</a><a href="#6-next-steps-to-agree-in-the-meeting">6. Next steps (to agree in the meeting)</a><a href="#appendix-a-if-time-allows-the-architecture-proposal">Appendix A. If time allows: the architecture proposal</a><a href="#appendix-b-words-used-in-this-pack">Appendix B. Words used in this pack</a></div></nav>
+<main class="wrap">
+<div class="tbl"><table>
+<tbody>
+<tr><td class="key">Meeting</td><td>Saturday 3 October 2026, 1 o'clock at night local time (7 PM)</td></tr>
+<tr><td class="key">Documents discussed</td><td><strong>1. "Raw Material Procurement-to-Payment Process v2"</strong>: the process and 28 screen images, received 1 October<br><strong>2. "Raw Material Procurement-to-Payment Database Objects"</strong>: the data dictionary (32 tables), received 1 October<br><em>If there is time:</em> "Flour Manufacturing ERP System", the architecture proposal, received 2 October</td></tr>
+<tr><td class="key">Purpose</td><td>Agree on how these documents become the system, and settle the questions only your team can answer</td></tr>
+<tr><td class="key">Length</td><td>About 90 minutes</td></tr>
+<tr><td class="key">A printable view</td><td><code>DISCUSSION-PACK.html</code> in this folder; it opens in any browser</td></tr>
+</tbody></table></div>
+<section class="sec" id="agenda">
+<h2 id="agenda">Agenda</h2>
+<div class="tbl"><table>
+<thead><tr><th>#</th><th>Topic</th><th>Time</th><th>What we want at the end</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>What we understood: your process in one picture</td><td>5 min</td><td>Agreement that the flow is right</td></tr>
+<tr><td>2</td><td>The screens, one by one</td><td>30 min</td><td>The good ideas confirmed; the open points noted</td></tr>
+<tr><td>3</td><td>The data dictionary</td><td>15 min</td><td>Agreement on how we use it</td></tr>
+<tr><td>4</td><td><strong>The four decisions that change the size of the work</strong></td><td>20 min</td><td>An answer, or an owner and a date for each</td></tr>
+<tr><td>5</td><td>Other questions</td><td>15 min</td><td>Answers, or owners and dates</td></tr>
+<tr><td>6</td><td>Next steps</td><td>5 min</td><td>Who sends what, and by when</td></tr>
+</tbody></table></div>
+</section>
+<section class="sec" id="1-what-we-understood">
+<h2 id="1-what-we-understood">1. What we understood</h2>
+<p><strong>Your process and ours are the same process.</strong> Almost every step you drew already exists in our plan:</p>
+<ol class="flow"><li>Purchase request</li><li>approval</li><li>purchase order</li><li>truck arrives</li><li>quality inspection</li><li>goods received note</li><li>stock</li><li>supplier invoice</li><li>payment request</li><li>approval</li><li>payment</li></ol>
+<div class="tbl"><table>
+<thead><tr><th></th><th>Your documents</th><th>How they fit our plan</th></tr></thead>
+<tbody>
+<tr><td>Screens</td><td>28 screen images on pages 2–25</td><td><strong>Almost every screen matches a requirement we already have.</strong> Three add something new, and we will add them: supplier delivery entry, bin card, stock card. One we suggest holding back for now: the supplier raising their own payment request</td></tr>
+<tr><td>Tables</td><td>32 tables</td><td><strong>30 match tables we already have.</strong> The other two (the supplier delivery and its lines) are new, and we will add them. We also add <strong>about 24 fields and status values</strong> that you have and we did not, such as remarks on every document, store type, bin type and the supplier's own item code</td></tr>
+<tr><td>Good ideas we are adopting</td><td></td><td>"Checked by" on inspections; a count review that can send a count back; attachment slots by document type (invoice, tax document, delivery note, withholding certificate), each with a "verify" tick; the approver's queue; one payment for several invoices; a required deposit slip; an "I agree" confirmation for the person submitting and for the approver</td></tr>
+</tbody></table></div>
+<blockquote><strong>Which release?</strong> Some of these additions come in the first release; others come in the follow-up release shortly after go-live. The plan we send after this meeting marks which is which, and your answers today help decide.</blockquote>
+<blockquote><strong>In short:</strong> we take <em>what</em> you want captured, every field and every step. <em>How</em> it is stored is our design, because it adds the links and locks that stop double payment and wrong stock (section 3).</blockquote>
+<p><strong>A note on the example numbers.</strong> Many screens use sample numbers that don't add up, or that disagree from one screen to the next. That is normal for screen designs, so we take the <strong>fields and the flow</strong> from them, not the numbers. For testing at the end, we would like <strong>one realistic example</strong> that runs through every screen: one supplier, one truck, one invoice, one payment (question <span class="q">Q-13</span>).</p>
+</section>
+<section class="sec" id="2-the-screens-one-by-one">
+<h2 id="2-the-screens-one-by-one">2. The screens, one by one</h2>
+<p>Each group shows what we saw, what we will build, and any question. "Q-" numbers point to the question list in sections 4 and 5.</p>
+<h3 id="2-1-sign-in-page-2">2.1 Sign-in (page 2)</h3>
+<div class="shots"><a class="shot" href="img/v2-p02-1.jpg" target="_blank" rel="noopener"><img loading="lazy" src="img/v2-p02-1.jpg" alt="Client screen, page 2"><span>Page 2</span></a></div>
+<ul><li><strong>We keep:</strong> username and password, plus the "SSO Login" button.</li><li><strong>One change:</strong> the <strong>operation unit</strong> is chosen <em>right after</em> sign-in, not on the sign-in page. A public sign-in page should not list the company's plants or branches.</li><li><strong>Question:</strong> what exactly is an operation unit: a branch, a plant, or a department? (<span class="q">Q-08</span>)</li></ul>
+<h3 id="2-2-supplier-registration-pages-3-4">2.2 Supplier registration (pages 3–4)</h3>
+<div class="shots"><a class="shot" href="img/v2-p03-1.jpg" target="_blank" rel="noopener"><img loading="lazy" src="img/v2-p03-1.jpg" alt="Client screen, page 3"><span>Page 3</span></a><a class="shot" href="img/v2-p03-2.jpg" target="_blank" rel="noopener"><img loading="lazy" src="img/v2-p03-2.jpg" alt="Client screen, page 3"><span>Page 3</span></a><a class="shot" href="img/v2-p04-1.jpg" target="_blank" rel="noopener"><img loading="lazy" src="img/v2-p04-1.jpg" alt="Client screen, page 4"><span>Page 4</span></a><a class="shot" href="img/v2-p04-2.jpg" target="_blank" rel="noopener"><img loading="lazy" src="img/v2-p04-2.jpg" alt="Client screen, page 4"><span>Page 4</span></a></div>
+<ul><li><strong>We keep:</strong> the four steps: basic information, contacts, address, bank and finance details.</li><li><strong>We add from your data dictionary:</strong> a "primary account" flag on the supplier's bank account (<code>is_primary</code>), and an active/inactive flag on each contact.</li><li><strong>We change:</strong><ul><li><strong>The status is set by actions</strong>, not picked from a list. A supplier becomes "Active" only when someone approves them. This applies to every document: none of our screens will have a status dropdown, because a dropdown lets anyone skip the approval.</li><li><strong>The registration date is filled in by the system</strong>, not typed.</li><li><strong>A change to a supplier's bank account needs a second person's approval.</strong> Changed bank details are one of the most common ways companies lose money to fraud.</li></ul></li><li><strong>Question:</strong> the screen is titled "Supplier Portal". Will suppliers register themselves, or does your team register them? (<span class="q">Q-03</span>)</li></ul>
+<h3 id="2-3-purchase-request-and-purchase-order-pages-5-6">2.3 Purchase request and purchase order (pages 5–6)</h3>
+<div class="shots"><a class="shot" href="img/v2-p05-1.jpg" target="_blank" rel="noopener"><img loading="lazy" src="img/v2-p05-1.jpg" alt="Client screen, page 5"><span>Page 5</span></a><a class="shot" href="img/v2-p05-2.jpg" target="_blank" rel="noopener"><img loading="lazy" src="img/v2-p05-2.jpg" alt="Client screen, page 5"><span>Page 5</span></a><a class="shot" href="img/v2-p06-1.jpg" target="_blank" rel="noopener"><img loading="lazy" src="img/v2-p06-1.jpg" alt="Client screen, page 6"><span>Page 6</span></a><a class="shot" href="img/v2-p06-2.jpg" target="_blank" rel="noopener"><img loading="lazy" src="img/v2-p06-2.jpg" alt="Client screen, page 6"><span>Page 6</span></a></div>
+<ul><li><strong>We keep:</strong> both forms and both approval dashboards with their counts and queues.</li><li><strong>We add:</strong> a "purpose" list on the request (production, maintenance, testing, office use…), and a budget code if you use one (<span class="q">Q-16</span>).</li><li><strong>We change:</strong><ul><li>"Urgent" stays a <strong>priority</strong> and is removed from the status list.</li><li>The PO line total is calculated, never typed (one sample line shows 200 × 4.50 = 990.00).</li><li>A purchase order is created <em>from</em> an approved request and keeps the link line by line. That link is what lets the system show "ordered 25 t, received 20 t, invoiced 20 t, still open 5 t".</li></ul></li><li><strong>Question:</strong> the request and order are in <strong>US dollars</strong>, while invoices and payments are in birr. Do you buy in foreign currency? (<span class="q">Q-09</span>)</li></ul>
+<h3 id="2-4-supplier-delivery-page-7-new-and-we-add-it">2.4 Supplier delivery (page 7) — <strong>new, and we add it</strong></h3>
+<div class="shots"><a class="shot" href="img/v2-p07-1.jpg" target="_blank" rel="noopener"><img loading="lazy" src="img/v2-p07-1.jpg" alt="Client screen, page 7"><span>Page 7</span></a></div>
+<ul><li><strong>We keep:</strong> the arrival record: supplier, purchase order, delivery note, plate, driver, date and quantities.</li><li><strong>We change:</strong><ul><li>The supplier and the items come <strong>from the purchase order</strong>, so a delivery can't be recorded against the wrong supplier. An item that is not on the order needs an order change first.</li><li><strong>Totals are kept per unit</strong>: tonnes and kilograms are never added into one number.</li><li>We would keep the grade out of the item name ("Wheat Grain (Grade 1)"). The <strong>grade comes from the inspection</strong>, so one wheat item can arrive in any grade.</li></ul></li><li><strong>Question:</strong> who records the delivery (stores, purchasing or the gate guard), and what does "Approve" on this screen mean? (<span class="q">Q-10</span>)</li></ul>
+<h3 id="2-5-quality-inspection-page-8">2.5 Quality inspection (page 8)</h3>
+<div class="shots"><a class="shot" href="img/v2-p08-1.jpg" target="_blank" rel="noopener"><img loading="lazy" src="img/v2-p08-1.jpg" alt="Client screen, page 8"><span>Page 8</span></a></div>
+<ul><li><strong>We keep:</strong> the parameters with their limits and results; "Analysed by" plus "Checked by".</li><li><strong>We change:</strong><ul><li>If the result is <strong>Rejected</strong>, "Accept and receive" is not available. A rejected delivery can only be accepted through a recorded exception (a "concession") by an authorised person.</li><li><strong>Hectolitre weight</strong> (the weight of 100 litres of grain, a standard wheat quality measure) is in <strong>kg/hl</strong>; the screen shows kg/l.</li></ul></li><li><strong>We noticed:</strong> only the <strong>wheat</strong> is inspected on page 8. The soya bean, bran and maize on the same delivery are received without inspection (<span class="q">Q-22</span>).</li><li><strong>Question:</strong> this is the biggest change from your first draft. The first draft had <strong>a grade and a score (92.4/100)</strong>; this version only has <strong>pass or fail</strong>, and a failed result rejects the delivered wheat (in the example, 2 of 9 parameters failed). Which is right, and do grades affect the price? (<span class="q">Q-02</span>)</li></ul>
+<h3 id="2-6-goods-received-note-page-9">2.6 Goods received note (page 9)</h3>
+<div class="shots"><a class="shot" href="img/v2-p09-1.jpg" target="_blank" rel="noopener"><img loading="lazy" src="img/v2-p09-1.jpg" alt="Client screen, page 9"><span>Page 9</span></a></div>
+<ul><li><strong>We keep:</strong> the GRN prepared from the delivery and the inspection, which the storekeeper then confirms.</li><li><strong>We change:</strong><ul><li><strong>A rejected delivery cannot be received.</strong> In the example the wheat rejected at inspection (page 8) is fully accepted on page 9: 500 MT accepted, 0 rejected.</li><li><strong>"Rejected" and "short" are two different quantities.</strong> Rejected means it arrived and was refused: it goes back on the truck or is held aside. Short means it never arrived: it is not stock and is not paid. Your data dictionary already keeps them apart (ordered, delivered, accepted and rejected), but the screen combines them in one column (<span class="q">Q-11</span>).</li><li><strong>The storage place (bin, store or silo) is chosen per line.</strong> Five materials can't all go into one bin.</li><li>The number of bags and the weight are converted using the item's kg-per-bag, not typed separately.</li><li><strong>Recording a delivery, inspecting it and receiving it are done by different people.</strong> In the examples one person records the delivery (page 7), inspects it (page 8) and receives it (page 9). If one person did all three, nobody would check their work (<span class="q">Q-23</span>).</li></ul></li><li><strong>Question:</strong> how is the <strong>quantity you pay for</strong> decided: the weighbridge, the bag count, or the delivery note? There are no weighbridge weights (gross, tare, net) on any v2 screen (<span class="q">Q-01</span>).</li></ul>
+<h3 id="2-7-bin-card-and-stock-card-pages-10-11-new-and-we-add-both">2.7 Bin card and stock card (pages 10–11) — <strong>new, and we add both</strong></h3>
+<div class="shots"><a class="shot" href="img/v2-p10-1.jpg" target="_blank" rel="noopener"><img loading="lazy" src="img/v2-p10-1.jpg" alt="Client screen, page 10"><span>Page 10</span></a><a class="shot" href="img/v2-p11-1.jpg" target="_blank" rel="noopener"><img loading="lazy" src="img/v2-p11-1.jpg" alt="Client screen, page 11"><span>Page 11</span></a></div>
+<ul><li><strong>We keep:</strong> both layouts: a <strong>bin card</strong> for one item in one storage place, and a <strong>stock card</strong> for one item in one warehouse, each with a running balance.</li><li><strong>We change:</strong> both are <strong>produced from the same stock history</strong>, so they always agree with each other and with the totals. In the examples the summary boxes and the rows disagree, and the two cards show different quantities for the same document.</li><li>A move from one bin to another <strong>inside the same warehouse</strong> does not change the warehouse total.</li><li>A quality rejection is a <strong>change of status</strong> (good → rejected), not a loss of stock.</li></ul>
+<h3 id="2-8-goods-transfer-page-12">2.8 Goods transfer (page 12)</h3>
+<div class="shots"><a class="shot" href="img/v2-p12-1.jpg" target="_blank" rel="noopener"><img loading="lazy" src="img/v2-p12-1.jpg" alt="Client screen, page 12"><span>Page 12</span></a></div>
+<ul><li><strong>We keep:</strong> the transfer from one place to another, including between warehouses.</li><li><strong>We change:</strong><ul><li>"from" and "to" are recorded on every line, so one transfer can move items between different places;</li><li>transfers that need approval wait for it. Your warehouse master already says "conditional, approval required".</li></ul></li><li><strong>Question:</strong> the example moves wheat, premix and empty bags into a <strong>finished-goods</strong> bin, including wheat "for production". Is that a move to a production store, or should the material be <strong>issued to the milling run</strong>? (<span class="q">Q-12</span>)</li></ul>
+<h3 id="2-9-physical-count-review-and-adjustment-pages-13-15">2.9 Physical count, review and adjustment (pages 13–15)</h3>
+<div class="shots"><a class="shot" href="img/v2-p13-1.jpg" target="_blank" rel="noopener"><img loading="lazy" src="img/v2-p13-1.jpg" alt="Client screen, page 13"><span>Page 13</span></a><a class="shot" href="img/v2-p14-1.jpg" target="_blank" rel="noopener"><img loading="lazy" src="img/v2-p14-1.jpg" alt="Client screen, page 14"><span>Page 14</span></a><a class="shot" href="img/v2-p15-1.jpg" target="_blank" rel="noopener"><img loading="lazy" src="img/v2-p15-1.jpg" alt="Client screen, page 15"><span>Page 15</span></a></div>
+<ul><li><strong>We keep:</strong> count → review (with "request changes") → post the adjustment, and your <strong>Excel import</strong> of counts. We also add a <strong>printable count sheet</strong>.</li><li><strong>We change:</strong><ul><li><strong>The posted adjustment always equals the approved count.</strong> In the example a −200 shortage is changed to 0 when it is posted. Any different figure needs a recount.</li><li>Damaged bags are a status change, not a quantity adjustment.</li><li>Totals are kept per unit.</li></ul></li><li><strong>Questions:</strong> should counters see the system quantity, or count "blind"? (<span class="q">Q-14</span>) May an approved count be posted with a different figure? (<span class="q">Q-15</span>)</li></ul>
+<h3 id="2-10-item-warehouse-store-silo-and-bin-masters-pages-16-20">2.10 Item, warehouse, store, silo and bin masters (pages 16–20)</h3>
+<div class="shots"><a class="shot" href="img/v2-p16-1.jpg" target="_blank" rel="noopener"><img loading="lazy" src="img/v2-p16-1.jpg" alt="Client screen, page 16"><span>Page 16</span></a><a class="shot" href="img/v2-p17-1.jpg" target="_blank" rel="noopener"><img loading="lazy" src="img/v2-p17-1.jpg" alt="Client screen, page 17"><span>Page 17</span></a><a class="shot" href="img/v2-p18-1.jpg" target="_blank" rel="noopener"><img loading="lazy" src="img/v2-p18-1.jpg" alt="Client screen, page 18"><span>Page 18</span></a><a class="shot" href="img/v2-p19-1.jpg" target="_blank" rel="noopener"><img loading="lazy" src="img/v2-p19-1.jpg" alt="Client screen, page 19"><span>Page 19</span></a><a class="shot" href="img/v2-p20-1.jpg" target="_blank" rel="noopener"><img loading="lazy" src="img/v2-p20-1.jpg" alt="Client screen, page 20"><span>Page 20</span></a></div>
+<ul><li><strong>We keep:</strong> every field shown, except the costing method per store (see "We change" below).</li><li><strong>We add from your design:</strong><ul><li><strong>warehouses:</strong> type, description, and receive/issue/transfer rules at warehouse level;</li><li><strong>stores:</strong> type or purpose (production, maintenance, packaging, laboratory, general), description, and temperature and humidity control;</li><li><strong>bins:</strong> bin type, "allow mixed items", "allow mixed lots", a temperature range, and a "blocked" status;</li><li><strong>silos:</strong> a <strong>minimum operating level</strong> (the low-level alarm, which is different from the safety stock), and a "maintenance" status;</li><li><strong>your number formats</strong> (WH-RM-001, SILO-W-001, BIN-WHT-01, GRN-2026-00001 …).</li></ul></li><li><strong>We change:</strong><ul><li><strong>One costing method for the whole company</strong> (the way stock is valued, for example the moving average), not one per store or silo. Otherwise the same wheat would have different costs in different places.</li><li>A silo's current level is <strong>calculated from the stock</strong>, not typed.</li><li>Masters are <strong>deactivated</strong>, never deleted, so history stays complete.</li></ul></li></ul>
+<h3 id="2-11-supplier-invoice-page-21-new-in-your-v2-already-in-our-">2.11 Supplier invoice (page 21) — <strong>new in your v2, already in our plan</strong></h3>
+<div class="shots"><a class="shot" href="img/v2-p21-1.jpg" target="_blank" rel="noopener"><img loading="lazy" src="img/v2-p21-1.jpg" alt="Client screen, page 21"><span>Page 21</span></a></div>
+<ul><li><strong>We keep:</strong> the invoice registered against the purchase order and the GRN, with the <strong>three-way match</strong>: what was ordered, what was received, and what was invoiced must agree before payment.</li><li><strong>We change:</strong><ul><li><strong>The amount due is the gross amount minus withholding tax.</strong> The example shows the amount before VAT, and 0.00 withholding on a 441,000 birr purchase.</li><li>The same supplier invoice number can't be registered twice.</li></ul></li><li><strong>We keep</strong> the invoice type (goods, service, credit note, debit note), as on the screen and in your dictionary, <strong>and add</strong> the supplier's own item code on each line.</li><li><strong>Question:</strong> should <strong>every</strong> invoice be approved, or only invoices that don't match the order or receipt? We can offer both as a setting (<span class="q">Q-04</span>).</li></ul>
+<h3 id="2-12-payment-request-review-and-payment-pages-22-25">2.12 Payment request, review and payment (pages 22–25)</h3>
+<div class="shots"><a class="shot" href="img/v2-p22-1.jpg" target="_blank" rel="noopener"><img loading="lazy" src="img/v2-p22-1.jpg" alt="Client screen, page 22"><span>Page 22</span></a><a class="shot" href="img/v2-p23-1.jpg" target="_blank" rel="noopener"><img loading="lazy" src="img/v2-p23-1.jpg" alt="Client screen, page 23"><span>Page 23</span></a><a class="shot" href="img/v2-p24-1.jpg" target="_blank" rel="noopener"><img loading="lazy" src="img/v2-p24-1.jpg" alt="Client screen, page 24"><span>Page 24</span></a><a class="shot" href="img/v2-p25-1.jpg" target="_blank" rel="noopener"><img loading="lazy" src="img/v2-p25-1.jpg" alt="Client screen, page 25"><span>Page 25</span></a></div>
+<ul><li><strong>We keep:</strong> the request with its documents; the approver's review with a "verify" tick per document; <strong>one payment covering several invoices</strong>; partial payment; the deposit slip.</li><li><strong>We change:</strong><ul><li>Payment requests are numbered <strong>PRQ-</strong>, so they never clash with purchase requests (PR-). Page 25 still shows "PR-2026-000129".</li><li>A cheque number appears only for cheque payments.</li><li><strong>Each invoice has one number.</strong> The examples show the same invoice as INV-000078, INV-2026-000078 and INV-450078.</li><li><strong>Dates follow the process:</strong> in the examples, the invoice and the payment are dated before the truck arrived.</li><li><strong>The bank account always comes from the approved supplier record</strong>, never typed or chosen at payment time.</li></ul></li><li><strong>Question:</strong> <strong>page 22 shows the supplier raising the payment request</strong>, but page 1 says your finance officer raises it. Which is right? (<span class="q">Q-03</span>)</li></ul>
+</section>
+<section class="sec" id="3-the-data-dictionary">
+<h2 id="3-the-data-dictionary">3. The data dictionary</h2>
+<p><strong>What is strong, and already the same in our design:</strong></p>
+<ul><li>every document has a header and lines;</li><li>quantities have enough decimal places;</li><li>who posted it and when is recorded;</li><li>purchase orders have approval levels;</li><li>stock movements carry the lot and the bin;</li><li>the supplier delivery is separate from the GRN;</li><li>GRN lines keep the ordered, delivered, accepted and rejected quantities apart;</li><li>the operation unit is on every document and master record.</li></ul>
+<p><strong>What we will do with it:</strong> capture <strong>every field</strong>, and keep our own table design. These eight points are why. Each one would otherwise become a real problem in daily use:</p>
+<div class="tbl"><table>
+<thead><tr><th>#</th><th>Point in the dictionary</th><th>Why it matters, in plain words</th><th>What our design does</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>Delivery lines have no link to their delivery or to the order line</td><td>The system can't tell which truck a line came on, or which order it fills</td><td>Every line knows its document and the line it came from</td></tr>
+<tr><td>2</td><td><strong>There are no tables for inspection results</strong></td><td>The quality results on page 8 would have nowhere to be stored</td><td>Full inspection tables: parameters, specifications, results, decisions</td></tr>
+<tr><td>3</td><td>Order lines, GRN lines and invoice lines are not linked to each other; the invoice holds its PO and GRN as free text</td><td><strong>The system couldn't stop paying the same delivery twice</strong>, or warn when an invoice is more than the delivery</td><td>Line-by-line links: request → order → receipt → invoice → payment</td></tr>
+<tr><td>4</td><td>Some referenced tables are never defined (units, currencies, departments, lots…)</td><td>Missing lists of values</td><td>Every list is defined</td></tr>
+<tr><td>5</td><td>The stock history can be edited, and the running balance is stored with no lock</td><td>Two people posting at once can corrupt the balance, and past movements can be changed</td><td>Stock history can only be added to; a correction is a new, reversing entry</td></tr>
+<tr><td>6</td><td>The transfer has a single warehouse field</td><td>A transfer <strong>between</strong> warehouses (page 12 does this) can't be recorded</td><td>"From" and "to" on every line</td></tr>
+<tr><td>7</td><td>The PR approval table has no link to the PR it approves</td><td>Nobody could tell which request an approval belongs to</td><td>One approval engine for every document, always linked</td></tr>
+<tr><td>8</td><td>One payment holds a single request number as text</td><td>Page 25 lists several invoices to pay in one payment, which this can't record; nor can a payment be cancelled</td><td>A payment is allocated across any number of invoices, and can be voided</td></tr>
+</tbody></table></div>
+<p>Smaller points, which we handle in our design:</p>
+<ul><li>types and names are mixed between tables, for example five spellings of the operation-unit column, and <code>CURRENT_TIME</code> defaults, which store only a time of day and not a date;</li><li>currency is held three different ways;</li><li>valuation is set per store;</li><li>status lists differ from the screens;</li><li>there is no audit log (the record of who changed what, and when).</li></ul>
+<blockquote><strong>We'd like to agree:</strong> "Every field in your dictionary is captured; the table design is ours." (<span class="q">Q-18</span>)</blockquote>
+</section>
+<section class="sec" id="4-the-four-decisions-that-change-the-size-of-the-work">
+<h2 id="4-the-four-decisions-that-change-the-size-of-the-work">4. The four decisions that change the size of the work</h2>
+<p>These four answers move the work by up to about 250 development hours, in either direction. <strong>They decide what fits in the six-month plan.</strong></p>
+<div class="tbl"><table>
+<thead><tr><th>Q</th><th>Decision</th><th>What your documents show</th><th>Our suggestion</th><th>Effect on the work</th><th>Your answer</th></tr></thead>
+<tbody>
+<tr><td class="key"><strong><span class="q">Q-01</span></strong></td><td><strong>Do you weigh trucks, and do you want the gate and weighbridge module in this release?</strong> What decides the quantity you pay for: the weighbridge, the bag count, or the delivery note?</td><td>The first draft had gross, tare and net weights. <strong>v2 has no weighbridge weights</strong></td><td>Keep the gate module if you weigh trucks; if not, record weights on the inspection</td><td>Without the gate module: about <strong>200 hours less</strong></td><td class="ans"></td></tr>
+<tr><td class="key"><strong><span class="q">Q-02</span></strong></td><td><strong>Inspection: pass/fail only, or grades (and do grades change the price)?</strong> Can a delivery be accepted with a deduction, as an exception, or in part?</td><td>The first draft had a grade and a score; <strong>v2 has pass/fail</strong>, and a failed result rejects the delivered wheat</td><td>Start with pass/fail, plus a recorded exception for accepting a failed delivery; grades and deductions later if needed</td><td>Pass/fail only: about <strong>40 hours less</strong></td><td class="ans"></td></tr>
+<tr><td class="key"><strong><span class="q">Q-03</span></strong></td><td><strong>Who raises the supplier payment request: your finance officer, or the supplier?</strong> Should suppliers use the system at all (register, upload invoices, see statements)?</td><td>Page 1: the finance officer. <strong>Page 22: the supplier</strong></td><td>Your finance officer raises it. A supplier portal is a separate, later project</td><td>A supplier portal now: <strong>140–200 hours more</strong></td><td class="ans"></td></tr>
+<tr><td class="key"><strong><span class="q">Q-04</span></strong></td><td><strong>Approve every supplier invoice</strong>, or only the ones that don't match?</td><td>Page 21 approves every invoice, before the payment request is approved as well</td><td>Only mismatches, with "approve every invoice" available as a setting</td><td>Small (about 8 hours)</td><td class="ans"></td></tr>
+</tbody></table></div>
+</section>
+<section class="sec" id="5-other-questions">
+<h2 id="5-other-questions">5. Other questions</h2>
+<div class="tbl"><table>
+<thead><tr><th>Q</th><th>Question</th><th>Why we ask</th><th>If we don't hear back, we will</th><th>Your answer</th></tr></thead>
+<tbody>
+<tr><td class="key"><span class="q">Q-05</span></td><td>Are these documents <strong>final</strong>, or examples? Will a third revision follow?</td><td>So we know what to build against</td><td>Treat the fields and flow as final and the numbers as examples</td><td class="ans"></td></tr>
+<tr><td class="key"><span class="q">Q-06</span></td><td>Is the data dictionary the <strong>required table design</strong>, or the list of data you need captured?</td><td>Section 3</td><td>Capture every field in our design</td><td class="ans"></td></tr>
+<tr><td class="key"><span class="q">Q-07</span></td><td>Is the architecture document a <strong>requirement</strong> or a <strong>recommendation</strong>? Will your own developers maintain the system after handover, and which languages do they use? Do you need SMS messages?</td><td>How closely we follow it</td><td>Treat it as a recommendation; full source code and documentation at handover</td><td class="ans"></td></tr>
+<tr><td class="key"><span class="q">Q-08</span></td><td>What is an <strong>operation unit</strong>: a branch, a plant or a department? Are suppliers and items shared across units?</td><td>Who sees what, and how masters are shared</td><td>Branch or plant; suppliers and items shared</td><td class="ans"></td></tr>
+<tr><td class="key"><span class="q">Q-09</span></td><td><strong>Currency:</strong> do you buy in US dollars? How are such purchases converted and paid?</td><td>Requests and orders show USD; invoices and payments ETB</td><td>One currency per document; foreign-currency orders keep their exchange rate; payment in birr</td><td class="ans"></td></tr>
+<tr><td class="key"><span class="q">Q-10</span></td><td><strong>Supplier delivery:</strong> who records it, and what does "Approve" mean on page 7?</td><td>Page 7</td><td>Stores record it; "approve" = it matches an open order, so it goes to inspection</td><td class="ans"></td></tr>
+<tr><td class="key"><span class="q">Q-11</span></td><td>Are <strong>rejected</strong> and <strong>short</strong> quantities recorded separately?</td><td>Page 9 combines them</td><td>Separately</td><td class="ans"></td></tr>
+<tr><td class="key"><span class="q">Q-12</span></td><td>Raw material "for production": a move to a production store, or <strong>issued to the milling run</strong>?</td><td>Page 12</td><td>Issued to the milling run</td><td class="ans"></td></tr>
+<tr><td class="key"><span class="q">Q-13</span></td><td>Can you give us <strong>one realistic example</strong> (one supplier, one truck, one invoice, one payment) for acceptance testing?</td><td>The sample numbers differ between screens</td><td>We prepare it and send it to you to confirm</td><td class="ans"></td></tr>
+<tr><td class="key"><span class="q">Q-14</span></td><td>Should counters see the system quantity, or count <strong>blind</strong>?</td><td>Page 13 shows the system quantity</td><td>Counters see the system quantity in the first release; blind counting follows in the follow-up release unless you need it at go-live</td><td class="ans"></td></tr>
+<tr><td class="key"><span class="q">Q-15</span></td><td>May an approved count be posted with a <strong>different</strong> figure?</td><td>Page 15</td><td>No: a different figure needs a recount</td><td class="ans"></td></tr>
+<tr><td class="key"><span class="q">Q-16</span></td><td>Do you use <strong>budget codes</strong> on purchases? Record only, or should the system check the budget?</td><td>Your dictionary has <code>budget_code</code></td><td>Record and report only</td><td class="ans"></td></tr>
+<tr><td class="key"><span class="q">Q-17</span></td><td><strong>Payment methods:</strong> do you pay suppliers in cash, and what is "Other" on page 25? Who issues withholding-tax certificates, and when is tax withheld?</td><td>Page 25; the invoice shows 0.00 withholding</td><td>Transfer and cheque; your company issues the withholding certificate</td><td class="ans"></td></tr>
+<tr><td class="key"><span class="q">Q-18</span></td><td>Do you agree: "<strong>every field captured, our table design</strong>"?</td><td>Section 3</td><td>— (we need a yes or no)</td><td class="ans"></td></tr>
+<tr><td class="key"><span class="q">Q-19</span></td><td>Confirm the raw materials you buy (wheat, soya bean, maize, premix, bags…). Is bran also bought, or only sold?</td><td>Item list and inspection set-up</td><td>The list on page 7</td><td class="ans"></td></tr>
+<tr><td class="key"><span class="q">Q-20</span></td><td>Your architecture document lists <strong>non-conformance, production plans, finished-flour release, a stock check before sales-order approval, and sales returns</strong>. Which of these do you need at go-live?</td><td>We plan them after go-live unless you need them on day one</td><td>Finished-flour release and the stock check at go-live; the other three after go-live</td><td class="ans"></td></tr>
+<tr><td class="key"><span class="q">Q-21</span></td><td>Are your <strong>branches</strong> (operation units) at other locations? How do they connect to the plant or head office: internet, VPN, or a private line?</td><td>One central server must be reachable from every branch</td><td>One site, or branches connected by VPN</td><td class="ans"></td></tr>
+<tr><td class="key"><span class="q">Q-22</span></td><td>Which raw materials are <strong>inspected</strong>, and against which specifications? Page 8 inspects only the wheat; we have no specifications for maize or soya bean yet</td><td>Inspection set-up per item</td><td>Every raw material with "inspection required" ticked on the item master; you send the specifications</td><td class="ans"></td></tr>
+<tr><td class="key"><span class="q">Q-23</span></td><td>In your team, can one person record, inspect <strong>and</strong> receive the same delivery (as in the examples)? Which of these must be different people?</td><td>Fraud and error control</td><td>Three different people; an administrator can allow exceptions, and every exception is logged</td><td class="ans"></td></tr>
+</tbody></table></div>
+</section>
+<section class="sec" id="6-next-steps-to-agree-in-the-meeting">
+<h2 id="6-next-steps-to-agree-in-the-meeting">6. Next steps (to agree in the meeting)</h2>
+<div class="tbl"><table>
+<thead><tr><th>What</th><th>Who</th><th>By when</th></tr></thead>
+<tbody>
+<tr><td>Answers to <span class="q">Q-01</span> to <span class="q">Q-04</span></td><td>Your team</td><td>As soon as possible: they decide the size of the work</td></tr>
+<tr><td>Answers to <span class="q">Q-05</span> to <span class="q">Q-23</span></td><td>Your team</td><td>Within one week</td></tr>
+<tr><td>A third revision of the process text (page 1) listing every screen in order, with who does it, and with the rejection path</td><td>Your team</td><td>Before we start</td></tr>
+<tr><td>One realistic example for acceptance testing (<span class="q">Q-13</span>)</td><td>Your team, or we prepare it and you confirm</td><td>Before week 14 of the project</td></tr>
+<tr><td>Our updated requirements and questionnaire with your answers folded in</td><td>Us</td><td>Within one week of your answers</td></tr>
+<tr><td>Workshops for the gate, production and sales (none of these has a client document yet)</td><td>Both</td><td>To schedule</td></tr>
+</tbody></table></div>
+</section>
+<section class="sec" id="appendix-a-if-time-allows-the-architecture-proposal">
+<h2 id="appendix-a-if-time-allows-the-architecture-proposal">Appendix A. If time allows: the architecture proposal</h2>
+<p><strong>We agree on most of it.</strong> Of 39 points we compared:</p>
+<ul><li><strong>18</strong> are already the same: one system with modules inside, one central PostgreSQL database, Tailwind, Zustand, Zod validation, Vitest tests, <code>/api/v1/...</code> addresses, approvals as actions, Linux and Nginx as an option, the same three main processes;</li><li><strong>3</strong> are under review on our side, all three as you propose them:<ul><li>a simpler frontend build, React with <strong>Vite</strong>, which would bring <strong>React Router</strong> with it;</li><li>a job queue inside PostgreSQL, so no extra Redis server;</li><li>API documentation (Swagger/OpenAPI) from the start;</li></ul></li><li><strong>16</strong> we keep, each for a reason (below);</li><li><strong>and we adopt</strong> your <strong>module names</strong> in our offer and your <strong>folder names</strong> inside each module.</li></ul>
+<p><strong>What we keep, in one line each:</strong></p>
+<ul><li><strong>NestJS:</strong> it runs on Express, with the layers your document proposes built in and enforced.</li><li><strong>Drizzle instead of Sequelize:</strong> row locks, exact numbers and rules enforced by the database.</li><li><strong>UUID keys:</strong> records from two installations can be merged without clashes, and IDs can't be guessed.</li><li><strong>Server sessions instead of browser tokens (JWT):</strong> a user can be signed out immediately, everywhere.</li><li><strong>One approval engine, one stock history that can't be edited, one costing method,</strong> and one code repository with shared definitions between the screens and the server.</li><li><strong>TypeScript:</strong> your examples are JavaScript, and you call TypeScript "worth considering". We use TypeScript throughout, because the compiler catches a whole class of mistakes in an ERP's many forms and documents before they reach users. It is the same language with types added, so JavaScript developers pick it up quickly (<span class="q">Q-07</span>).</li></ul>
+<p><strong>What we noticed in your module lists:</strong></p>
+<ul><li>Your eight modules are our six plus the platform, <strong>without a gate module</strong>. That is question <span class="q">Q-01</span>.</li><li>Your page lists include five things we want to confirm, because we plan them at a later depth (<span class="q">Q-20</span>):<ul><li><strong>non-conformance</strong> records in QC;</li><li><strong>production plans</strong>;</li><li><strong>finished-flour release</strong> by QC before it can be sold;</li><li>a <strong>stock check</strong> before a sales order is approved;</li><li><strong>sales returns</strong>.</li></ul></li><li>Your document plans "one centrally managed application and database, accessible to authorized users across all operating units". That means branches reach one server over the network. How are your branches connected to the head office or plant? (<span class="q">Q-21</span>)</li></ul>
+</section>
+<section class="sec" id="appendix-b-words-used-in-this-pack">
+<h2 id="appendix-b-words-used-in-this-pack">Appendix B. Words used in this pack</h2>
+<div class="tbl"><table>
+<thead><tr><th>Word</th><th>Meaning</th></tr></thead>
+<tbody>
+<tr><td>PR</td><td>Purchase request (purchase requisition): someone asks to buy something</td></tr>
+<tr><td>PO</td><td>Purchase order: the order sent to the supplier</td></tr>
+<tr><td>GRN</td><td>Goods received note: the record of what was actually received into stock</td></tr>
+<tr><td>PRQ</td><td>Payment request: the request to pay a supplier</td></tr>
+<tr><td>QC</td><td>Quality control: the inspection and lab tests</td></tr>
+<tr><td>Three-way match</td><td>Checking that the order, the receipt and the invoice agree before paying</td></tr>
+<tr><td>Withholding tax (WHT)</td><td>Tax the buyer deducts from a payment and pays to the tax authority for the supplier</td></tr>
+<tr><td>Bin card / stock card</td><td>The movement history of one item in one storage place (bin card) or one warehouse (stock card), with the running balance</td></tr>
+<tr><td>Lot</td><td>One batch of material that arrived or was produced together, so it can be traced</td></tr>
+<tr><td>Silo</td><td>A large storage tank for grain or flour</td></tr>
+<tr><td>Hectolitre weight</td><td>The weight of 100 litres of grain, in kg/hl: a standard measure of wheat quality</td></tr>
+<tr><td>Concession</td><td>A recorded, approved exception: for example, accepting a delivery that failed a test</td></tr>
+<tr><td>Blind count</td><td>Counting stock without seeing what the system expects</td></tr>
+<tr><td>Deactivate</td><td>Switch a record off so it can't be used again, while keeping its history</td></tr>
+<tr><td>Master record</td><td>A record set up once and reused by many documents: a supplier, an item, a warehouse, a bin</td></tr>
+<tr><td>Birr / ETB</td><td>The Ethiopian currency</td></tr>
+<tr><td>Costing method (valuation)</td><td>How the value of stock is calculated, for example the moving average of what was paid</td></tr>
+<tr><td>Milling run</td><td>One production run of the mill: wheat in, flour and bran out</td></tr>
+<tr><td>Credit note / debit note</td><td>A document that reduces (credit) or increases (debit) what is owed on an invoice</td></tr>
+<tr><td>Acceptance testing (UAT)</td><td>Your key users test the system against agreed scenarios before go-live</td></tr>
+<tr><td>Go-live</td><td>The day the company starts using the system for real work</td></tr>
+<tr><td>Job queue</td><td>Background work the system does by itself, such as sending emails or producing reports</td></tr>
+<tr><td>Row lock</td><td>A database rule that stops two people changing the same balance at the same moment</td></tr>
+<tr><td>Audit log</td><td>The record of who changed what, and when</td></tr>
+<tr><td>Operation unit</td><td>Your term for a branch or plant (question <span class="q">Q-08</span>)</td></tr>
+<tr><td>SSO</td><td>Single sign-on: one company login for several systems</td></tr>
+<tr><td>MT</td><td>Metric tonne: 1,000 kg</td></tr>
+<tr><td>Gross / tare / net weight</td><td>The truck weighed full (gross) and empty (tare); the difference is the net weight of the load</td></tr>
+<tr><td>Weighbridge</td><td>The large scale a whole truck drives onto to be weighed</td></tr>
+<tr><td>Safety stock</td><td>The lowest stock level you want to keep before re-ordering</td></tr>
+<tr><td>VAT</td><td>Value-added tax</td></tr>
+<tr><td>Supplier portal</td><td>A part of the system that suppliers themselves sign in to</td></tr>
+<tr><td>API</td><td>The interface the screens use to talk to the server; other systems can use it too</td></tr>
+<tr><td>Vite, React, React Router</td><td>Tools for building the screens: Vite packages them, React draws them, React Router moves between them</td></tr>
+<tr><td>NestJS, Express</td><td>Frameworks for the server program; NestJS is built on Express</td></tr>
+<tr><td>Drizzle, Sequelize</td><td>Libraries that connect the server program to the PostgreSQL database</td></tr>
+<tr><td>Redis</td><td>A separate in-memory server, often used for job queues</td></tr>
+<tr><td>UUID</td><td>A long, random-looking ID that is unique everywhere</td></tr>
+<tr><td>JWT</td><td>A sign-in token kept in the browser</td></tr>
+<tr><td>TypeScript</td><td>JavaScript with types added, so mistakes are caught before the program runs</td></tr>
+<tr><td>Swagger / OpenAPI, Zod, Vitest, Nginx</td><td>Names from your architecture document: API documentation, data-checking rules, automated tests, and the web server in front of the system</td></tr>
+</tbody></table></div>
+</section>
+</main>
+<footer class="wrap foot">MOS planning · local document, not published</footer>
+<script>
+(function(){var b=document.getElementById('theme');b.onclick=function(){var r=document.documentElement;var d=r.getAttribute('data-theme')==='dark'||(!r.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);r.setAttribute('data-theme',d?'light':'dark');};})();
+</script>
+</body>
+</html>

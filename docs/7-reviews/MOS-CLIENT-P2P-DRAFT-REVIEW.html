@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Client&#x27;s first P2P draft review</title>
+<meta name="description" content="Review of the client&#x27;s first P2P draft (history).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+:root{
+  --ground:#f2f4f3; --surface:#ffffff; --surface-2:#f7f9f8;
+  --ink:#18212b; --ink-2:#44505c; --muted:#68737e; --rule:#d5dbdc; --rule-2:#e6eaea;
+  --accent:#2563b8; --accent-ink:#1d4f94; --accent-soft:#e7eef9;
+  --amber:#c9851c; --amber-soft:#f8eedd; --amber-ink:#7a4f0c;
+  --ok:#2f7a4f; --danger:#b3372f;
+  --font-display:"Barlow Semi Condensed","Arial Narrow",Arial,sans-serif;
+  --font-body:"Public Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#12171d; --surface:#1a2129; --surface-2:#161c23;
+    --ink:#e7ebef; --ink-2:#b8c2cc; --muted:#8e9aa6; --rule:#2e3844; --rule-2:#252e38;
+    --accent:#5b93e6; --accent-ink:#8db5f0; --accent-soft:#1d2c44;
+    --amber:#b8842c; --amber-soft:#2e2517; --amber-ink:#e2b46a;
+    --ok:#5fb383; --danger:#e37a70;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#12171d; --surface:#1a2129; --surface-2:#161c23;
+  --ink:#e7ebef; --ink-2:#b8c2cc; --muted:#8e9aa6; --rule:#2e3844; --rule-2:#252e38;
+  --accent:#5b93e6; --accent-ink:#8db5f0; --accent-soft:#1d2c44;
+  --amber:#b8842c; --amber-soft:#2e2517; --amber-ink:#e2b46a;
+  --ok:#5fb383; --danger:#e37a70;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.55;margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:20px}
+@media (max-width:520px){.wrap{padding-inline:16px}}
+h1,h2,h3,h4{font-family:var(--font-display);text-wrap:balance;margin:0;color:var(--ink);letter-spacing:.005em}
+h1{font-size:clamp(34px,5vw,48px);font-weight:700;line-height:1.05}
+h2{font-size:26px;font-weight:700;line-height:1.15;margin-top:6px}
+h3{font-size:19px;font-weight:600;line-height:1.25}
+h4{font-size:16px;font-weight:600}
+[id]{scroll-margin-top:64px}
+p{margin:0;max-width:78ch}
+a{color:var(--accent-ink)}
+code{font-family:var(--font-mono);font-size:.86em;background:var(--surface-2);border:1px solid var(--rule-2);border-radius:4px;padding:0 4px}
+.eyebrow{font-family:var(--font-mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.masthead{padding-block:34px 20px;display:grid;gap:14px}
+.masthead .lede{font-size:17px;color:var(--ink-2);max-width:80ch}
+.status-line{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.pill{display:inline-flex;align-items:center;font-family:var(--font-mono);font-size:12px;padding:3px 9px;border-radius:999px;border:1px solid var(--rule);background:var(--surface);color:var(--ink-2);white-space:nowrap}
+.pill.plan{border-color:var(--accent);color:var(--accent-ink);background:var(--accent-soft)}
+.pill.rev{border-color:var(--amber);color:var(--amber-ink);background:var(--amber-soft)}
+.spec{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));border:1px solid var(--rule);background:var(--surface);border-radius:6px}
+.spec div{padding:12px 14px;border-right:1px solid var(--rule-2)}
+.spec div:last-child{border-right:0}
+.spec b{display:block;font-family:var(--font-display);font-size:26px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.1}
+.spec span{font-size:12.5px;color:var(--muted)}
+.note{font-size:13.5px;color:var(--muted)}
+.btn{appearance:none;border:1px solid var(--rule);background:var(--surface);color:var(--ink);font:500 13px/1.2 var(--font-body);padding:7px 12px;border-radius:6px;cursor:pointer}
+.btn:hover{border-color:var(--accent);color:var(--accent-ink)}
+.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn.print{margin-left:auto}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap}
+.tabbar{position:sticky;top:0;z-index:5;background:var(--ground);border-bottom:1px solid var(--rule)}
+.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:thin}
+.tabs button{appearance:none;border:0;background:none;color:var(--ink-2);font-family:var(--font-display);font-size:16px;font-weight:600;padding:12px 14px 10px;border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tabs button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.panel{padding-block:26px 48px;display:grid;gap:30px}
+.panel[hidden]{display:none}
+section.block{display:grid;gap:14px;min-width:0}
+section.block > p,section.block > ul,section.block > ol{color:var(--ink-2)}
+ul.clean,ol.clean{margin:0;padding-left:20px;display:grid;gap:5px;max-width:86ch}
+ul.clean li,ol.clean li{color:var(--ink-2)}
+ul.clean ul.clean,ol.clean ul.clean{margin-top:5px}
+li b,p b{color:var(--ink)}
+.tbl{overflow-x:auto;border:1px solid var(--rule);border-radius:6px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{text-align:left;vertical-align:top;padding:8px 11px;border-bottom:1px solid var(--rule-2)}
+th{font-family:var(--font-display);font-weight:600;font-size:14px;color:var(--ink-2);background:var(--surface-2);letter-spacing:.01em;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.id{font-family:var(--font-mono);font-size:12px;white-space:nowrap;color:var(--accent-ink)}
+table.steps td:nth-child(4){min-width:300px}
+table.steps td:last-child{font-family:var(--font-mono);font-size:11px;color:var(--ink-2);min-width:170px;max-width:240px;overflow-wrap:anywhere}
+figure{margin:0;display:grid;gap:8px;min-width:0}
+.fig{overflow-x:auto;background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:14px}
+.fig svg{display:block;width:100%;height:auto;color:var(--ink)}
+.fig.hero svg{min-width:900px}
+figcaption{font-size:13.5px;color:var(--muted);max-width:92ch}
+svg text{font-family:var(--font-body)}
+svg .ttl{font-family:var(--font-display);font-size:15px;font-weight:600;fill:var(--ink)}
+svg .lbl{font-size:12px;fill:var(--ink-2)}
+svg .sm{font-size:10.5px;fill:var(--muted)}
+svg .st{fill:var(--surface);stroke:var(--ink-2);stroke-width:1.2}
+svg .st-auto{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.5}
+svg .st-person{fill:var(--amber-soft);stroke:var(--amber);stroke-width:1.4}
+svg .st-side{fill:var(--surface-2);stroke:var(--muted);stroke-width:1.1;stroke-dasharray:4 3}
+svg .edge{stroke:var(--ink-2);stroke-width:1.4;fill:none}
+svg .edge-async{stroke:var(--accent);stroke-width:1.5;fill:none;stroke-dasharray:6 4}
+svg .mk{fill:var(--ink-2)}
+svg .mk-auto{fill:var(--accent)}
+svg .hb rect{fill:var(--surface);stroke:var(--accent);stroke-width:1.2}
+svg .hb text{font-family:var(--font-mono);font-size:10px;fill:var(--accent-ink);text-anchor:middle;dominant-baseline:central}
+details{border:1px solid var(--rule);border-radius:6px;background:var(--surface)}
+details > summary{cursor:pointer;padding:11px 14px;font-family:var(--font-display);font-weight:600;font-size:16px}
+details > summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+details .inner{padding:4px 16px 18px;display:grid;gap:14px;min-width:0}
+details.proc{margin-top:10px}
+details.proc > summary{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;list-style-position:outside}
+details.proc[open] > summary{border-bottom:1px solid var(--rule-2)}
+.pid{font-family:var(--font-mono);font-size:12.5px;font-weight:500;color:var(--accent-ink);background:var(--accent-soft);border-radius:4px;padding:1px 7px}
+.pname{flex:1 1 320px}
+.meta{font-family:var(--font-mono);font-size:11.5px;font-weight:400;color:var(--muted)}
+.life-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,460px),1fr));gap:18px}
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:14px 16px;display:grid;gap:10px;align-content:start;min-width:0}
+.card.wide{grid-column:1/-1}
+.card .mmd{border:0;padding:0}
+.card p{font-size:14px;color:var(--ink-2)}
+.mmd-fig{margin:0}
+.mmd{overflow-x:auto;background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:12px;min-height:44px}
+.mmd:empty::before{content:"Drawing diagram\2026";color:var(--muted);font-size:13px}
+.mmd svg{display:block;margin:0 auto;height:auto}
+.mmd.failed{color:var(--danger);font-size:13px}
+.mmd-src{display:none;margin:0;overflow-x:auto;font-family:var(--font-mono);font-size:11.5px;line-height:1.45;background:var(--surface-2);border:1px solid var(--rule);border-radius:6px;padding:10px 12px;color:var(--ink-2)}
+.mmd-src.show{display:block}
+body.offline .mmd{display:none}
+body.offline .mmd-src{display:block}
+pre.code{margin:0;overflow-x:auto;font-family:var(--font-mono);font-size:12px;background:var(--surface-2);border:1px solid var(--rule);border-radius:6px;padding:10px 12px}
+blockquote.callout{margin:0;border-left:3px solid var(--accent);background:var(--accent-soft);padding:12px 16px;border-radius:0 6px 6px 0;display:grid;gap:8px}
+details.about .inner,details.graph .inner{padding-top:12px}
+.foot{padding-block:10px 40px}
+@media print{
+  :root,:root[data-theme="dark"],:root:not([data-theme="light"]){
+    --ground:#ffffff; --surface:#ffffff; --surface-2:#f6f7f7; --ink:#111; --ink-2:#333; --muted:#555; --rule:#ccc; --rule-2:#e2e2e2;
+    --accent:#2563b8; --accent-ink:#1d4f94; --accent-soft:#eef3fb; --amber:#c9851c; --amber-soft:#faf2e4; --amber-ink:#7a4f0c;
+    color-scheme:light;
+  }
+  body{font-size:11.5pt}
+  .tabbar,.toolbar,.btn,.offline-note{display:none !important}
+  .panel,.panel[hidden]{display:grid !important;padding-block:10px}
+  .wrap{max-width:none}
+  .fig.hero svg{min-width:0}
+  .mmd,figure,tr,.card{break-inside:avoid}
+  .mmd:empty{display:none}
+  .mmd:empty + .mmd-src{display:block}
+  details.proc{break-before:page}
+  details > summary{list-style:none}
+}
+
+/* nested tables and code must not widen the page on a phone */
+.panel,.panel>.block,.block li,.block ol,.block ul{min-width:0;max-width:100%}
+.block li .tbl{max-width:100%;overflow-x:auto;display:block}
+.block pre{max-width:100%;overflow-x:auto}
+.block :not(pre)>code{overflow-wrap:anywhere}
+.block p,.block li{overflow-wrap:break-word}
+
+</style>
+</head>
+<body>
+<style>@media print{.mos-nav{display:none}}</style><div class="mos-nav" style="font:14px/1.4 'Segoe UI',system-ui,sans-serif;padding:7px 16px;background:#1f6f6b;color:#fff"><a href="../../index.html" style="color:#fff;font-weight:600;text-decoration:none">&larr; MOS start page</a><span style="opacity:.8"> &nbsp;&middot;&nbsp; 7. Reviews</span></div>
+<header class="wrap masthead">
+  <div class="eyebrow">MOS · history (27 Sep) · local file, not published</div>
+  <h1>Client&#x27;s first P2P draft review</h1>
+  <p class="lede">The review of the client's first procure-to-pay draft: what it describes, the screen-by-screen mapping, the decisions it caused and its issues. Kept because later documents cite its issue numbers; the current review is the v2 review.</p>
+  <div class="status-line"><span class="pill plan">Planning only · no code</span><span class="pill rev">History · 27 Sep 2026</span>
+  <button type="button" class="btn print" id="printBtn">Print or save as PDF</button></div>
+  <div class="spec"><div><b>18</b><span>pages reviewed</span></div><div><b>40</b><span>issues</span></div><div><b>History</b><span>see the v2 review</span></div></div>
+  
+</header>
+<nav class="tabbar" aria-label="Sections"><div class="wrap tabs" role="tablist"><button role="tab" type="button" id="tab-overview" aria-controls="panel-overview" aria-selected="false">Draft and verdict</button><button role="tab" type="button" id="tab-map" aria-controls="panel-map" aria-selected="false">Screens and decisions</button><button role="tab" type="button" id="tab-issues" aria-controls="panel-issues" aria-selected="false">Issues and questions</button><button role="tab" type="button" id="tab-rest" aria-controls="panel-rest" aria-selected="false">Timeline and formats</button></div></nav>
+<main>
+<div class="panel wrap" role="tabpanel" id="panel-overview" aria-labelledby="tab-overview" hidden><section class="block"><details class="about"><summary>About this document</summary><div class="inner"><div class="tbl"><table class=""><thead><tr><th></th><th></th></tr></thead><tbody><tr><td>Source reviewed</td><td>"Raw Material Procurement-to-Payment Process – 1st Draft": <b>18 pages = 1 narrative page + 17 screen mock-ups (21 images; the 5-step supplier wizard counts as one screen).</b> Copies in <a href="../9-inputs/from-client/">docs/9-inputs/from-client/</a>: <code>P2P-process-1st-draft.pdf</code>, <code>.docx</code></td></tr><tr><td>Not client input</td><td>The procure-to-pay <b>swimlane</b> image was made with ChatGPT by the owner, from the client's narrative. It is in <a href="../9-inputs/owner-brainstorm/">docs/9-inputs/owner-brainstorm/</a>. v0.2 of this review wrongly called it the client's swimlane (corrected in v0.3; see the <a href="MOS-PACKAGE-AUDIT-v0.3.html">audit</a>)</td></tr><tr><td>Date</td><td>2026-09-27 (v0.2 review); revised 2026-09-27 for package v0.3</td></tr><tr><td>Planning package version</td><td>This review caused v0.1 → <b>v0.2</b>. The v0.3 re-frame (<a href="../6-decisions/adr/">ADR-0017/18/19</a>) supersedes its timeline statements (§7)</td></tr><tr><td>Audience</td><td>Product owner, the client's process owners, developers</td></tr><tr><td>Status</td><td>Planning only. No code has been written</td></tr></tbody></table></div></div></details></section><section class="block"><h2 id="1-what-the-draft-describes">1. What the draft describes</h2>
+<p><b>The client's narrative</b> (PDF page 1) describes a raw-material flow across seven roles. The step table below is taken from that narrative.</p>
+<div class="tbl"><table class="steps"><thead><tr><th>#</th><th>Step</th><th>Role</th></tr></thead><tbody><tr><td>1</td><td>Raise purchase requisition (PR) for raw materials</td><td>Storekeeper</td></tr><tr><td>2</td><td>Review and approve PR</td><td>Management</td></tr><tr><td>3</td><td>Convert PR to purchase order (PO) and send to supplier</td><td>Purchasing department</td></tr><tr><td>4</td><td>Deliver the materials</td><td>Supplier</td></tr><tr><td>5</td><td>Inspect against specifications</td><td>Inspection / QC</td></tr><tr><td>6</td><td>If passed: receive goods, generate GRN, add the accepted quantity to stock</td><td>Storekeeper</td></tr><tr><td>7</td><td>Raise payment request from PO + GRN + supplier invoice</td><td>Finance officer</td></tr><tr><td>8</td><td>Review and approve payment request</td><td>Authorised approver</td></tr><tr><td>9</td><td>Process payment (cheque or bank transfer)</td><td>Finance officer</td></tr></tbody></table></div>
+<p>Two details appear only in the owner's ChatGPT swimlane, not in the client's narrative:</p>
+<ul class="clean"><li>the fail branch ("reject materials and notify supplier; return or replacement");</li><li>the supplier's "receive PO and prepare delivery".</li></ul>
+<p>MOS designs a fail path anyway (FRD §9.5), but <b>what the client actually does with rejected material is a client question</b> (§6).</p>
+<p><b>The 17 screens:</b></p>
+<ul class="clean"><li>sign-in;</li><li>supplier registration (5 steps, titled "Supplier Portal – New Registration");</li><li>PR form and PR approvals dashboard;</li><li>PO form and PO approvals dashboard;</li><li>wheat inspection (for "Addis Flour Factory");</li><li>item, warehouse, store and silo masters;</li><li>goods receiving (GRN);</li><li>stock balance;</li><li>stock adjustment;</li><li>payment request, payment approval and supplier payment.</li></ul></section><section class="block"><h2 id="2-verdict">2. Verdict</h2>
+<p><b>The draft and the plan agree on the spine:</b> PR → approval → PO → inspection → GRN → stock → payment request → approval → payment. Roughly 80% of the draft maps directly onto FRD requirements.</p>
+<p>It changed the plan in five material ways (v0.2):</p>
+<ol class="clean"><li><b>"First module" means the whole procure-to-pay chain</b>, including inspection, stores and payment. The plan delivers this chain end to end as its own milestone. Under v0.3 that is <b>the end of M3 without inspection and the end of M4 with inspection</b> (AS-13).</li><li><b>People confirm the automated steps.</b> The storekeeper generates the GRN, and the finance officer raises the payment request. The rule is "the system prepares, a named role confirms" (ADR-0016); full auto-posting stays available as a setting.</li><li><b>Sign-in has a username/password option as well as SSO,</b> plus an "operation unit" choice. Local accounts are in v1, and they are the default in v0.3 (ADR-0015).</li><li><b>Inspection produces a grade and a quality score,</b> not just pass/fail.</li><li><b>Stores are richer than the plan assumed:</b> warehouse → store / silo, with capacity, levels, storekeepers, restricted access and receipt/issue/transfer flags.</li></ol>
+<p><b>What it also tells us:</b></p>
+<ul class="clean"><li><b>The client is a flour mill.</b> The inspection screen names "Addis Flour Factory" and durum wheat in 50 kg bags; the stock screen lists bran. v0.3 treats "Floor Manufacturing" as flour until the client confirms.</li><li><b>Production already touches this flow.</b> The stock history shows "Issue to Production Line 1" and a bran receipt.</li></ul>
+<p>The draft contains about 40 defects that should be fixed before its second revision (§5). None blocks planning, but several would become bugs if built as drawn.</p></section></div><div class="panel wrap" role="tabpanel" id="panel-map" aria-labelledby="tab-map" hidden><section class="block"><h2 id="3-screen-by-screen-mapping">3. Screen-by-screen mapping</h2>
+<p>"As-is" means adopted as drawn. "Changed" means adopted with the changes listed.</p>
+<div class="tbl"><table class=""><thead><tr><th>Draft screen</th><th>Maps to (FRD v0.3)</th><th>Decision</th><th>Notes</th></tr></thead><tbody><tr><td>Sign-in: username, password, operation unit, "SSO Login"</td><td>FR-PLT-010, 018, 019</td><td>Changed</td><td>Local accounts are the default and SSO is optional (ADR-0015). The operation unit (a site) is picked <b>right after</b> sign-in, so the public page never lists the company's sites</td></tr><tr><td>Supplier registration, 5 steps ("Supplier Portal")</td><td>FR-PRC-001, FR-MD-012, 013, 014; FR-PRC-020 (v1.1)</td><td>Changed</td><td>Fields adopted in full. Status and registration date are system-controlled. Staff use the wizard in v1; supplier self-registration by invite link is v1.1. <b>Whether the client expects suppliers to self-register is a question</b> (§6)</td></tr><tr><td>PR form (header and lines)</td><td>FR-PRC-007, FR-PLT-007, FR-PLT-055</td><td>Changed</td><td>Adds priority, department, requester employee ID, required date (≥ request date), live available-to-use stock, computed quantity to purchase and a specification link. Status becomes action-driven</td></tr><tr><td>PR approvals dashboard</td><td>FR-PLT-030, 032, 054; FR-RPT-001</td><td>Changed</td><td>Bulk approve/reject with guardrails. Approval history is immutable (no delete icon). Only submitted items appear in the queue</td></tr><tr><td>PO form</td><td>FR-PRC-010</td><td>Changed</td><td>The PR link is mandatory by default (as drawn). Adds delivery terms, plant, storage location, header discount (allocated to lines for costing) and an explicit <b>ISSUED</b> status</td></tr><tr><td>PO approvals dashboard (KPI tiles incl. average approval time)</td><td>FR-RPT-001, FR-PLT-054</td><td>Changed</td><td>Approval cycle time becomes a standard KPI. The delete icons on approval rows are not built</td></tr><tr><td>Wheat inspection</td><td>FR-QC-004, 008, 009, 012, 013, 022–025</td><td>Changed</td><td>Grades, weighted quality score, optional "additional parameters" and grade-based price differentials. Net weight is <i>provisional</i> until the tare is weighed. <b>With the gate module off, this screen creates the inspection lot</b> (FR-QC-025). Adds accepted and rejected quantity. The wheat parameters become the grain/flour-milling pack</td></tr><tr><td>Item master</td><td>FR-MD-003</td><td>As-is</td><td>"Inspection required" drives the QC policy; "raw material" maps to item type; standard cost is a reference price, not the valuation method. Adds the spare-part (MRO) item type (the store master has a Spare Parts store)</td></tr><tr><td>Warehouse, store and silo masters</td><td>FR-MD-010, FR-INV-019, 020, FR-PLT-053</td><td>Changed</td><td>Warehouse → storage unit (STORE / SILO / TANK / BIN / YARD / QUARANTINE / REJECT / IN_TRANSIT). Silos get capacity, validated levels, a calculated current level and dip measurement. Valuation method is company-level, not per store or silo. "Close Warehouse" becomes deactivate-only, refused while stock remains</td></tr><tr><td>Goods receiving (GRN)</td><td>FR-PRC-013, 021, FR-INB-002</td><td>Changed</td><td>Pre-filled from the PO and the inspection (or gate). Accepted and rejected quantity per line, with the rejected quantity either returned on the truck or held as REJECTED stock. Bag tare deducted. Batch pattern <code>BATCH-{YYYYMMDD}-{SEQ:2}</code>. Weighed and counted lines can be mixed. The storekeeper confirms ("Save &amp; Generate GRN")</td></tr><tr><td>Stock balance and transaction history</td><td>FR-INV-001, 014, 015, FR-RPT-005</td><td>Changed</td><td>Columns adopted, plus DAMAGED and <b>Reserved</b> (v1, because sales is now v1). The formula and status breakdown are defined so totals reconcile, and totals are per unit of measure (the draft's example fails on both; see §5)</td></tr><tr><td>Stock adjustment</td><td>FR-INV-008, 009</td><td>Changed</td><td>Count-driven adjustments are generated from the count. The approver comes from the approval matrix, not typed in. "Save &amp; Post" becomes "Submit", with auto-post only under the threshold</td></tr><tr><td>Payment request (finance officer)</td><td>FR-AP-001, 007, 013, 014; FR-INB-003</td><td>Changed</td><td>Pre-drafted when the GRN posts and routed to the finance officer. Invoices are captured inline (stored as separate records). Partial amounts; gross / WHT / net shown. Derived total. Prefix <code>PV-</code> instead of <code>PR-</code></td></tr><tr><td>Payment approval</td><td>FR-AP-007, FR-PLT-025</td><td>As-is</td><td>Comments are mandatory for both approve and reject, as drawn</td></tr><tr><td>Supplier payment</td><td>FR-AP-008, 012, 015, 016</td><td>Changed</td><td>Cheque number and date (a post-dated cheque is allowed), cheque register and cheque books, amount in words, <b>proof-of-payment attachment</b>, invoice selection limited to the approved request. <b>The payment method must equal the approved request's; the paying account is a company account</b></td></tr></tbody></table></div></section><section class="block"><h2 id="4-plan-changes-made-decisions">4. Plan changes made (decisions)</h2>
+<div class="tbl"><table class="steps"><thead><tr><th>#</th><th>Decision</th><th>Where recorded</th></tr></thead><tbody><tr><td>D1</td><td><b>Local username/password accounts</b> in v1 (the default in v0.3) alongside optional SSO, configured per installation: argon2id, lockout, password policy, optional TOTP (enforceable per role), admin reset that forces a change. Breached-password check in v1.1</td><td>ADR-0015, FR-PLT-018, TDD §6.1</td></tr><tr><td>D2</td><td><b>Operation unit</b> (a site) chosen right after sign-in, remembered, switchable from the header. It sets default scope and document defaults, but never widens permissions</td><td>FR-PLT-019, TDD §6.3</td></tr><tr><td>D3</td><td><b>"The system prepares, a named role confirms."</b> The GRN is drafted from gate or inspection data and confirmed by the storekeeper. The PV is drafted from GRN, PO and invoice and submitted by the finance officer. Each step is an installation setting: <i>confirm</i> (default) or <i>automatic</i></td><td>ADR-0016, FR-INB-002/003/010</td></tr><tr><td>D4</td><td><b>The PV captures invoices inline.</b> The data model keeps invoices separate, so duplicate detection, partial payments and matching still work</td><td>FR-AP-001/007, TDD §13.2</td></tr><tr><td>D5</td><td><b>Storage hierarchy:</b> site → warehouse → storage unit → optional bins, with storekeepers, capacity, validated levels, allowed categories, restricted access and receipt/issue/transfer permissions</td><td>FR-MD-010, FR-INV-019, TDD §5</td></tr><tr><td>D6</td><td><b>QC grading and scoring:</b> grade schemes, weighted score out of 100 (formula in FR-QC-023), grade-based price differentials with a defined combination order, optional parameters, explicit "Calculate quality"</td><td>FR-QC-013/022–024, TDD §11</td></tr><tr><td>D7</td><td><b>GRN lines:</b> accepted and rejected quantity with disposition; one weighed line plus counted lines per truck; bag tare; manual weights with controls when the gate module is off</td><td>FR-PRC-013/021, TDD §10</td></tr><tr><td>D8</td><td><b>Stock status DAMAGED</b> added. The stock balance report always reconciles: on-hand = Σ statuses; status changes never deduct twice</td><td>FR-INV-002/003/014, TDD §9.5</td></tr><tr><td>D9</td><td><b>Sequencing (v0.3):</b> procure-to-pay end to end without inspection at the end of M3; with inspection (AS-13) and the gate loop at the end of M4</td><td>Implementation plan §3</td></tr><tr><td class="id">D10</td><td><b>Scope moves:</b> RFQ comparison → Later (quotations are recorded on the PO); GRN PO-reassignment → v1.1; supplier self-registration link → v1.1</td><td>FR-PRC-008/009/016/020</td></tr><tr><td class="id">D11</td><td><b>Departments and employee IDs</b> in the organisation model</td><td>FR-PLT-007, TDD §5</td></tr><tr><td class="id">D12</td><td><b>PO lifecycle</b> gains ISSUED. A PR link is required by default (as drawn)</td><td>FR-PRC-010</td></tr><tr><td class="id">D13</td><td><b>Status fields are action-driven,</b> never editable dropdowns</td><td>FR-PLT-031</td></tr><tr><td class="id">D14</td><td><b>Default number formats</b> follow the draft's style (§8), with the payment-request prefix changed to avoid a clash</td><td>FR-PLT-040, TDD §17.1</td></tr><tr><td class="id">D15</td><td><b>Inspection before unloading with the gate module off</b> creates the inspection lot from the draft's inspection screen, and the GRN is prepared from it</td><td>FR-QC-025, FRD §9.3 (flow C)</td></tr><tr><td class="id">D16</td><td><b>Approval history is immutable; used masters are deactivate-only; date sanity checks</b></td><td>FR-PLT-053/054/055</td></tr></tbody></table></div></section></div><div class="panel wrap" role="tabpanel" id="panel-issues" aria-labelledby="tab-issues" hidden><section class="block"><h2 id="5-issues-found-in-the-draft-fix-before-its-second-revision">5. Issues found in the draft (fix before its second revision)</h2>
+<p>Items 1–20 are from the v0.2 review, re-verified against the PDF (amendments in <i>italics</i>). Items 21–40 were added by the v0.3 audit.</p>
+<div class="tbl"><table class="steps"><thead><tr><th>#</th><th>Severity</th><th>Screen</th><th>Issue</th><th>Recommendation</th></tr></thead><tbody><tr><td>1</td><td>High</td><td>Payment request</td><td>The request number <code>PR-2026-000129</code> uses the same prefix as purchase requisitions (<code>PR-2024-00123</code>)</td><td>Payment requests use <code>PV-</code> (payment voucher)</td></tr><tr><td>2</td><td>High</td><td>Supplier, PR, PO</td><td>Status is an editable dropdown (supplier Active/Inactive; PR Draft/Submitted/Approved/…; PO Draft/Issued/Pending/Canceled). <i>The PO status list also has no Approved or Rejected, although a PO approval dashboard exists</i></td><td>Status is shown as a badge and changes only through actions</td></tr><tr><td>3</td><td>Medium</td><td>PR</td><td>"Urgent" appears as a status; it is a priority. "Confirmatted" is unclear</td><td>Lifecycle per FRD §1.5</td></tr><tr><td>4</td><td>Medium</td><td>Supplier step 1</td><td>"Date registered" is an input field</td><td>System-set when the record is created</td></tr><tr><td>5</td><td>Low</td><td>Supplier steps 4–5</td><td>Step 5 repeats the bank account list from step 4. <i>Step 4 lists "Bank Account 2" twice; step 5 lists "Product Categories" twice</i></td><td>Remove the duplicates</td></tr><tr><td>6</td><td>High</td><td>Inspection</td><td>Net weight is entered before receiving. Tare (the empty truck) is known only <b>after</b> unloading, unless a stored tare is used</td><td>Inspection shows gross and a <i>provisional</i> net; the GRN uses the final net after tare</td></tr><tr><td>7</td><td>Low</td><td>Inspection</td><td>Hectolitre weight is shown as kg/l</td><td>kg/hl</td></tr><tr><td>8</td><td>High</td><td>GRN</td><td>Net weight 20,000 kg, but the lines total 20,500 kg (wheat 19,800 accepted + 200 rejected + additive 500)</td><td>Weighed line = truck net − bag tare − nominal weight of counted lines; mismatches are flagged</td></tr><tr><td>9</td><td>High</td><td>Stock balance</td><td>Wheat row: opening 10,000 + received 19,800 − issued 2,500 ≠ closing 18,050. The rejection is subtracted twice (the GRN already splits 19,800 / 200, then "Inspection Rejection −200"). <i>Also:</i><br>• <i>"Damaged Adjustment −50" double-counts the same way;</i><br>• <i>the additive row gives 530, not 400; packaging gives 1,200, not 1,300;</i><br>• <i>the totals card (24,480) disagrees with the rows (24,750) and with the formula (33,780);</i><br>• <i>the summary's Adjustment column shows 0 while the history shows −250;</i><br>• <i>kg and pcs are summed into "KG";</i><br>• <i>closing excludes the rejected 200;</i><br>• <i>an opening balance sits on a batch created by that day's GRN</i></td><td>Rejection and damage are <b>status moves</b>, not deductions. Closing on-hand = opening + received − issued ± adjustments = Σ status columns; totals per unit of measure. The corrected example is the FRD FR-INV-014 fixture</td></tr><tr><td>10</td><td>Medium</td><td>Stock adjustment</td><td>"Approved by: Quality Inspector" is typed in; the button is "Save &amp; Post Adjustment". <i>The summary panel doesn't reconcile (45,080 vs 24,080); "System Stock (Available)" shows the closing figure, not available; "Adjustmenty" is a duplicate field</i></td><td>The approver comes from the approval matrix (warehouse authority, not QC). Posting follows approval, with auto-post only below a threshold. The count compares against on-hand across statuses</td></tr><tr><td>11</td><td>Medium</td><td>Payment request</td><td>"Requested amount" is typed separately from "Total amount to pay"</td><td>Derived from the invoice lines</td></tr><tr><td>12</td><td>Low</td><td>Payment request</td><td>The "PO Number" field shows a GRN number; invoice date "99-Aug-2026"</td><td>Mock-up typos</td></tr><tr><td>13</td><td>Low</td><td>PO</td><td>Line 200 × 4.50 shown as 990.00 (should be 900.00; the PO total already uses 900)</td><td>Mock-up arithmetic</td></tr><tr><td>14</td><td>Low</td><td>PO approvals</td><td>"Avg approval time 1.8ms"</td><td>Hours or days</td></tr><tr><td>15</td><td>Medium</td><td>Store master</td><td>Valuation method is set per store. <i>The silo master also carries a Stock_Valuation_Method</i></td><td>Valuation is company-level; shown read-only</td></tr><tr><td>16</td><td>Info</td><td>Whole flow</td><td>No supplier-invoice step and no gate step. <i>Weighbridge data is captured twice with conflicting values: plate/gross/tare/net on the inspection (AB-12345, tare 2,500) and on the GRN (ET-12345, tare 5,000)</i></td><td>Invoices are captured inline on the PV (D4). Weights are captured once (gate, or the inspection when the gate is off) and flow to the GRN</td></tr><tr><td>17</td><td>Info</td><td>Roles</td><td>The finance officer both raises and pays the request</td><td>Acceptable: an independent approver sits between them. A setting can require a different payer. The approver can never record the payment (SOD-15)</td></tr><tr><td>18</td><td>Question</td><td>GRN</td><td>Annotation "Unit ups one colument"</td><td>Read as: show the unit of measure once per line, in its own column. <b>Please confirm</b></td></tr><tr><td>19</td><td>Question</td><td>Supplier payment</td><td>Annotation "Upplode depset slip"</td><td>Adopted: a proof-of-payment attachment is required before a payment posts. <i>For a cheque, the proof is usually a cheque copy, not a deposit slip</i></td></tr><tr><td>20</td><td>Question</td><td>Sign-in</td><td>Branded "Factory ERP", with a "Finance &amp; Accounts" tile. <i>The tiles show Inventory, Procurement, Production, Finance &amp; Accounts and Reports, but no Sales, QC or Gate</i></td><td>Is "Factory ERP" the product name? MOS has <b>no general ledger</b>, only a payables/receivables sub-ledger with journal export; please confirm. The tile set should include all six modules</td></tr><tr><td>21</td><td>Medium</td><td>PR</td><td>Required date 07/10/2024 is before the request date 07/18/2024; "Created Date: Jan 18 2024, 12:35:254 PMT" is malformed and doesn't match</td><td>Date sanity checks (FR-PLT-055)</td></tr><tr><td>22</td><td>Medium</td><td>PO vs PR</td><td>The PO date (07/10/2024) predates its PR; the PO line (MAT-A-002, 200 Each) doesn't match the linked PR line (MAT-P-001 polypropylene, 380 kg)</td><td>A PO line converts from a PR line with its item and quantity (FR-PRC-007/010)</td></tr><tr><td>23</td><td>Medium</td><td>PO approvals</td><td>Row 2's "PO Number" shows a PR number; row 1 shows DRAFT and PENDING together; approval rows have <b>delete icons</b></td><td>Drafts never appear in approval queues; approval history cannot be deleted (FR-PLT-054)</td></tr><tr><td>24</td><td>Low</td><td>PR approvals</td><td>The same PR-2024-00123 appears as Pending, Approved, Approved and Rejected; the pending row has an approval date</td><td>One row per approval task; dates only after decisions</td></tr><tr><td>25</td><td>Medium</td><td>PR/PO vs payment</td><td>PR and PO amounts are in <b>USD ($)</b>; invoices, the payment request and the payment are in <b>ETB</b></td><td><b>Question:</b> are some POs in foreign currency and paid in ETB? v1 refuses an invoice in a different currency from its PO unless the client confirms (FRD §9.5 #33)</td></tr><tr><td>26</td><td>Medium</td><td>Payment</td><td>The approved request says <b>Bank Transfer</b>; the payment says <b>Check</b>. The payment's "Bank Account" shows the account number from the request's supplier bank details</td><td>A method change after approval requires re-approval; the paying account must be a company account (FR-AP-007/008)</td></tr><tr><td>27</td><td>Medium</td><td>Whole flow</td><td>The screens don't chain as one scenario: different trucks, tares, inspections, GRNs, and years 2024/2025/2026; invoices total 175,000 against a PO amount of 150,000</td><td>The AS-13 fixture is one coherent dataset, to be confirmed with the client. Over-invoicing goes to hold (FR-AP-002)</td></tr><tr><td>28</td><td>Medium</td><td>Inspection vs GRN</td><td>The inspection says "Accepted" and has no rejected-quantity field; the GRN shows 200 kg rejected with inspection "PASSED"</td><td>The inspection records accepted and rejected quantity (partial accept), and the GRN takes both from it (FR-QC-012/024)</td></tr><tr><td>29</td><td>Low</td><td>Silo master</td><td>Safety stock 10,000 is above the minimum level 5,000; the silo has no allow-flags while store and warehouse do</td><td>Level validation (FR-MD-010); flags on every storage unit</td></tr><tr><td>30</td><td>Low</td><td>Warehouse master</td><td>The Capacity panel appears twice; "Metric Tons" is listed twice; "Close Warehouse" action</td><td>Remove the duplicates; closing = deactivation, refused while stock remains (FR-PLT-053)</td></tr><tr><td>31</td><td>Low</td><td>Numbering</td><td>Four PO formats (<code>PO-2024-00456</code>, <code>PO-2025-0010</code>, <code>PO-2026-000125</code>, <code>PO-2026-00045</code>), two GRN, two INS and two item-ID formats (<code>MAT000123</code>, <code>MAT-0001</code>)</td><td>One pattern per document type (§8)</td></tr><tr><td>32</td><td>Info</td><td>PR</td><td>The PR example is plastics (polypropylene resin, "new product line"), not flour</td><td>The examples should use the plant's real materials</td></tr><tr><td>33</td><td>Info</td><td>Stock</td><td>Bran is "received" and wheat is "Issued to Production Line 1": production already interacts with this flow</td><td>Production is in v1 (M5); bran is a by-product of milling runs (FR-MFG-003/015)</td></tr><tr><td>34</td><td>Question</td><td>Inspection</td><td>The meaning of "Document No." (DOC-2025-0001) is unclear: the supplier's delivery note?</td><td>Read as the supplier document number; <b>please confirm</b></td></tr><tr><td>35</td><td>Question</td><td>Inspection</td><td>"Factory Name: Addis Flour Factory"; durum wheat</td><td>Confirms a <b>flour</b> mill; <b>please confirm</b> that "Floor Manufacturing" means flour</td></tr><tr><td>36</td><td>Question</td><td>Supplier registration</td><td>Titled "Supplier Portal – New Registration"</td><td>Staff enter suppliers in v1; supplier self-registration by link is v1.1. <b>Should suppliers register themselves?</b></td></tr><tr><td>37</td><td>Info</td><td>Stock balance</td><td>"Reserved" column shown</td><td>Reservations are v1 (sales and production)</td></tr><tr><td>38</td><td>Info</td><td>Store master</td><td>A "Spare Parts" store type</td><td>MRO spare parts are an item type (FR-MD-003)</td></tr><tr><td>39</td><td>Info</td><td>Inspection</td><td>450 bags = 225 quintals = 22,500 kg: wheat arrives in 50 kg bags</td><td>Bag count and bag tare on receipts; empty-bag handling (FR-PRC-021)</td></tr><tr><td>40</td><td>Info</td><td>Sign-in / whole flow</td><td>No sales, gate or QC screens yet</td><td>Client workshops for gate and production (before M4) and sales (before M5)</td></tr></tbody></table></div></section><section class="block"><h2 id="6-questions-for-the-client">6. Questions for the client</h2>
+<p><b>Answered or partly answered by the draft</b> (to confirm, not to ask open-ended):</p>
+<div class="tbl"><table class="steps"><thead><tr><th>#</th><th>Question</th><th>What the draft shows</th><th>Needed by</th></tr></thead><tbody><tr><td>Q6</td><td>Is a PO without a PR ever allowed?</td><td>The PO's "Purchase Requisition Number" is mandatory. <b>Confirm: never, or only for named categories?</b></td><td>M2</td></tr><tr><td>Q7</td><td>Should the payer be a different person from the requester?</td><td>The same finance officer raises and pays. <b>Confirm that is intended.</b></td><td>M3</td></tr><tr><td>Q8</td><td>Are invoices received before or after the goods, and at gross or accepted weight?</td><td>The narrative says "After the GRN is completed…"; the invoice dates follow the GRN date. <b>Confirm, and state the weight basis.</b></td><td>M3</td></tr></tbody></table></div>
+<p><b>Open questions</b> (the Phase 5 decision register carries them with owners):</p>
+<div class="tbl"><table class="steps"><thead><tr><th>#</th><th>Question</th><th>Needed by</th></tr></thead><tbody><tr><td>Q0</td><td>Does "Floor Manufacturing" mean <b>flour</b>? (The draft names "Addis Flour Factory")</td><td>M1</td></tr><tr><td>Q1</td><td><b>Product name:</b> "Factory ERP" (as on the sign-in mock-up), or something else?</td><td>M1</td></tr><tr><td>Q9</td><td><b>Operation unit:</b> what does it represent: a plant (site), a legal company, or a department? The draft's "Factory Name" and "Plant/Factory Location" suggest a plant</td><td>M1</td></tr><tr><td class="id">Q11</td><td><b>Currency:</b> PRs and POs show USD, and invoices and payments show ETB. Are some purchases in foreign currency? How are they converted and paid?</td><td>M1</td></tr><tr><td>Q5</td><td><b>PR approval:</b> who exactly is "Management"? Amount thresholds per approver</td><td>M1</td></tr><tr><td class="id">Q12</td><td><b>Suppliers:</b> should suppliers self-register (the screens say "Supplier Portal")? Are there individual suppliers (farmers) without a TIN?</td><td>M2</td></tr><tr><td class="id">Q13</td><td><b>Payment method:</b> can the method change after approval (the draft goes from bank transfer to cheque)? Which company accounts pay (banks, cash boxes, mobile money)?</td><td>M2</td></tr><tr><td class="id">Q14</td><td><b>Withholding and VAT:</b> is the company a withholding agent? The current rates and thresholds, including the no-TIN rate</td><td>M3</td></tr><tr><td>Q4</td><td><b>Rejected quantity on the GRN</b> (200 kg in the example): unloaded and held, or left on the truck? What happens next: return, replacement, disposal?</td><td>M3</td></tr><tr><td class="id">Q15</td><td><b>Bags:</b> are empty bags returned to the supplier, kept, or credited? What is the bag tare?</td><td>M3</td></tr><tr><td class="id">Q10</td><td><b>Transfers:</b> "Allow transfer: conditional, approval required". Who approves transfers between stores?</td><td>M3</td></tr><tr><td>Q2</td><td><b>Grading:</b> is the wheat grade decided by the worst parameter, or by score bands? Please share the actual grade table and score weights behind "92.4 / 100"</td><td>M4</td></tr><tr><td>Q3</td><td><b>Price effect of grade/quality:</b> a price differential per grade, deductions per parameter (e.g. moisture above a base), or both?</td><td>M4</td></tr><tr><td class="id">Q16</td><td><b>Partial acceptance at inspection:</b> can one truck be partly accepted? Who decides: the inspector, or the QC manager?</td><td>M4</td></tr><tr><td class="id">Q17</td><td><b>Gate and production:</b> gate documents checked in and out, weighbridge details; products, milling stages, extraction rates, by-products, packing sizes, fortification. A workshop is needed</td><td>M4</td></tr><tr><td class="id">Q18</td><td><b>Sales:</b> customers, price lists, credit rules, delivery documents; <b>is a fiscal device / e-invoice legally required for sales invoices?</b> A workshop is needed</td><td>M5</td></tr><tr><td class="id">Q19</td><td><b>Hosting and infrastructure</b> (ADR-0019): servers, OS, network, backups, devices. Full list in the Phase 5 questionnaire</td><td>M5</td></tr></tbody></table></div></section></div><div class="panel wrap" role="tabpanel" id="panel-rest" aria-labelledby="tab-rest" hidden><section class="block"><h2 id="7-timeline-effect">7. Timeline effect</h2>
+<div class="tbl"><table class=""><thead><tr><th></th><th>v0.1 plan</th><th>v0.2 plan (this review)</th><th><b>v0.3 (ADR-0018)</b></th></tr></thead><tbody><tr><td>Scope of the first release</td><td>Procurement, inventory, QC, gate, AP</td><td>Same, plus the draft's additions</td><td><b>All six modules</b> (production and sales added)</td></tr><tr><td>First release calendar</td><td>≈ 40 weeks</td><td>≈ 45 weeks (≈ 10.4 months) at 1.5 FTE</td><td><b>≤ 26 weeks of development + ≈ 9 weeks to go live</b> (team path A/B/C); <i>since 2026-10-03: everything in 26 weeks, go-live W24 (ADR-0025)</i></td></tr><tr><td>Procure-to-pay usable end to end</td><td>End of MVP</td><td>Week 31</td><td><b>End of M3 without inspection; end of M4 with inspection (AS-13)</b></td></tr><tr><td>Gate + automated inbound loop</td><td>Week 30</td><td>Week 36</td><td><b>End of M4</b></td></tr><tr><td>Full scope</td><td>≈ 21–23 months</td><td>≈ 22–24 months</td><td>v1 at ≈ 8 months; v1.1 and Later lists with no date</td></tr></tbody></table></div>
+<p>v0.2's arithmetic was 59.5 dev-weeks ÷ 1.5 FTE × 1.15 buffer = 45.6 weeks, stated as "≈ 45 weeks / 10.4 months". That figure is now historical; the v0.3 hours come in planning Phase 4.</p></section><section class="block"><h2 id="8-default-number-formats-configurable">8. Default number formats (configurable)</h2>
+<p><code>{FY}</code> is the fiscal year of the posting date; <code>{YYYY}</code> is the calendar year; <code>{YYYYMMDD}</code> is the calendar date.</p>
+<div class="tbl"><table class=""><thead><tr><th>Document</th><th>Draft (as seen)</th><th>Default adopted</th><th>Gap-free?</th></tr></thead><tbody><tr><td>Supplier</td><td><code>SUP-00045</code></td><td><code>SUP-{SEQ:5}</code></td><td>No</td></tr><tr><td>Item / material</td><td><code>MAT000123</code>, <code>MAT-0001</code>, <code>RAW-WHT-001</code></td><td><code>MAT{SEQ:6}</code> system ID + user-defined code</td><td>No</td></tr><tr><td>Purchase requisition</td><td><code>REQ-2024-00123</code> / <code>PR-2024-00123</code> (inconsistent)</td><td><code>PR-{FY}-{SEQ:5}</code></td><td>No</td></tr><tr><td>Purchase order</td><td><code>PO-2024-00456</code>, <code>PO-2025-0010</code>, <code>PO-2026-000125</code>, <code>PO-2026-00045</code></td><td><code>PO-{FY}-{SEQ:5}</code></td><td>No</td></tr><tr><td>Inspection</td><td><code>INS-2025-0001</code>, <code>INS-2026-000078</code></td><td><code>INS-{FY}-{SEQ:6}</code></td><td>No</td></tr><tr><td>Goods receipt</td><td><code>GRN-2026-000001</code>, <code>GRN-2026-00078</code></td><td><code>GRN-{FY}-{SEQ:6}</code></td><td><b>Yes</b></td></tr><tr><td>Batch / lot</td><td><code>BATCH-20260813-01</code></td><td><code>BATCH-{YYYYMMDD}-{SEQ:2}</code></td><td>No</td></tr><tr><td>Stock issue</td><td><code>ISS-2026-00015</code></td><td><code>ISS-{FY}-{SEQ:5}</code></td><td><b>Yes</b></td></tr><tr><td>Stock adjustment</td><td><code>ADJ-2026-000046</code></td><td><code>ADJ-{FY}-{SEQ:6}</code></td><td><b>Yes</b></td></tr><tr><td>Physical count</td><td><code>PHY-COUNT-2026-00012</code></td><td><code>CNT-{FY}-{SEQ:5}</code></td><td>No</td></tr><tr><td>Payment request</td><td><code>PR-2026-000129</code> (clash)</td><td><b><code>PV-{FY}-{SEQ:6}</code></b>, numbered at submission; cancelled numbers kept</td><td><b>Yes</b></td></tr><tr><td>Payment</td><td><code>PAY-2026-000156</code></td><td><code>PAY-{FY}-{SEQ:6}</code></td><td><b>Yes</b></td></tr><tr><td>Approval record</td><td><code>AP-2024-001</code></td><td>Internal only (approval chain id); not a user-facing number</td><td>—</td></tr></tbody></table></div>
+<p>The formats for documents not in the draft (weigh tickets, work orders, sales orders, delivery orders, customer invoices, receipts, credit notes) are listed in TDD §17.1. The gap-free list is FRD FR-PLT-041.</p></section></div>
+</main>
+<footer class="wrap foot"><p class="note">Source: <code>MOS/docs/7-reviews/MOS-CLIENT-P2P-DRAFT-REVIEW.md</code> (the master copy). Kept locally in the MOS repository; not published.</p></footer>
+<script type="module">
+const MERMAID_URL = 'https://cdn.jsdelivr.net/npm/mermaid@12/dist/mermaid.esm.min.mjs';
+const tabs = [...document.querySelectorAll('[role="tab"]')];
+const panels = [...document.querySelectorAll('[role="tabpanel"]')];
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch { /* storage unavailable */ } },
+};
+const TABKEY = 'mos-pm-tab:' + location.pathname;
+function pickTab() { const k = store.get(TABKEY); if (k && document.getElementById('tab-' + k)) return k; const first = document.querySelector('[role="tab"]'); return first ? first.id.slice(4) : 'overview'; }
+
+
+function show(key, focusTab) {
+  let found = false;
+  for (const t of tabs) {
+    const on = t.id === `tab-${key}`;
+    t.setAttribute('aria-selected', String(on));
+    t.tabIndex = on ? 0 : -1;
+    if (on) { found = true; if (focusTab) t.focus(); }
+  }
+  if (!found) return show('overview', focusTab);
+  for (const p of panels) p.hidden = p.id !== `panel-${key}`;
+  store.set(TABKEY, key);
+  renderVisible();
+}
+tabs.forEach((t, i) => {
+  t.addEventListener('click', () => show(t.id.slice(4)));
+  t.addEventListener('keydown', (e) => {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    const next = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+    show(next.id.slice(4), true);
+  });
+});
+
+// ---- Mermaid, loaded from the CDN and drawn lazily (hidden diagrams cannot be measured)
+let mermaid = null;
+const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function initMermaid() {
+  const dark = matchMedia('(prefers-color-scheme: dark)').matches;
+  mermaid.initialize({
+    startOnLoad: false,
+    securityLevel: 'strict',
+    htmlLabels: false,
+    theme: 'base',
+    fontFamily: css('--font-body'),
+    themeVariables: {
+      darkMode: dark,
+      background: css('--surface'),
+      fontFamily: css('--font-body'),
+      fontSize: '13px',
+      primaryColor: css('--accent-soft'),
+      primaryBorderColor: css('--accent'),
+      primaryTextColor: css('--ink'),
+      secondaryColor: css('--amber-soft'),
+      tertiaryColor: css('--surface-2'),
+      lineColor: css('--ink-2'),
+      textColor: css('--ink'),
+      mainBkg: css('--accent-soft'),
+      clusterBkg: css('--surface-2'),
+      clusterBorder: css('--rule'),
+      edgeLabelBackground: css('--surface'),
+      actorBkg: css('--accent-soft'),
+      actorBorder: css('--accent'),
+      actorTextColor: css('--ink'),
+      actorLineColor: css('--rule'),
+      signalColor: css('--ink-2'),
+      signalTextColor: css('--ink'),
+      labelBoxBkgColor: css('--surface-2'),
+      labelBoxBorderColor: css('--rule'),
+      labelTextColor: css('--ink'),
+      loopTextColor: css('--ink-2'),
+      noteBkgColor: css('--amber-soft'),
+      noteBorderColor: css('--amber'),
+      noteTextColor: css('--ink'),
+      activationBkgColor: css('--surface-2'),
+      stateLabelColor: css('--ink'),
+      transitionColor: css('--ink-2'),
+      transitionLabelColor: css('--ink-2'),
+    },
+    flowchart: { htmlLabels: false, curve: 'basis', useMaxWidth: true },
+    sequence: { useMaxWidth: true, wrap: true, width: 170, messageFontSize: 13, actorFontSize: 13, noteFontSize: 12 },
+    state: { useMaxWidth: true },
+  });
+}
+let queue = Promise.resolve();
+function renderVisible() {
+  if (!mermaid) return queue;
+  queue = queue.then(async () => {
+    for (const el of document.querySelectorAll('.mmd:not([data-done])')) {
+      if (el.offsetParent === null) continue;
+      try {
+        const { svg } = await mermaid.render(`${el.id}-svg`, el.dataset.src);
+        el.innerHTML = svg;
+        el.dataset.done = '1';
+      } catch (err) {
+        el.dataset.done = 'error';
+        el.classList.add('failed');
+        el.textContent = 'This diagram could not be drawn; its source is shown below.';
+        el.nextElementSibling?.classList.add('show');
+      }
+    }
+  });
+  return queue;
+}
+import(MERMAID_URL)
+  .then(async (m) => {
+    // measure labels with the real web font, or they are clipped once it loads
+    await Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 3000))]);
+    mermaid = m.default; initMermaid(); renderVisible();
+  })
+  .catch(() => { document.body.classList.add('offline'); });
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+  if (!mermaid) return;
+  initMermaid();
+  document.querySelectorAll('.mmd[data-done="1"]').forEach((el) => { delete el.dataset.done; el.innerHTML = ''; });
+  renderVisible();
+});
+document.addEventListener('toggle', (e) => { if (e.target.open) renderVisible(); }, true);
+
+// ---- open / close all processes
+document.querySelectorAll('.toolbar .btn').forEach((b) => b.addEventListener('click', () => {
+  const open = b.dataset.act === 'expand';
+  b.closest('.panel').querySelectorAll('details.proc').forEach((d) => { d.open = open; });
+  renderVisible();
+}));
+
+// ---- in-page links switch to the right tab and open the right section
+function goTo(id) {
+  const target = document.getElementById(id);
+  if (!target) return false;
+  const panel = target.closest('[role="tabpanel"]');
+  if (panel) show(panel.id.slice(6));
+  if (target.tagName === 'DETAILS') target.open = true;
+  let d = target.parentElement?.closest('details');
+  while (d) { d.open = true; d = d.parentElement?.closest('details'); }
+  requestAnimationFrame(() => target.scrollIntoView({ block: 'start' }));
+  renderVisible();
+  return true;
+}
+document.addEventListener('click', (e) => {
+  const a = e.target.closest('a[href^="#"]');
+  if (!a) return;
+  const id = decodeURIComponent(a.getAttribute('href').slice(1));
+  if (goTo(id)) { e.preventDefault(); history.replaceState(null, '', `#${id}`); }
+});
+
+// ---- print: show everything, draw every diagram, then print
+const printBtn = document.getElementById('printBtn');
+let opened = [];
+function expandForPrint() {
+  panels.forEach((p) => { p.hidden = false; });
+  opened = [...document.querySelectorAll('details:not([open])')];
+  opened.forEach((d) => { d.open = true; });
+}
+function restoreAfterPrint() {
+  opened.forEach((d) => { d.open = false; });
+  opened = [];
+  show(pickTab());
+}
+printBtn.addEventListener('click', async () => {
+  expandForPrint();
+  await renderVisible();
+  setTimeout(() => window.print(), 250);
+});
+window.addEventListener('beforeprint', () => { if (!opened.length) expandForPrint(); });
+window.addEventListener('afterprint', restoreAfterPrint);
+
+// ---- start
+const initial = decodeURIComponent(location.hash.slice(1));
+if (!(initial && goTo(initial))) show(pickTab());
+
+</script>
+</body>
+</html>

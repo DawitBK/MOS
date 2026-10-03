@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MOS Master Plan</title>
+<meta name="description" content="MOS master plan: the planning package on a few pages.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+:root{
+  --ground:#f2f4f3; --surface:#ffffff; --surface-2:#f7f9f8;
+  --ink:#18212b; --ink-2:#44505c; --muted:#68737e; --rule:#d5dbdc; --rule-2:#e6eaea;
+  --accent:#2563b8; --accent-ink:#1d4f94; --accent-soft:#e7eef9;
+  --amber:#c9851c; --amber-soft:#f8eedd; --amber-ink:#7a4f0c;
+  --ok:#2f7a4f; --danger:#b3372f;
+  --font-display:"Barlow Semi Condensed","Arial Narrow",Arial,sans-serif;
+  --font-body:"Public Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#12171d; --surface:#1a2129; --surface-2:#161c23;
+    --ink:#e7ebef; --ink-2:#b8c2cc; --muted:#8e9aa6; --rule:#2e3844; --rule-2:#252e38;
+    --accent:#5b93e6; --accent-ink:#8db5f0; --accent-soft:#1d2c44;
+    --amber:#b8842c; --amber-soft:#2e2517; --amber-ink:#e2b46a;
+    --ok:#5fb383; --danger:#e37a70;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#12171d; --surface:#1a2129; --surface-2:#161c23;
+  --ink:#e7ebef; --ink-2:#b8c2cc; --muted:#8e9aa6; --rule:#2e3844; --rule-2:#252e38;
+  --accent:#5b93e6; --accent-ink:#8db5f0; --accent-soft:#1d2c44;
+  --amber:#b8842c; --amber-soft:#2e2517; --amber-ink:#e2b46a;
+  --ok:#5fb383; --danger:#e37a70;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.55;margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:20px}
+@media (max-width:520px){.wrap{padding-inline:16px}}
+h1,h2,h3,h4{font-family:var(--font-display);text-wrap:balance;margin:0;color:var(--ink);letter-spacing:.005em}
+h1{font-size:clamp(34px,5vw,48px);font-weight:700;line-height:1.05}
+h2{font-size:26px;font-weight:700;line-height:1.15;margin-top:6px}
+h3{font-size:19px;font-weight:600;line-height:1.25}
+h4{font-size:16px;font-weight:600}
+[id]{scroll-margin-top:64px}
+p{margin:0;max-width:78ch}
+a{color:var(--accent-ink)}
+code{font-family:var(--font-mono);font-size:.86em;background:var(--surface-2);border:1px solid var(--rule-2);border-radius:4px;padding:0 4px}
+.eyebrow{font-family:var(--font-mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.masthead{padding-block:34px 20px;display:grid;gap:14px}
+.masthead .lede{font-size:17px;color:var(--ink-2);max-width:80ch}
+.status-line{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.pill{display:inline-flex;align-items:center;font-family:var(--font-mono);font-size:12px;padding:3px 9px;border-radius:999px;border:1px solid var(--rule);background:var(--surface);color:var(--ink-2);white-space:nowrap}
+.pill.plan{border-color:var(--accent);color:var(--accent-ink);background:var(--accent-soft)}
+.pill.rev{border-color:var(--amber);color:var(--amber-ink);background:var(--amber-soft)}
+.spec{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));border:1px solid var(--rule);background:var(--surface);border-radius:6px}
+.spec div{padding:12px 14px;border-right:1px solid var(--rule-2)}
+.spec div:last-child{border-right:0}
+.spec b{display:block;font-family:var(--font-display);font-size:26px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.1}
+.spec span{font-size:12.5px;color:var(--muted)}
+.note{font-size:13.5px;color:var(--muted)}
+.btn{appearance:none;border:1px solid var(--rule);background:var(--surface);color:var(--ink);font:500 13px/1.2 var(--font-body);padding:7px 12px;border-radius:6px;cursor:pointer}
+.btn:hover{border-color:var(--accent);color:var(--accent-ink)}
+.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn.print{margin-left:auto}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap}
+.tabbar{position:sticky;top:0;z-index:5;background:var(--ground);border-bottom:1px solid var(--rule)}
+.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:thin}
+.tabs button{appearance:none;border:0;background:none;color:var(--ink-2);font-family:var(--font-display);font-size:16px;font-weight:600;padding:12px 14px 10px;border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tabs button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.panel{padding-block:26px 48px;display:grid;gap:30px}
+.panel[hidden]{display:none}
+section.block{display:grid;gap:14px;min-width:0}
+section.block > p,section.block > ul,section.block > ol{color:var(--ink-2)}
+ul.clean,ol.clean{margin:0;padding-left:20px;display:grid;gap:5px;max-width:86ch}
+ul.clean li,ol.clean li{color:var(--ink-2)}
+ul.clean ul.clean,ol.clean ul.clean{margin-top:5px}
+li b,p b{color:var(--ink)}
+.tbl{overflow-x:auto;border:1px solid var(--rule);border-radius:6px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{text-align:left;vertical-align:top;padding:8px 11px;border-bottom:1px solid var(--rule-2)}
+th{font-family:var(--font-display);font-weight:600;font-size:14px;color:var(--ink-2);background:var(--surface-2);letter-spacing:.01em;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.id{font-family:var(--font-mono);font-size:12px;white-space:nowrap;color:var(--accent-ink)}
+table.steps td:nth-child(4){min-width:300px}
+table.steps td:last-child{font-family:var(--font-mono);font-size:11px;color:var(--ink-2);min-width:170px;max-width:240px;overflow-wrap:anywhere}
+figure{margin:0;display:grid;gap:8px;min-width:0}
+.fig{overflow-x:auto;background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:14px}
+.fig svg{display:block;width:100%;height:auto;color:var(--ink)}
+.fig.hero svg{min-width:900px}
+figcaption{font-size:13.5px;color:var(--muted);max-width:92ch}
+svg text{font-family:var(--font-body)}
+svg .ttl{font-family:var(--font-display);font-size:15px;font-weight:600;fill:var(--ink)}
+svg .lbl{font-size:12px;fill:var(--ink-2)}
+svg .sm{font-size:10.5px;fill:var(--muted)}
+svg .st{fill:var(--surface);stroke:var(--ink-2);stroke-width:1.2}
+svg .st-auto{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.5}
+svg .st-person{fill:var(--amber-soft);stroke:var(--amber);stroke-width:1.4}
+svg .st-side{fill:var(--surface-2);stroke:var(--muted);stroke-width:1.1;stroke-dasharray:4 3}
+svg .edge{stroke:var(--ink-2);stroke-width:1.4;fill:none}
+svg .edge-async{stroke:var(--accent);stroke-width:1.5;fill:none;stroke-dasharray:6 4}
+svg .mk{fill:var(--ink-2)}
+svg .mk-auto{fill:var(--accent)}
+svg .hb rect{fill:var(--surface);stroke:var(--accent);stroke-width:1.2}
+svg .hb text{font-family:var(--font-mono);font-size:10px;fill:var(--accent-ink);text-anchor:middle;dominant-baseline:central}
+details{border:1px solid var(--rule);border-radius:6px;background:var(--surface)}
+details > summary{cursor:pointer;padding:11px 14px;font-family:var(--font-display);font-weight:600;font-size:16px}
+details > summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+details .inner{padding:4px 16px 18px;display:grid;gap:14px;min-width:0}
+details.proc{margin-top:10px}
+details.proc > summary{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;list-style-position:outside}
+details.proc[open] > summary{border-bottom:1px solid var(--rule-2)}
+.pid{font-family:var(--font-mono);font-size:12.5px;font-weight:500;color:var(--accent-ink);background:var(--accent-soft);border-radius:4px;padding:1px 7px}
+.pname{flex:1 1 320px}
+.meta{font-family:var(--font-mono);font-size:11.5px;font-weight:400;color:var(--muted)}
+.life-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,460px),1fr));gap:18px}
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:14px 16px;display:grid;gap:10px;align-content:start;min-width:0}
+.card.wide{grid-column:1/-1}
+.card .mmd{border:0;padding:0}
+.card p{font-size:14px;color:var(--ink-2)}
+.mmd-fig{margin:0}
+.mmd{overflow-x:auto;background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:12px;min-height:44px}
+.mmd:empty::before{content:"Drawing diagram\2026";color:var(--muted);font-size:13px}
+.mmd svg{display:block;margin:0 auto;height:auto}
+.mmd.failed{color:var(--danger);font-size:13px}
+.mmd-src{display:none;margin:0;overflow-x:auto;font-family:var(--font-mono);font-size:11.5px;line-height:1.45;background:var(--surface-2);border:1px solid var(--rule);border-radius:6px;padding:10px 12px;color:var(--ink-2)}
+.mmd-src.show{display:block}
+body.offline .mmd{display:none}
+body.offline .mmd-src{display:block}
+pre.code{margin:0;overflow-x:auto;font-family:var(--font-mono);font-size:12px;background:var(--surface-2);border:1px solid var(--rule);border-radius:6px;padding:10px 12px}
+blockquote.callout{margin:0;border-left:3px solid var(--accent);background:var(--accent-soft);padding:12px 16px;border-radius:0 6px 6px 0;display:grid;gap:8px}
+details.about .inner,details.graph .inner{padding-top:12px}
+.foot{padding-block:10px 40px}
+@media print{
+  :root,:root[data-theme="dark"],:root:not([data-theme="light"]){
+    --ground:#ffffff; --surface:#ffffff; --surface-2:#f6f7f7; --ink:#111; --ink-2:#333; --muted:#555; --rule:#ccc; --rule-2:#e2e2e2;
+    --accent:#2563b8; --accent-ink:#1d4f94; --accent-soft:#eef3fb; --amber:#c9851c; --amber-soft:#faf2e4; --amber-ink:#7a4f0c;
+    color-scheme:light;
+  }
+  body{font-size:11.5pt}
+  .tabbar,.toolbar,.btn,.offline-note{display:none !important}
+  .panel,.panel[hidden]{display:grid !important;padding-block:10px}
+  .wrap{max-width:none}
+  .fig.hero svg{min-width:0}
+  .mmd,figure,tr,.card{break-inside:avoid}
+  .mmd:empty{display:none}
+  .mmd:empty + .mmd-src{display:block}
+  details.proc{break-before:page}
+  details > summary{list-style:none}
+}
+
+/* nested tables and code must not widen the page on a phone */
+.panel,.panel>.block,.block li,.block ol,.block ul{min-width:0;max-width:100%}
+.block li .tbl{max-width:100%;overflow-x:auto;display:block}
+.block pre{max-width:100%;overflow-x:auto}
+.block :not(pre)>code{overflow-wrap:anywhere}
+.block p,.block li{overflow-wrap:break-word}
+
+</style>
+</head>
+<body>
+<style>@media print{.mos-nav{display:none}}</style><div class="mos-nav" style="font:14px/1.4 'Segoe UI',system-ui,sans-serif;padding:7px 16px;background:#1f6f6b;color:#fff"><a href="../../index.html" style="color:#fff;font-weight:600;text-decoration:none">&larr; MOS start page</a><span style="opacity:.8"> &nbsp;&middot;&nbsp; 1. Overview</span></div>
+<header class="wrap masthead">
+  <div class="eyebrow">MOS · planning package · local file, not published</div>
+  <h1>MOS Master Plan</h1>
+  <p class="lede">The whole planning package on a few pages: what MOS is, the six-month plan, team options, decisions, architecture, controls, risks and the document map.</p>
+  <div class="status-line"><span class="pill plan">Planning only · no code</span><span class="pill rev">Draft 0.5 · 3 Oct 2026</span>
+  <button type="button" class="btn print" id="printBtn">Print or save as PDF</button></div>
+  <div class="spec"><div><b>W24</b><span>go-live</span></div><div><b>26 weeks</b><span>everything included</span></div><div><b>6</b><span>modules at core depth</span></div><div><b>2,439 h</b><span>core estimate</span></div><div><b>A+ ×1.33</b><span>speed needed, recommended team</span></div><div><b>$22,190</b><span>path A+, 26 weeks</span></div></div>
+  <p class="note offline-note">Charts are drawn by Mermaid from the internet (cdn.jsdelivr.net). Offline, their source text is shown instead.</p>
+</header>
+<nav class="tabbar" aria-label="Sections"><div class="wrap tabs" role="tablist"><button role="tab" type="button" id="tab-overview" aria-controls="panel-overview" aria-selected="false">In one minute</button><button role="tab" type="button" id="tab-plan" aria-controls="panel-plan" aria-selected="false">Plan and teams</button><button role="tab" type="button" id="tab-design" aria-controls="panel-design" aria-selected="false">Decisions and design</button><button role="tab" type="button" id="tab-client" aria-controls="panel-client" aria-selected="false">Client, risks, next</button><button role="tab" type="button" id="tab-map" aria-controls="panel-map" aria-selected="false">Document map</button></div></nav>
+<main>
+<div class="panel wrap" role="tabpanel" id="panel-overview" aria-labelledby="tab-overview" hidden><section class="block"><details class="about"><summary>About this document</summary><div class="inner"><div class="tbl"><table class=""><thead><tr><th></th><th></th></tr></thead><tbody><tr><td>Document</td><td>Master plan: the whole planning package on a few pages</td></tr><tr><td>Version</td><td><b>0.5</b>, draft for review (2026-10-03: everything inside six months; the client's v2 documents absorbed. 0.4: 2026-09-28)</td></tr><tr><td>Audience</td><td>Product owner and stakeholders; the entry point for developers</td></tr><tr><td>Status</td><td><b>Planning only.</b> No implementation has started and no code has been written</td></tr><tr><td>Read next</td><td><a href="../4-plan/MOS-IMPLEMENTATION-PLAN.html">Implementation plan</a> (when) · <a href="../4-plan/MOS-SPRINT-PLAN.html">Sprint plan</a> (sprint by sprint) · <a href="../2-requirements/MOS-FRD.html">FRD</a> (what) · <a href="../3-design/MOS-TDD.html">TDD</a> (how) · <a href="../5-for-the-client/MOS-COMMERCIAL-PROPOSAL.html">Commercial proposal</a> (price) · <a href="../6-decisions/MOS-DECISION-REGISTER.html">Decision register</a> (what is open)</td></tr></tbody></table></div>
+<blockquote class="callout"><p>"MOS" is a working codename. The client's screens call the system <b>"Factory ERP"</b>, a candidate name to confirm. One find/replace renames it before any external release.</p></blockquote></div></details></section><section class="block"><h2 id="in-one-minute">In one minute</h2>
+<ul class="clean"><li><b>What:</b> one integrated system for a <b>flour mill</b>: procurement with supplier payment, inventory with silos, lab and quality, gate and weighbridge, production (milling and packing), and sales with receivables.</li><li><b>When:</b> <b>everything inside 26 weeks.</b> Build in W1–W20, each module tested by the client's key users as soon as it is built, <b>go-live in W24</b>, close support to W26 (<a href="../6-decisions/adr/ADR-0025-everything-in-six-months.md">ADR-0025</a>).</li><li><b>Size:</b> the six modules at core depth are <b>2,439 estimated hours</b> of AI-assisted development. Everything tagged v1 is 3,177 hours.</li><li><b>Team:</b> recommended <b>path A+</b>: three developers, AI assistance, one QA engineer. It needs the team to work at the best case of the estimate (×1.33). Two developers would need ×1.89, which is beyond it.</li><li><b>Price:</b> one <b>fixed price of ETB 986,615</b> (about US$6,090), within the owner's ETB 1,000,000 cap, for every given requirement and every go-live service (<a href="../5-for-the-client/MOS-PRICING-AND-TIMELINE.html">pricing and timeline</a>). Maintenance, new features, hosting and third-party services are outside it.</li><li><b>Status:</b> planning complete; the client's documents of 27 September – 2 October reviewed and absorbed; discussed with the client on 3 October. Implementation waits for the owner's go-ahead.</li></ul>
+<h3 id="words-used-here">Words used here</h3>
+<div class="tbl"><table class=""><thead><tr><th>Word</th><th>Meaning</th></tr></thead><tbody><tr><td><b>Core / standard / full</b></td><td>Depth of a feature. Core = the flow works end to end with its key controls (this is what the release promises). Standard and full are year-one conveniences and extras, built if time allows, otherwise in the next release (v1.1)</td></tr><tr><td><b>Speed needed</b> (×1.33)</td><td>How much faster than the likely estimate the team must work. ×1.33 = each estimated hour done in 45 minutes</td></tr><tr><td><b>UAT</b></td><td>User acceptance testing: the client's key users test the system against agreed scripts</td></tr><tr><td><b>Hypercare</b></td><td>Close daily support right after go-live</td></tr><tr><td><b>GRN / PV / PR / PO</b></td><td>Goods received note / payment request (payment voucher) / purchase requisition / purchase order</td></tr></tbody></table></div></section><section class="block"><h2 id="1-what-mos-is">1. What MOS is</h2>
+<p>MOS is a <b>company-neutral</b> system for running a manufacturing plant's core operations. <b>v1 runs as one installation per company</b>, with deliberate seams to grow into multi-company and SaaS later. Six modules:</p>
+<ol class="clean"><li><b>Procurement, with supplier payment:</b> suppliers, requisitions, purchase orders, the supplier delivery record, goods receipt, invoices and matching, payment requests, approvals, payments.</li><li><b>Inventory:</b> multi-site, multi-store and silo stock; lots; stock statuses; transfers; counts; bin and stock cards; valuation.</li><li><b>Lab and quality:</b> specifications, inspection, grades and scores, decisions, quality price and weight deductions.</li><li><b>Gate and weighbridge:</b> vehicles and goods in and out, weighing, delivery verification, exit control.</li><li><b>Production:</b> recipes with flour and by-products, milling runs, packing, work orders, finished-flour release, extraction rate.</li><li><b>Sales and receivables:</b> customers, credit control, orders, deliveries with outbound weighing, invoicing, receipts.</li></ol>
+<p>It includes a <b>payables/receivables sub-ledger</b> that exports journals to the accounting package the client already uses. It is not a general ledger.</p>
+<p><b>The headline capability is the inbound raw-material loop.</b> A truck is weighed and the lab inspects and grades the wheat. On acceptance, <b>the goods receipt is prepared automatically and the payment request is drafted.</b> Nothing is re-keyed. By default the storekeeper and the finance officer each confirm the prepared document.</p></section></div><div class="panel wrap" role="tabpanel" id="panel-plan" aria-labelledby="tab-plan" hidden><section class="block"><h2 id="2-the-plan-on-one-page">2. The plan on one page</h2>
+<figure class="mmd-fig"><div class="mmd gantt" data-src="gantt
+  title MOS: everything in 26 weeks (path A+; W1 = go-ahead week; drawing dates only)
+  dateFormat YYYY-MM-DD
+  axisFormat W%V
+  tickInterval 2week
+  weekday monday
+  section Build
+  Foundation (platform, users, master data, approvals, stock ledger) :2027-01-04, 63d
+  Inventory :2027-02-18, 25d
+  Procurement :2027-02-22, 35d
+  Payables and supplier payment :2027-03-12, 37d
+  Lab and quality :2027-03-15, 26d
+  Gate and weighbridge :2027-03-30, 28d
+  Production :2027-04-10, 26d
+  Sales and receivables :2027-04-19, 29d
+  Hardening and freeze :crit, 2027-05-17, 7d
+  section With the client
+  Rolling UAT (each module, after it is built) :2027-03-01, 84d
+  System test and final UAT :2027-05-24, 14d
+  Training and rehearsal :2027-06-07, 7d
+  Go-live (W24) :crit, 2027-06-14, 7d
+  Hypercare :2027-06-21, 14d
+  section Servers
+  Test server ready :milestone, 2027-02-01, 0d
+  Production server ready :milestone, 2027-04-26, 0d" id="mmd1" role="img" aria-label="Diagram"></div><pre class="mmd-src">gantt
+  title MOS: everything in 26 weeks (path A+; W1 = go-ahead week; drawing dates only)
+  dateFormat YYYY-MM-DD
+  axisFormat W%V
+  tickInterval 2week
+  weekday monday
+  section Build
+  Foundation (platform, users, master data, approvals, stock ledger) :2027-01-04, 63d
+  Inventory :2027-02-18, 25d
+  Procurement :2027-02-22, 35d
+  Payables and supplier payment :2027-03-12, 37d
+  Lab and quality :2027-03-15, 26d
+  Gate and weighbridge :2027-03-30, 28d
+  Production :2027-04-10, 26d
+  Sales and receivables :2027-04-19, 29d
+  Hardening and freeze :crit, 2027-05-17, 7d
+  section With the client
+  Rolling UAT (each module, after it is built) :2027-03-01, 84d
+  System test and final UAT :2027-05-24, 14d
+  Training and rehearsal :2027-06-07, 7d
+  Go-live (W24) :crit, 2027-06-14, 7d
+  Hypercare :2027-06-21, 14d
+  section Servers
+  Test server ready :milestone, 2027-02-01, 0d
+  Production server ready :milestone, 2027-04-26, 0d</pre></figure>
+<div class="tbl"><table class=""><thead><tr><th>Review</th><th>Week</th><th>What the client sees</th></tr></thead><tbody><tr><td>M1</td><td>W4</td><td>Sign-in, the shell, users and roles, <b>the test server on their infrastructure</b>; first speed checkpoint</td></tr><tr><td>M2</td><td>W8</td><td>Company set-up, stores and silos, items, partners, taxes, numbering, approvals; second checkpoint</td></tr><tr><td>M3</td><td>W12</td><td>Stock documents, bin and stock cards, counts; suppliers, PRs, POs, deliveries; inspection set-up</td></tr><tr><td>M4</td><td>W16</td><td><b>The client's procure-to-pay end to end</b>: PR → PO → delivery → inspection → GRN → payment request → approval → payment; production server ready</td></tr><tr><td>M5</td><td>W20</td><td>Gate and weighbridge, production, sales; <b>feature freeze</b></td></tr><tr><td>Go-live</td><td><b>W24</b></td><td>After the system test and final UAT (W21–W22) and training (W23); hypercare W25–W26</td></tr></tbody></table></div>
+<p>The <a href="../4-plan/MOS-SPRINT-PLAN.html">sprint plan</a> has every sprint's features, tasks, tests and client inputs.</p></section><section class="block"><h2 id="3-team-options-and-what-they-need">3. Team options and what they need</h2>
+<div class="tbl"><table class=""><thead><tr><th>Path</th><th>Team</th><th>Speed needed</th><th>In plain words</th><th>Team cost at the US$5 rate card</th></tr></thead><tbody><tr><td><b>A+</b> (recommended)</td><td>3 developers + AI + QA</td><td><b>×1.33</b></td><td>Tight but inside the estimate's range</td><td><b>$22,190</b></td></tr><tr><td><b>A</b></td><td>2 developers + AI + QA</td><td>×1.89</td><td>Beyond the best case; possible only if the client drops the gate module and grading (×1.59) and the second developer works 7 days (×1.49)</td><td>$17,390</td></tr><tr><td><b>B</b></td><td>2 developers + AI</td><td>×2.22</td><td>Not recommended</td><td>$13,390</td></tr><tr><td><b>C</b></td><td>1 developer</td><td>does not fit</td><td>The go-live work alone needs more than one person has in the last six weeks</td><td>—</td></tr></tbody></table></div>
+<p><b>Why three developers still need ×1.33:</b> much of the build is a chain (platform → master data → stock ledger → procurement → payables and QC → gate → sales). Each step waits for half of the one before. A third developer shortens the parallel parts, not the chain. Which paths are offered is the owner's decision <b>O-34</b>.</p>
+<p><b>How the plan is held:</b> checkpoints at <b>W4 and W8</b> measure the real speed. If the team is more than 10% behind, capacity is added before W9; the date and the core scope do not move. If it is ahead, standard features are pulled into the release.</p></section></div><div class="panel wrap" role="tabpanel" id="panel-design" aria-labelledby="tab-design" hidden><section class="block"><h2 id="4-decisions-taken">4. Decisions taken</h2>
+<div class="tbl"><table class=""><thead><tr><th>Topic</th><th>Decision</th></tr></thead><tbody><tr><td>Installation model</td><td><b>One installation per company, no tenancy in v1</b> (ADR-0017). Multi-company and SaaS are later stages with a written playbook</td></tr><tr><td>Scope and time</td><td><b>One release: all six modules at core depth, everything inside 26 weeks, go-live W24</b> (ADR-0020 as amended by ADR-0025)</td></tr><tr><td>Infrastructure</td><td><b>Not assumed</b> (ADR-0019). The proposal leads with <b>on-premises</b> hosting, native services or Docker Compose (ADR-0022). The client's infrastructure answers are needed <b>before W1</b> (test server by W4)</td></tr><tr><td>Industry</td><td>Generic engine; industry specifics are data. v1 ships the <b>grain/flour-milling pack</b></td></tr><tr><td>Finance</td><td>Operational sub-ledger + journal export. <b>No general ledger</b></td></tr><tr><td>Identity</td><td><b>Local username/password accounts by default</b> (two-factor for sensitive roles), plus optional single sign-on through any OpenID Connect provider (ADR-0015)</td></tr><tr><td>Automation</td><td><b>The system prepares, a named role confirms</b> (ADR-0016): the storekeeper confirms the GRN, the finance officer the payment request</td></tr><tr><td>Platform reuse</td><td><b>Standalone.</b> Uses the house SSO only as an optional identity provider; copies proven patterns from DMS; <b>does not use GMS</b></td></tr><tr><td>Hardware</td><td>Weighbridge and barcodes <b>by manual entry with strong controls</b> in v1; direct capture is Later</td></tr><tr><td>Stack (ADR-0021)</td><td>Node.js 24, TypeScript, NestJS 12, Zod, Drizzle ORM, PostgreSQL 18. <b>Open (O-27, O-28):</b> Vite single-page app instead of Next.js 16, and pg-boss instead of BullMQ + Redis; both recommended</td></tr><tr><td>Locale</td><td>English / Gregorian in v1; Amharic + Ethiopian calendar is Later</td></tr><tr><td>Documents</td><td>Kept in this repository (private GitHub remote); never published as claude.ai pages</td></tr></tbody></table></div></section><section class="block"><h2 id="5-the-headline-flow-inbound-raw-material">5. The headline flow: inbound raw material</h2>
+<figure class="mmd-fig"><div class="mmd flowchart" data-src="flowchart LR
+  A[Truck arrives&lt;br/&gt;supplier and PO checked] --&gt; B[Weighed in&lt;br/&gt;gross, photo, blind check]
+  B --&gt; C[Lab: sample, tests,&lt;br/&gt;grade and score]
+  C --&gt;|Reject| R[No receipt&lt;br/&gt;rejection note, exit]
+  C --&gt;|Accept, deduct or partial| D[Unload to silo or store]
+  D --&gt; E[Weighed out&lt;br/&gt;tare, bag tare]
+  E --&gt; F[GRN prepared&lt;br/&gt;automatically]
+  F --&gt; G[Storekeeper confirms]
+  G --&gt; H[Payment request&lt;br/&gt;drafted automatically]
+  H --&gt; I[Finance officer confirms&lt;br/&gt;gross, VAT, WHT, net]
+  I --&gt; J[Approval]
+  J --&gt; K[Payment recorded&lt;br/&gt;cheque or transfer, proof]
+  K --&gt; L[Journals exported]" id="mmd2" role="img" aria-label="Diagram"></div><pre class="mmd-src">flowchart LR
+  A[Truck arrives&lt;br/&gt;supplier and PO checked] --&gt; B[Weighed in&lt;br/&gt;gross, photo, blind check]
+  B --&gt; C[Lab: sample, tests,&lt;br/&gt;grade and score]
+  C --&gt;|Reject| R[No receipt&lt;br/&gt;rejection note, exit]
+  C --&gt;|Accept, deduct or partial| D[Unload to silo or store]
+  D --&gt; E[Weighed out&lt;br/&gt;tare, bag tare]
+  E --&gt; F[GRN prepared&lt;br/&gt;automatically]
+  F --&gt; G[Storekeeper confirms]
+  G --&gt; H[Payment request&lt;br/&gt;drafted automatically]
+  H --&gt; I[Finance officer confirms&lt;br/&gt;gross, VAT, WHT, net]
+  I --&gt; J[Approval]
+  J --&gt; K[Payment recorded&lt;br/&gt;cheque or transfer, proof]
+  K --&gt; L[Journals exported]</pre></figure>
+<ul class="clean"><li><b>With the gate module off</b> (the client's own flow), the storekeeper records the delivery when the truck arrives, the inspector records the weights, and the GRN is prepared from them.</li><li>Bulk materials are tested <b>before unloading</b>; packaged materials go <b>into quarantine</b> first.</li><li>Weight-based deductions reduce the <b>payable</b> quantity, never physical stock.</li><li>34 real-world exception cases are specified, each with a test.</li></ul></section><section class="block"><h2 id="6-architecture-at-a-glance">6. Architecture at a glance</h2>
+<figure class="mmd-fig"><div class="mmd flowchart" data-src="flowchart LR
+  U[Browser or tablet] --&gt;|HTTPS| P[Reverse proxy]
+  P --&gt; W[Web app]
+  P --&gt; A[API: NestJS&lt;br/&gt;one transaction per request]
+  A --&gt; D[(PostgreSQL&lt;br/&gt;one schema per module,&lt;br/&gt;posted rows protected)]
+  A --&gt; O[Outbox in the database]
+  O --&gt; K[Worker: PDFs, email,&lt;br/&gt;drafts, schedules]
+  A -.optional.-&gt; I[Identity provider]
+  A --&gt; F[File storage&lt;br/&gt;local disk or S3]" id="mmd3" role="img" aria-label="Diagram"></div><pre class="mmd-src">flowchart LR
+  U[Browser or tablet] --&gt;|HTTPS| P[Reverse proxy]
+  P --&gt; W[Web app]
+  P --&gt; A[API: NestJS&lt;br/&gt;one transaction per request]
+  A --&gt; D[(PostgreSQL&lt;br/&gt;one schema per module,&lt;br/&gt;posted rows protected)]
+  A --&gt; O[Outbox in the database]
+  O --&gt; K[Worker: PDFs, email,&lt;br/&gt;drafts, schedules]
+  A -.optional.-&gt; I[Identity provider]
+  A --&gt; F[File storage&lt;br/&gt;local disk or S3]</pre></figure>
+<ul class="clean"><li><b>Modular monolith:</b> one API and one background worker share one PostgreSQL database, with one schema per module and strict dependency tiers.</li><li><b>Posted records are permanent.</b> Receipts, issues, invoices, payments, QC results and approvals cannot be edited; corrections are reversal documents. <b>Status changes only through actions</b> (submit, approve, post), never by editing a field.</li><li><b>The inventory ledger</b> records every stock movement with quantity and value; property-based tests prove the balance always reconciles.</li><li><b>Side effects go through an outbox</b> (emails, PDFs, automatic drafts): nothing is half-done after a crash, and nothing happens twice.</li><li><b>Controls are data:</b> approval matrices, segregation-of-duties rules, tolerances, grade tables and price rules.</li></ul>
+<p>Full design: <a href="../3-design/MOS-TDD.html">TDD</a> and <a href="../3-design/MOS-DATABASE-DESIGN.html">database design</a> (230 tables).</p></section><section class="block"><h2 id="7-controls-built-in-highlights">7. Controls built in (highlights)</h2>
+<ul class="clean"><li><b>Segregation of duties:</b> the PO creator never posts its GRN; neither may approve a payment request covering their PO or GRN; the payment request's requester cannot approve it, and its approver cannot record the payment; bank-detail changes need an independent approver and a call-back; a weighbridge operator cannot verify their own weight.</li><li><b>Fraud-resistant supplier bank details:</b> never edited in place; a change needs independent approval, a call-back and a cooling-off period.</li><li><b>Payments:</b> only against an approved request, never above the approved amount; unique cheque numbers; proof attached.</li><li><b>Weighbridge integrity:</b> photo evidence, blind re-entry by a second person, random forced re-tare, gap-free weigh tickets.</li><li><b>Exit control:</b> no outbound goods leave without a posted document and a weight within tolerance.</li><li><b>Quality holds and periods:</b> quarantined stock can't be issued, shipped or paid for; period close and backdating windows apply.</li></ul></section></div><div class="panel wrap" role="tabpanel" id="panel-client" aria-labelledby="tab-client" hidden><section class="block"><h2 id="8-the-clients-documents-27-september--2-october">8. The client's documents (27 September – 2 October)</h2>
+<div class="tbl"><table class=""><thead><tr><th>Document</th><th>What we did</th></tr></thead><tbody><tr><td>Procure-to-pay process, first draft (27 Sep)</td><td>Reviewed screen by screen (<a href="../7-reviews/MOS-CLIENT-P2P-DRAFT-REVIEW.html">first-draft review</a>)</td></tr><tr><td>Procure-to-pay process v2, 28 screens (1 Oct)</td><td>Reviewed and re-checked page by page (<a href="../7-reviews/MOS-CLIENT-DOCS-V2-REVIEW.html">v2 review</a>); three new screens adopted (the supplier delivery record, the bin card, the stock card)</td></tr><tr><td>Data dictionary (1 Oct)</td><td>Every field captured; the table design stays ours (O-33)</td></tr><tr><td>Architecture proposal (2 Oct)</td><td>Compared decision by decision; two changes recommended (Vite, pg-boss: O-27, O-28)</td></tr></tbody></table></div>
+<p>Together they added <b>59 core hours</b> (now counted). They were discussed with the client on 3 October (<a href="../8-meetings/2026-10-03-client-documents/DISCUSSION-PACK.html">discussion pack</a>). <b>Four answers decide how comfortable the six months are:</b> the gate module (Q-01), grading (Q-02), who raises supplier payment requests (Q-03) and invoice approval (Q-04).</p></section><section class="block"><h2 id="9-top-risks">9. Top risks</h2>
+<div class="tbl"><table class=""><thead><tr><th>Risk</th><th>What we do about it</th></tr></thead><tbody><tr><td>The plan needs a speed above the likely estimate (A+ ×1.33, A ×1.89)</td><td>Checkpoints at W4 and W8; capacity added before W9 if behind; buffer slots at the end of the build relieve the critical path</td></tr><tr><td>Infrastructure is unknown, and now needed before W1</td><td>The infrastructure questions go first; a temporary test server on our side if theirs is late</td></tr><tr><td>Key users not available for rolling UAT</td><td>Named before W1; sessions booked at each sprint review</td></tr><tr><td>Gate, production and sales have no client input yet</td><td>Workshops before W10 (gate, production) and W12 (sales)</td></tr><tr><td>Burnout from 7-day weeks for six months</td><td>80% focus factor; one rest day a week recommended; path A+ spreads the load</td></tr><tr><td>No slack in the go-live window</td><td>First migration dry run in W17–W20; go/no-go at the end of W23</td></tr><tr><td>Sales invoices may legally need a fiscal device</td><td>Asked before W12; added through the change rule if required</td></tr><tr><td>Stock or valuation errors</td><td>The ledger is built and proven with property tests before any inventory screen</td></tr></tbody></table></div>
+<p>The full register is in the <a href="../4-plan/MOS-IMPLEMENTATION-PLAN.html">implementation plan</a> §13.</p></section><section class="block"><h2 id="10-honest-assessment">10. Honest assessment</h2>
+<ul class="clean"><li><b>Six months all-in rests on AI-assisted speed at the best case of the estimate</b>, even with three developers. The W4 checkpoint shows early whether it holds.</li><li><b>Standard and full depth (738 estimated hours) are not promised in the release.</b> The client should see those lists before signing.</li><li><b>Production and sales are designed from flour-milling practice, not yet from the client's own description.</b> The workshops before W10 and W12 are essential.</li><li><b>The client's documents are a strong start</b> but contain defects that would become bugs if built as drawn (for example editable status fields, a payment approval with no link to its requisition, rejected stock received in full). The plan builds the corrected versions.</li><li><b>AI speeds up coding, not everything.</b> Client decisions, UAT, data migration and servers still take calendar time; that is why the go-live work is spread across the build.</li></ul></section><section class="block"><h2 id="11-what-happens-next">11. What happens next</h2>
+<ol class="clean"><li><b>The owner</b> settles O-34 (which team to plan with) and O-27/O-28 (stack) in the <a href="../6-decisions/MOS-DECISION-REGISTER.html">decision register</a>. The price is decided (A-43).</li><li><b>The client</b> answers the four sizing questions and the "before W1" items, including infrastructure, and names key users.</li><li>The proposal and questionnaire go to the client; the client chooses a path and a start week.</li><li>W1 begins after the go-ahead. No code is written before that.</li></ol></section></div><div class="panel wrap" role="tabpanel" id="panel-map" aria-labelledby="tab-map" hidden><section class="block"><h2 id="12-document-map">12. Document map</h2>
+<div class="tbl"><table class=""><thead><tr><th>Folder</th><th>Documents</th></tr></thead><tbody><tr><td><a href="README.md">1-overview</a></td><td>This master plan</td></tr><tr><td><a href="../2-requirements/README.md">2-requirements</a></td><td><a href="../2-requirements/MOS-FRD.html">FRD</a>: 231 requirements (205 in v1) with acceptance criteria · <a href="../2-requirements/MOS-PROCESS-MODEL.html">Process model</a>: 21 swimlanes, 199 numbered steps, lifecycles, exceptions, controls</td></tr><tr><td><a href="../3-design/README.md">3-design</a></td><td><a href="../3-design/MOS-DATABASE-DESIGN.html">Database design</a>: 230 tables in 9 schemas · <a href="../3-design/MOS-TDD.html">TDD</a>: architecture and technical design</td></tr><tr><td><a href="../4-plan/README.md">4-plan</a></td><td><a href="../4-plan/MOS-IMPLEMENTATION-PLAN.html">Implementation plan</a>: estimate, speed per path, roadmap, go-live, risks · <a href="../4-plan/MOS-SPRINT-PLAN.html">Sprint plan</a>: 13 sprints, every feature with tasks · <a href="../4-plan/MOS-PROCUREMENT-MODULE-PLAN.html">Module 1 plan</a>: 54 stories, UAT script</td></tr><tr><td><a href="../5-for-the-client/README.md">5-for-the-client</a></td><td><a href="../5-for-the-client/MOS-COMMERCIAL-PROPOSAL.html">Commercial proposal</a> · <a href="../5-for-the-client/MOS-PRICING-AND-TIMELINE.html">Pricing and timeline</a> (price by phase, sprint, module and feature) · <a href="../5-for-the-client/MOS-STAKEHOLDER-QUESTIONNAIRE.html">Stakeholder questionnaire</a> (drafts, not sent)</td></tr><tr><td><a href="../6-decisions/README.md">6-decisions</a></td><td><a href="../6-decisions/MOS-DECISION-REGISTER.html">Decision register</a> · <a href="../6-decisions/adr/README.md">ADRs</a> 0001–0025</td></tr><tr><td><a href="../7-reviews/README.md">7-reviews</a></td><td><a href="../7-reviews/MOS-CLIENT-DOCS-V2-REVIEW.html">Client documents v2 review</a> (current) and three earlier reviews</td></tr><tr><td><a href="../8-meetings/README.md">8-meetings</a></td><td><a href="../8-meetings/2026-10-03-client-documents/README.md">3 October: discussion pack and owner briefing</a></td></tr><tr><td><a href="../9-inputs/README.md">9-inputs</a></td><td>The client's documents as received; the owner's ChatGPT brainstorm (not client documents)</td></tr></tbody></table></div></section></div>
+</main>
+<footer class="wrap foot"><p class="note">Source: <code>MOS/docs/1-overview/MOS-MASTER-PLAN.md</code> (the master copy). Kept locally in the MOS repository; not published.</p></footer>
+<script type="module">
+const MERMAID_URL = 'https://cdn.jsdelivr.net/npm/mermaid@12/dist/mermaid.esm.min.mjs';
+const tabs = [...document.querySelectorAll('[role="tab"]')];
+const panels = [...document.querySelectorAll('[role="tabpanel"]')];
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch { /* storage unavailable */ } },
+};
+const TABKEY = 'mos-pm-tab:' + location.pathname;
+function pickTab() { const k = store.get(TABKEY); if (k && document.getElementById('tab-' + k)) return k; const first = document.querySelector('[role="tab"]'); return first ? first.id.slice(4) : 'overview'; }
+
+
+function show(key, focusTab) {
+  let found = false;
+  for (const t of tabs) {
+    const on = t.id === `tab-${key}`;
+    t.setAttribute('aria-selected', String(on));
+    t.tabIndex = on ? 0 : -1;
+    if (on) { found = true; if (focusTab) t.focus(); }
+  }
+  if (!found) return show('overview', focusTab);
+  for (const p of panels) p.hidden = p.id !== `panel-${key}`;
+  store.set(TABKEY, key);
+  renderVisible();
+}
+tabs.forEach((t, i) => {
+  t.addEventListener('click', () => show(t.id.slice(4)));
+  t.addEventListener('keydown', (e) => {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    const next = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+    show(next.id.slice(4), true);
+  });
+});
+
+// ---- Mermaid, loaded from the CDN and drawn lazily (hidden diagrams cannot be measured)
+let mermaid = null;
+const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function initMermaid() {
+  const dark = matchMedia('(prefers-color-scheme: dark)').matches;
+  mermaid.initialize({
+    startOnLoad: false,
+    securityLevel: 'strict',
+    htmlLabels: false,
+    theme: 'base',
+    fontFamily: css('--font-body'),
+    themeVariables: {
+      darkMode: dark,
+      background: css('--surface'),
+      fontFamily: css('--font-body'),
+      fontSize: '13px',
+      primaryColor: css('--accent-soft'),
+      primaryBorderColor: css('--accent'),
+      primaryTextColor: css('--ink'),
+      secondaryColor: css('--amber-soft'),
+      tertiaryColor: css('--surface-2'),
+      lineColor: css('--ink-2'),
+      textColor: css('--ink'),
+      mainBkg: css('--accent-soft'),
+      clusterBkg: css('--surface-2'),
+      clusterBorder: css('--rule'),
+      edgeLabelBackground: css('--surface'),
+      actorBkg: css('--accent-soft'),
+      actorBorder: css('--accent'),
+      actorTextColor: css('--ink'),
+      actorLineColor: css('--rule'),
+      signalColor: css('--ink-2'),
+      signalTextColor: css('--ink'),
+      labelBoxBkgColor: css('--surface-2'),
+      labelBoxBorderColor: css('--rule'),
+      labelTextColor: css('--ink'),
+      loopTextColor: css('--ink-2'),
+      noteBkgColor: css('--amber-soft'),
+      noteBorderColor: css('--amber'),
+      noteTextColor: css('--ink'),
+      activationBkgColor: css('--surface-2'),
+      stateLabelColor: css('--ink'),
+      transitionColor: css('--ink-2'),
+      transitionLabelColor: css('--ink-2'),
+    },
+    flowchart: { htmlLabels: false, curve: 'basis', useMaxWidth: true },
+    sequence: { useMaxWidth: true, wrap: true, width: 170, messageFontSize: 13, actorFontSize: 13, noteFontSize: 12 },
+    state: { useMaxWidth: true },
+  });
+}
+let queue = Promise.resolve();
+function renderVisible() {
+  if (!mermaid) return queue;
+  queue = queue.then(async () => {
+    for (const el of document.querySelectorAll('.mmd:not([data-done])')) {
+      if (el.offsetParent === null) continue;
+      try {
+        const { svg } = await mermaid.render(`${el.id}-svg`, el.dataset.src);
+        el.innerHTML = svg;
+        el.dataset.done = '1';
+      } catch (err) {
+        el.dataset.done = 'error';
+        el.classList.add('failed');
+        el.textContent = 'This diagram could not be drawn; its source is shown below.';
+        el.nextElementSibling?.classList.add('show');
+      }
+    }
+  });
+  return queue;
+}
+import(MERMAID_URL)
+  .then(async (m) => {
+    // measure labels with the real web font, or they are clipped once it loads
+    await Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 3000))]);
+    mermaid = m.default; initMermaid(); renderVisible();
+  })
+  .catch(() => { document.body.classList.add('offline'); });
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+  if (!mermaid) return;
+  initMermaid();
+  document.querySelectorAll('.mmd[data-done="1"]').forEach((el) => { delete el.dataset.done; el.innerHTML = ''; });
+  renderVisible();
+});
+document.addEventListener('toggle', (e) => { if (e.target.open) renderVisible(); }, true);
+
+// ---- open / close all processes
+document.querySelectorAll('.toolbar .btn').forEach((b) => b.addEventListener('click', () => {
+  const open = b.dataset.act === 'expand';
+  b.closest('.panel').querySelectorAll('details.proc').forEach((d) => { d.open = open; });
+  renderVisible();
+}));
+
+// ---- in-page links switch to the right tab and open the right section
+function goTo(id) {
+  const target = document.getElementById(id);
+  if (!target) return false;
+  const panel = target.closest('[role="tabpanel"]');
+  if (panel) show(panel.id.slice(6));
+  if (target.tagName === 'DETAILS') target.open = true;
+  let d = target.parentElement?.closest('details');
+  while (d) { d.open = true; d = d.parentElement?.closest('details'); }
+  requestAnimationFrame(() => target.scrollIntoView({ block: 'start' }));
+  renderVisible();
+  return true;
+}
+document.addEventListener('click', (e) => {
+  const a = e.target.closest('a[href^="#"]');
+  if (!a) return;
+  const id = decodeURIComponent(a.getAttribute('href').slice(1));
+  if (goTo(id)) { e.preventDefault(); history.replaceState(null, '', `#${id}`); }
+});
+
+// ---- print: show everything, draw every diagram, then print
+const printBtn = document.getElementById('printBtn');
+let opened = [];
+function expandForPrint() {
+  panels.forEach((p) => { p.hidden = false; });
+  opened = [...document.querySelectorAll('details:not([open])')];
+  opened.forEach((d) => { d.open = true; });
+}
+function restoreAfterPrint() {
+  opened.forEach((d) => { d.open = false; });
+  opened = [];
+  show(pickTab());
+}
+printBtn.addEventListener('click', async () => {
+  expandForPrint();
+  await renderVisible();
+  setTimeout(() => window.print(), 250);
+});
+window.addEventListener('beforeprint', () => { if (!opened.length) expandForPrint(); });
+window.addEventListener('afterprint', restoreAfterPrint);
+
+// ---- start
+const initial = decodeURIComponent(location.hash.slice(1));
+if (!(initial && goTo(initial))) show(pickTab());
+
+</script>
+</body>
+</html>
