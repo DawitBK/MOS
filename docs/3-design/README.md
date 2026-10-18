@@ -6,6 +6,7 @@ Where the data lives and how the system is built.
 |---|---|---|---|
 | **Database design** | Where the data lives: 230 tables in 9 groups, every column, diagrams and worked examples | v0.1.1, 28 Sep | [page](MOS-DATABASE-DESIGN.html) · [text](MOS-DATABASE-DESIGN.md) |
 | **Technical design (TDD)** | How it will be built: architecture, stock ledger, security, deployment options | v0.3.3 | [page](MOS-TDD.html) · [text](MOS-TDD.md) |
+| **MOS on Odoo: fit-gap** | Every one of the 231 requirements against Odoo 20 and OCA: what fits, what is custom, and the evidence behind proposed ADR-0026 | v0.1, 2026-10-18 | [text](ODOO-FIT-GAP.md) |
 
 **Formats:** "page" is the browser view, and "text" is the `.md` master copy (preview it in VS Code with Ctrl+Shift+V).
 
