@@ -354,3 +354,16 @@ The set: auth_oidc, auth_session_timeout, password_security, base_tier_validatio
 
 
 [← Design](README.md) · [All documents](../../README.md) · [Start page](../../index.html)
+
+## 6. Addendum, 2026-10-28: requirements added at FRD 0.3.6
+
+The client-documents review proposed four requirements that the FRD had been waiting to receive. They are in the FRD now (0.3.6) and are built as custom addons; none of them exists in Odoo Community or on OCA 20.0. The id counts in section 1 are not changed by this addendum.
+
+| Id | Requirement | Class | Built in |
+|---|---|---|---|
+| FR-INV-023 | Bin card | CUST | `mos_stock_cards` |
+| FR-INV-024 | Stock card | CUST | `mos_stock_cards` |
+| FR-PRC-023 | Supplier delivery entry | CUST | `mos_deliveries` |
+| FR-AP-020 | Optional approval of every supplier invoice | CUST | `mos_documents` |
+
+Amended: FR-PLT-044 (typed, verified attachment slots, `mos_documents`), FR-PLT-025 (the optional "I agree" statements, `mos_approvals`), FR-INV-009 (blind counting, count sheet, import, recount by another person, review with request-changes, `mos_counts`), FR-PRC-007 (request date, priority, requester ID, remarks, live available stock, quantity to purchase, specification and notes, `mos_request_forms`), FR-PLT-030 and FR-RPT-001 (approvals dashboard and the overview as cards, `mos_dashboards`). The look of the client's screens (`mos_theme`) is not a requirement id: it is the reading of the 28 screen images in `docs/9-inputs/from-client/`.
