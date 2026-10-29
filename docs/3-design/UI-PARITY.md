@@ -17,7 +17,7 @@ One mechanism, in `mos_theme` (`models/page_chrome.py`), gives **every MOS form*
 | 2 | Sign-in | **Built** | The operation unit is chosen after sign-in (decision D2, FR-PLT-019), and that picker is **not built yet**: there is no "current site" per user |
 | 3–4 | Supplier registration (5 steps) | **Built** | "Date registered" is not shown (the record's creation date is the date); status is shown as Candidate and is not editable (review defect) |
 | 5 | Purchase request | Partly | Header, parts, line grid and totals follow the screen; priority is radio buttons, not coloured pills |
-| 6 | Purchase order | **Not done** | Still Odoo's own order form; no coloured status pills, no totals row as drawn |
+| 6 | Purchase order | Partly | Page header, "Part 1" and "Part 2" cards, line grid and totals follow the screen; it is still Odoo's order form underneath, with its own buttons in the header and Odoo's status bar instead of the Draft / Issued / Pending / Canceled pills; the company currency of the demo is USD, not birr |
 | 7 | Supplier delivery entry | **Built** | — |
 | 8 | QC inspection | Partly | Parameters, pass/fail pills, summary and "analysed by / checked by" follow the screen; "inspection type", "document no", "address of wheat", and the quantity in quintals and bags are not shown |
 | 9 | Goods receiving | **Not done** | Still Odoo's receipt form; no receiving summary, no "ready for GRN" status panel |
