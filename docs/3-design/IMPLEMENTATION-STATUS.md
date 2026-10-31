@@ -59,7 +59,7 @@
 | FR-GATE-016 |  Exit clearance evaluates, and records every attempt with results: no open blocking hold; all mandatory steps done; ever | v1 (M3–M4) | Built (cited) | mos_gate, mos_gate_plus |
 | FR-GATE-017 | Overridable clearance checks (e.g. seal missing, plate mismatch explained) need an SSUP override with reason code and co | v1 (M3–M4) | Built (cited) | mos_gate, mos_gate_plus |
 | FR-GATE-018 | Exit pass (printable, QR) issued when the visit reaches an exit-eligible state; scanned or typed at exit | v1 (M3–M4) | Built (cited) | mos_gate |
-| FR-GATE-019 | Material gate passes: returnable / non-returnable, out/in, reason, requester, lines (item or asset tag/serial, qty, esti | v1 (pull-in; else v1.1) | Built | mos.gate.pass (mos_gate) |
+| FR-GATE-019 | Material gate passes: returnable / non-returnable, out/in, reason, requester, lines (item or asset tag/serial, qty, esti | v1 (pull-in; else v1.1) | Built | mos.gate.pass with approval, rejection, validity and expiry job, partial out and return, asset tag and serial, estimated value, and the posted-document rule for stock items on a final pass (mos_gate, mos_inventory; completed 2026-10-31) |
 | FR-GATE-020 | Service/contractor visits: persons count, work-permit reference, tools declared in and verified out; minimal people-visi | v1.1 | Built (cited) | mos_gate, mos_gate_plus |
 | FR-GATE-021 | Yard board: vehicles on site with purpose, partner, current step, time in step, total dwell and flags (hold, blacklist w | v1 (pull-in; else v1.1) · v1.1 | Built | Yard board (mos_gate_plus) |
 | FR-GATE-022 | Incidents (seal broken, tamper suspected, document forgery, blacklist attempt, safety, theft, unauthorised entry, spilla | v1 (pull-in; else v1.1) | Built | mos.gate.incident (mos_gate) |
@@ -92,8 +92,8 @@
 | Id | Requirement | Tag | Status | Evidence |
 |---|---|---|---|---|
 | FR-INV-001 | Real-time stock by item × storage unit × lot × status, with quantity and value, filterable by site, warehouse and catego | v1 (M2–M3) | Built (cited) | mos_platform_plus |
-| FR-INV-002 | Stock statuses QUARANTINE, AVAILABLE, BLOCKED, DAMAGED, REJECTED. Only AVAILABLE stock can be issued to consumption, pro | v1 (M2–M3) | Built | Location stock status and mos.stock.status.change (mos_inventory) |
-| FR-INV-003 | Status changes are documents with a reason. QUARANTINE → AVAILABLE only through a QC decision. AVAILABLE ↔ BLOCKED by WS | v1 (M2–M3) | Built | Status change documents with reason and approval (mos_inventory) |
+| FR-INV-002 | Stock statuses QUARANTINE, AVAILABLE, BLOCKED, DAMAGED, REJECTED. Only AVAILABLE stock can be issued to consumption, pro | v1 (M2–M3) | Built | Five statuses on the place stock sits in (available, quarantine, blocked, damaged, rejected); only available stock can be issued, sold, transferred or reserved; scrap can leave damaged and rejected places (mos_inventory; fixed 2026-10-31, the first audit had marked it built with two statuses missing) |
+| FR-INV-003 | Status changes are documents with a reason. QUARANTINE → AVAILABLE only through a QC decision. AVAILABLE ↔ BLOCKED by WS | v1 (M2–M3) | Built | Status changes are documents with a reason and an inventory manager approving; damaged recovers to available only; rejected has no status exit; only quarantine is rejected; on-hand is unchanged by a status change (mos_inventory) |
 | FR-INV-004 | Lot tracking: lot number (auto per the batch pattern, or the supplier's), supplier lot, manufacture and expiry dates, at | v1 (M2–M3) · standard depth: p | Built (cited) | mos_stock_plus |
 | FR-INV-005 | Goods receipt kinds: from PO (Procurement), from another site (transfer), from production output (with production), from | v1 (M2–M3) | Built | Receipts from PO, transfer, production, customer return, adjustment, and mos.stock.receipt for miscellaneous receipts (reason, cost, restricted to inventory managers) and the opening balance |
 | FR-INV-006 | Goods issue: to cost centre/department (consumption), to production (with production), to customer via delivery (with sa | v1 (M2–M3) | Built | mos.stock.issue: consumption by a department or scrap, available stock only, approval by the matrix, valued at average cost (mos_inventory) |
@@ -302,6 +302,10 @@
 | FR-SAL-017 |  Price-list versions are approved (SMGR, per the approval matrix) before they take effect; floor prices are part of the  | v1 (M4–M5) | Built (cited) | mos_commercial, mos_sales |
 | FR-SAL-018 |  Credit notes without a physical return (price correction, shortage or damage claim) need a reason, evidence (e.g. the s | v1 (pull-in; else v1.1) | Built (cited) | mos_commercial, mos_sales |
 
+## A correction to the first version of this table
+
+The first version counted a requirement as *Built (cited)* when its id appeared in the code, including ids inside ranges written as FR-X-001..005. That overstated the evidence: 81 requirements had no explicit mention. Each v1 one of them was then probed by hand. This found four real gaps (stock statuses damaged and rejected, never-negative stock, average costing instead of standard cost, and the gate-pass rules) and confirmed the rest as built through native Odoo features or code that does not cite the id (for example cost settlement, FR-MFG-014, is built and tested in mos_manufacturing). The lifecycle comparison in [LIFECYCLE-COMPARISON.md](LIFECYCLE-COMPARISON.md) was the second check and found four more.
+
 ## Beyond the FRD: design and decision records
 
 | Source | What it asks | Status | Evidence |
@@ -316,12 +320,3 @@
 | ADR-0016 | The system prepares, a named role confirms | Built | mos_flows (GRN and payment-request modes) |
 | ADR-0021 | Node/NestJS stack | Superseded by ADR-0026 | Odoo 20 on PostgreSQL 17 |
 | ADR-0004 | Shared-database multi-tenancy | Superseded by ADR-0017 | - |
-
-## What this audit covered, and what it did not
-
-- **Covered:** every id row of the FRD (231), the ADR index, and the TDD sections on identity, platform services, observability and security. Gaps found on 2026-10-31 and closed the same day: printed documents (`mos_print`), departments, password rules and forced change, goods issue, goods receipt without an order, item shelf life and tare, unique item codes, cheque clearing/stale/missing, the receipt-draft limit, number-series restart policy and fiscal-year token, the flour-pack specifications, QR codes on prints, the backup and restore test, CI.
-- **Spot-checked, not re-proved:** the 34 inbound failure cases (§9.5) have scenario tests in `mos_flows`; the other exceptions of the process model (E35 to E64) were checked by looking for the code and a test for a sample (silo capacity, count freeze, fumigation hold, credit limit, price floor, cash sessions, paper mode, document expiry). Each is not yet a numbered test of its own.
-- **Not audited line by line:** the database design (385 KB), the sprint plan, the process-model lifecycles (6.1 to 6.27: state names and transitions) and the RACI table. These need a generated comparison (states in the document against states in the models) and a person to read the RACI against the groups; they are the next phase.
-- **Still open:** FR-PLT-047 (import of open supplier and customer balances at go-live), FR-RPT-002 (a date range and a site filter on every report, not only lists), ADR-0022 item 6 (metrics endpoint and alert rules, which depend on the client's monitoring).
-- **Not built because the plan says Later or Future:** API keys beyond Odoo's own (FR-PLT-016), edge-agent weighbridge capture (FR-GATE-026), thermal printing (FR-GATE-027), plate recognition and RFID (FR-GATE-029), multi-tenant (FR-PLT-001, 005).
-- **Evidence limit:** *Built (cited)* means the code names the requirement and the addon's tests pass (505 tests, 0 failed, 2026-10-31). It does not mean each acceptance criterion was clicked through in a browser.
